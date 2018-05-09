@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>部门管理</title>
+		<link rel="shortcut icon" href="favicon.ico">
+		<link href="css/bootstrap.min.css?v=3.3.5" rel="stylesheet">
+		<link href="css/font-awesome.css?v=4.4.0" rel="stylesheet">
+		<!--<link href="css/plugins/treeview/bootstrap-treeview.css" rel="stylesheet">-->
+		<link href="css/plugins/zTreeStyle/zTreeStyle.css" rel="stylesheet">
+		<link href="css/checkbox3.min.css" rel="stylesheet">
+		<!-- jqgrid-->
+		<link href="css/plugins/jqgrid/ui.jqgrid.css?0820" rel="stylesheet">
+		<link href="css/style.css?v=4.0.0" rel="stylesheet">
+		<link href="css/yh.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/zTreeStyle/metro.css" />
+<!--		<link rel="stylesheet" href="css/zTreeStyle/metro.css" />
+-->	</head>
+
+	<body class="gray-bg">
+		<div class="wrapper wrapper-content animated fadeInRight">
+
+			<div>
+
+				<div class="col-sm-4">
+					<div class="ibox float-e-margins">
+						<div class="ibox-title">
+							<h5>组织列表</h5>
+							<div class="search-tree">
+								<input type="text" class="search" id="searchText" /><button class="btn btn-primary btn-sm" id="deptSearch">搜索</button>
+							</div>
+
+						</div>
+						<div class="ibox-content">
+							<ul id="tree-dep" class="ztree"  style="overflow:auto;"></ul>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-8">
+					<div class="ibox float-e-margins">
+						<div class="ibox-title">
+							<div class="menu-div">
+								<button class="btn btn-outline btn-primary" data-toggle="modal" id="update-btn">编辑</button>
+								<button class="btn btn-outline btn-primary" id="add-btn">新增 </button>
+								<button class="btn btn-outline btn-danger" id="delete-btn">删除</button>
+							</div>
+							<div class="add-hide">
+								<form class="form-horizontal m-t float-div" id="commentForm">
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">部门名称：</label>
+											<div class="col-sm-8">
+												<input id="parentId" name="parentId" minlength="2" type="hidden" class="form-control" required="" aria-required="true" readonly="readonly">
+												<input id="stationName" name="stationName" minlength="2" type="text" class="form-control" required="" aria-required="true" readonly="readonly">
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">是否使用：</label>
+											<div class="col-sm-8">
+												<div class="radio3">
+													<input type="radio" name="ifUse" id="ifUse1" value="1" checked="checked" disabled="disabled">
+													<label for="ifUse1">是</label>
+												</div>
+												<div class="radio3">
+													<input type="radio" name="ifUse" id="ifUse0" value="0" disabled="disabled">
+													<label for="ifUse0">否</label>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">父部门：</label>
+											<div class="col-sm-8">
+												<input id="parentStationName" type="text" class="form-control" name="parentStationName" required="" aria-required="true" readonly="readonly">
+												<div class="parent-div">
+													<ul id="tree-parent" class="ztree"></ul>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">IP地址：</label>
+											<div class="col-sm-8">
+												<input id="ipAddress" type="text" class="form-control" name="ipAddress" required="" aria-required="true" readonly="readonly">
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">地址：</label>
+											<div class="col-sm-8">
+												<input id="address" type="text" class="form-control" name="address" required="" aria-required="true" readonly="readonly" rel="popover" data-content="空空如也！" data-original-title="地址">
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">联系电话：</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" name="tel" id="tel" readonly="readonly" />
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">经纬度：</label>
+											<div class="col-sm-4">
+												<input id="longitude" type="text" class="form-control" name="longitude" required="" aria-required="true" placeholder="经度" readonly="readonly">
+											</div>
+											<div class="col-sm-4">
+												<input id="latitude" type="text" class="form-control" name="latitude" required="" aria-required="true" placeholder="纬度" readonly="readonly">
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">组织编号：</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" name="stationNum" id="stationNum" required="" aria-required="true" readonly="readonly" />
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">覆盖范围：</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" name="coverRange" id="coverRange" readonly="readonly" />
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">接出警车辆数：</label>
+											<div class="col-sm-8">
+												<input type="number" class="form-control" name="carCount" id="carCount" readonly="readonly" />
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">基地台号：</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" name="baseNum" id="baseNum" readonly="readonly" />
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">单位编码：</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" name="unitNumber" id="unitNumber" readonly="readonly" />
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">组织代码：</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" name="orgcode" id="orgcode" readonly="readonly" />
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">排序：</label>
+											<div class="col-sm-8">
+												<input type="number" class="form-control" name="sort" id="sort" readonly="readonly" />
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">管辖区域：</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" name="glxq" id="glxq" readonly="readonly" rel="popover" data-content="空空如也！" data-original-title="管辖区域"/>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">人口情况：</label>
+											<div class="col-sm-8">
+												<input id="rkqk" name="rkqk" type="text" class="form-control" readonly="readonly" rel="popover" data-content="空空如也！" data-original-title="人口情况">
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">社区\责任区：</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" name="sqzrq" id="sqzrq" readonly="readonly" rel="popover" data-content="空空如也！" data-original-title="社区/责任区"/>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">警力情况：</label>
+											<div class="col-sm-8">
+												<input id="jlqk" name="jlqk" type="text" class="form-control" readonly="readonly"  rel="popover" data-content="空空如也！" data-original-title="警员情况">
+												
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">重点部位：</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" name="zdbw" id="zdbw" readonly="readonly" rel="popover" data-content="空空如也！" data-original-title="重点部位"/>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">重点警情：</label>
+											<div class="col-sm-8">
+												<input id="zdjq" name="zdjq" type="text" class="form-control" readonly="readonly" rel="popover" data-content="空空如也！" data-original-title="警员情况">
+											</div>
+										</div>
+									</div>
+
+									<input type="hidden" id="pictureUrl" name="pictureUrl" class="form-control" accept=".jpg,.png,.png" readonly="readonly">
+
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">是否直属机构：</label>
+											<div class="col-sm-8">
+												<div class="radio3">
+													<input type="radio" id="isZsjg1" name="isZsjg" value="1" disabled="disabled">
+													<label for="isZsjg1">是</label>
+												</div>
+												<div class="radio3">
+													<input type="radio" id="isZsjg0" name="isZsjg" checked="checked" value="0" disabled="disabled">
+													<label for="isZsjg0">否</label>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">是否口子所：</label>
+											<div class="col-sm-8">
+												<div class="radio3">
+													<input type="radio" id="isCzs1" name="isCzs" value="1" disabled="disabled">
+													<label for="isCzs1">是</label>
+												</div>
+												<div class="radio3">
+													<input type="radio" id="isCzs0" name="isCzs" checked="checked" value="0" disabled="disabled">
+													<label for="isCzs0">否</label>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!--<div class="form-group">-->
+
+									<!--</div>-->
+
+								</form>
+								<form  enctype ="multipart/form-data" id="uploadForm">
+		                        	 <div class="col-sm-6">
+		                            <div class="form-group">
+		                                <label class="col-sm-3 control-label">部门相片：</label>
+		                                <div class="col-sm-8">
+				                            <input type="file" id="file" name="file" class="form-control"  readonly="readonly" style="width: calc(100% - 55px);float: left;">
+				                            <input type="button" class="btn btn-primary" disabled="disabled" id="uploadBtn" value="上传"/>
+		                                </div>
+		                               
+		                            </div>
+		                           </div>
+		                        </form>
+								<!--<form method="POST" enctype="multipart/form-data" action="http://172.17.99.10:10014/zuul/api/jp-TIFS-FileCenter-ms/file">
+									File to upload:
+									<input type="file" name="file">
+									<input type="submit" value="Upload">
+								</form>-->
+
+								<div class="footer-group">
+									<button class="btn btn-primary" id="deptMsgSave" disabled="disabled">保存</button>
+									<button type="button" class="btn btn-default" disabled="disabled" id="cancel">取消</button>
+								</div>
+
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<div>
+
+				</div>
+			</div>
+
+			<!-- 全局js -->
+			<script src="js/jquery.min.js?v=2.1.4"></script>
+			<script src="js/bootstrap.min.js?v=3.3.5"></script>
+
+			<!-- 自定义js -->
+			<script src="js/content.js?v=1.0.0"></script>
+
+			<script src="js/plugins/datapicker/bootstrap-datepicker.js"></script>
+			<!-- Bootstrap-Treeview plugin javascript -->
+			<!--<script src="js/plugins/treeview/bootstrap-treeview.js"></script>
+    <script src="js/demo/treeview-demo.js"></script>-->
+			<script src="js/plugins/ztree/jquery.ztree.core.js"></script>
+			<script src="js/plugins/ztree/jquery.ztree.excheck.js"></script>
+
+			<!-- jqGrid -->
+			<script src="js/plugins/jqgrid/i18n/grid.locale-cn.js?0820"></script>
+			<script src="js/plugins/jqgrid/jquery.jqGrid.min.js?0820"></script>
+
+			<script src="js/plugins/validate/jquery.validate.min.js"></script>
+			<script src="js/plugins/validate/messages_zh.min.js"></script>
+
+			<script src="js/plugins/layer/layer.min.js"></script>
+			<script type="text/javascript" src="js/jquery.serializejson.js"></script>
+
+			<script src="js/demo/form-validate-demo.js"></script>
+			<script src="js/common/config.js" type="text/javascript" charset="utf-8"></script>
+			<script type="text/javascript" src="js/common/ztreeDept.js"></script>
+			<script type="text/javascript" src="js/mapController/danbing.js"></script>
+
+	</body>
+
+</html>

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>人流点位管理</title>
+		<link rel="shortcut icon" href="favicon.ico">
+		<link href="css/bootstrap.min.css?v=3.3.5" rel="stylesheet">
+		<link href="css/font-awesome.css?v=4.4.0" rel="stylesheet">
+		<link href="css/plugins/datetime/bootstrap-datetimepicker.css" />
+		<!--<link href="css/plugins/treeview/bootstrap-treeview.css" rel="stylesheet">-->
+		<link href="css/plugins/zTreeStyle/zTreeStyle.css" rel="stylesheet">
+		<link href="css/checkbox3.min.css" rel="stylesheet">
+
+		<!-- jqgrid-->
+		<link href="css/plugins/jqgrid/ui.jqgrid.css" rel="stylesheet">
+		<link href="css/style.css?v=4.0.0" rel="stylesheet">
+		<link href="css/yh.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/zTreeStyle/metro.css" />
+		<link href="css/plugins/chosen/chosen.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/jquery.treetable.css" />
+		<link rel="stylesheet" href="css/jquery.treegrid.css" />
+		<link rel="stylesheet" href="css/jquery.treetable.theme.default.css" />
+		<!--		<link rel="stylesheet" href="css/zTreeStyle/metro.css" />
+-->
+		<style type="text/css">
+			.divcss5 {
+				-webkit-text-size-adjust: none;
+			}
+			
+			table.treetable {
+				font-size: 14px;
+			}
+		</style>
+	</head>
+
+	<body class="gray-bg">
+		<div class="wrapper wrapper-content animated fadeInRight">
+			<div>
+				<div class="col-sm-12 ">
+					<div class="ibox float-e-margins">
+						<div class="ibox-title">
+							<div class="menu-div">
+								<button class="btn btn-primary" data-toggle="modal" data-target="#myModal" id="add-btn">新增重点人类型</button>
+								<!--<button class="btn btn-outline btn-primary" data-toggle="modal" id="update-btn">修改</button>
+								<button class="btn btn-outline btn-danger" id="delete-btn">删除</button>
+								<button class="btn btn-primary btn-outline" id="addAs-btn" data-toggle="modal" data-target="#myModal1">添加重点部位关系</button>
+								<button class="btn btn-outline btn-danger" id="deleteAs-btn">删除重点部位关系</button>-->
+							</div>
+							<!--<div class="search-div">
+								<input type="text" class="search" id="searchText" placeholder="请输入区域id" style="width: 16%;margin-right: 1%;" />
+								<input type="text" class="search" id="searchText1" placeholder="请输入区域名称" style="width: 16%;margin-right: 1%;" />
+								<div class="search" id="searchText4" placeholder="请选择所属部门名称" style="width: 16%;margin-right: 1%;">
+									<select name="stationidList" data-placeholder="选择所属部门" class="chosen-select" style="width:100%; height: 100%;" tabindex="2" id="stationidList" value="stationid">
+										<option value=" "></option>
+									</select>
+								</div>
+								<!--<input type="text" class="search" id="searchText2" placeholder="请输入所属部门id"  style="width: 16%;margin-right: 1%;"/>-->
+							<!--<button class="btn btn-primary btn-sm" id="plsCarTpSch">搜索</button>-->
+							<!--</div>-->
+						</div>
+						<div class="ibox-content">
+							<div class="jqGrid_wrapper">
+								<!--<table id="example-advanced">
+									<tr data-tt-id="1">
+										<td>Parent</td>
+									</tr>
+									<tr data-tt-id="1-1" data-tt-parent-id="1">
+										<td>Child</td>
+									</tr>
+									<tr data-tt-id="2">
+										<td>Parent</td>
+									</tr>
+									<tr data-tt-id="2-1" data-tt-parent-id="2">
+										<td>Child</td>
+									</tr>
+								</table>-->
+								<!--<div>
+									<table id="treeTable1" style="width: 100%">
+										<tr>
+											<td style="width: 200px;">
+												标题</td>
+											<td>
+												内容</td>
+										</tr>
+										<tr id="1">
+											<td>
+												<span controller="true">1</span></td>
+											<td>
+												内容</td>
+										</tr>
+										<tr id="2" pid="1">
+											<td>
+												<span controller="true">2</span></td>
+											<td>
+												内容</td>
+										</tr>
+										<tr id="3" pid="2">
+											<td>
+												3</td>
+											<td>
+												内容</td>
+										</tr>
+										<tr id="4" pid="2">
+											<td>
+												4</td>
+											<td>
+												内容</td>
+										</tr>
+										<tr id="5" pid="4">
+											<td>
+												4.1</td>
+											<td>
+												内容</td>
+										</tr>
+										<tr id="6" pid="1" haschild="true">
+											<td>
+												5</td>
+											<td>
+												注意这个节点是动态加载的</td>
+										</tr>
+										<tr id="7">
+											<td>
+												8</td>
+											<td>
+												内容</td>
+										</tr>
+									</table>
+								</div>-->
+								<table class="table table-bordered table-striped table-hover" id="treetable">
+									<!--<th>类型名称</th>
+									<th>总数</th>
+									<th>操作</th>-->
+								</table>
+								<!--<input type="button" value="关闭所有节点" onclick="expandAll('N')">
+								<input type="button" value="展开所有节点" onclick="expandAll('Y')">
+								<input type="button" value="取得当前行的数据" onclick="selectedItem()"><br> 当前选中的行：
+								<input type="text" id="currentRow" size="110">
+
+								<div id="div1"></div>
+								<div class="ibox-content">
+									<ul id="tree-dep" class="ztree" style="overflow:auto;"></ul>
+								</div>-->
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="width: 100%;">
+					<div class="modal-dialog" style="width: 80%;height: 100%;">
+						<div class="modal-content" style="height: auto;">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h4 class="modal-title" id="myModalLabel">新增摄像头信息</h4>
+							</div>
+							<!--<div class="modal-body">-->
+							<!--新增用户信息-->
+							<div class="">
+
+								<form class="form-horizontal m-t" id="commentForm" action="javascript:;">
+									<div class="col-sm-12">
+										<div class="add-hide">
+
+											<!--<div class="form-group">
+												<label class="col-sm-3 control-label">所属辖区：</label>
+												<div class="col-sm-8">
+													<select name="stationid" data-placeholder="选择所属辖区（必填项）..." class="chosen-select" style="width:600px;" tabindex="2" id="stationid">
+
+													</select>
+													<div class="col-sm-8">
+													</div>
+												</div>
+											</div>-->
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">层级：</label>
+												<div class="col-sm-8">
+													<select name="hierarchy" class="chosen-select" style="width:600px;" tabindex="2" id="hierarchy">
+														<option value="1">根节点为1</option>
+														<option value="2">子节点为2</option>
+													</select>
+													<!--<select name="hierarchy" id="hierarchy">
+														<option value="1">根节点为1</option>
+														<option value="2">子节点为2</option>
+													</select>-->
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">类型的类型：</label>
+												<div class="col-sm-8">
+													<select name="type" class="chosen-select" style="width:600px;" tabindex="2" id="type">
+														<option value="0">0</option>
+														<option value="1">1</option>
+													</select>
+													<!--<input id="type" name="type" maxlength="50" type="text" class="form-control" required="required">-->
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">类型的关键字：</label>
+												<div class="col-sm-8">
+													<input id="typekey" name="typekey" maxlength="50" type="text" class="form-control" required="required">
+													<span class="span-required">(必填)</span>
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">类型名称：</label>
+												<div class="col-sm-8">
+													<input id="typename" name="typename" maxlength="50" type="text" class="form-control" required="required">
+													<span class="span-required">(必填)</span>
+												</div>
+											</div>
+
+											<!--<div class="form-group">
+												<label class="col-sm-3 control-label">人流阈值：</label>
+												<div class="col-sm-8">
+													<input id="threshold" name="threshold" maxlength="38" type="number" class="form-control">
+												</div>
+											</div>-->
+
+										</div>
+									</div>
+
+									<div class="col-sm-12" style="height: 50px; width: 100%;">
+									</div>
+									<div class="modal-footer" style="border-top:0px">
+										<button type="button" class="btn btn-default" data-dismiss="modal" id="cancel" style="position: absolute;bottom: 2%;right: 40%">关闭</button>
+										<button type="submit" class="btn btn-primary" id="plsCarTpSave" style="position: absolute;bottom: 2%;right: 54%;">保存</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="width: 100%;">
+					<div class="modal-dialog" style="width: 91%;height: 100%;">
+						<div class="modal-content" style="height: auto;">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h4 class="modal-title" id="myModalLabel">添加关系</h4>
+							</div>
+							<!--<div class="modal-body">-->
+							<!--新增用户信息-->
+							<div class="">
+								<div class="jqGrid_wrapper">
+									<table id="table_list_2"></table>
+									<div id="pager_list_2"></div>
+								</div>
+								<form class="form-horizontal m-t" id="commentForm" action="javascript:;">
+									<div class="col-sm-12" style="height: 50px; width: 100%;">
+									</div>
+									<div class="modal-footer" style="border-top:0px">
+										<button type="button" class="btn btn-default" data-dismiss="modal" id="cancel" style="position: absolute;bottom: 2%;right: 40%">关闭</button>
+										<button type="submit" class="btn btn-primary" id="plsCarTpSave1" style="position: absolute;bottom: 2%;right: 54%;">保存</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- 全局js -->
+			<script src="js/jquery.min.js?v=2.1.4 "></script>
+			<script src="js/bootstrap.min.js?v=3.3.5 "></script>
+
+			<!-- 自定义js -->
+			<script src="js/content.js?v=1.0.0 "></script>
+
+			<script src="js/plugins/datetime/bootstrap-datetimepicker.js "></script>
+			<!-- Bootstrap-Treeview plugin javascript -->
+			<!--<script src="js/plugins/treeview/bootstrap-treeview.js "></script>
+    <script src="js/demo/treeview-demo.js "></script>-->
+			<!--		<script src="js/plugins/ztree/jquery.ztree.core.js "></script>
+			<script src="js/plugins/ztree/jquery.ztree.excheck.js "></script>-->
+
+			<!-- jqGrid -->
+			<!--<script src="js/plugins/jqgrid/i18n/grid.locale-cn.js?0820"></script>
+			<script src="js/plugins/jqgrid/jquery.jqGrid.min.js?0820"></script>
+-->
+			<script src="js/plugins/validate/jquery.validate.min.js"></script>
+			<script src="js/plugins/validate/messages_zh.min.js"></script>
+
+			<script src="js/plugins/layer/layer.min.js"></script>
+			<script type="text/javascript" src="js/jquery.serializejson.js"></script>
+
+			<script src="js/demo/form-validate-demo.js"></script>
+			<script src="js/jquery.treetable.js"></script>
+			<script type="text/javascript" src="js/common/ztreeDept.js"></script>
+			<script src="js/jqPaginator.js" type="text/javascript" charset="utf-8"></script>
+			<script type="text/javascript" src="js/plugins/chosen/chosen.jquery.js"></script>
+			<script src="js/common/config.js" type="text/javascript" charset="utf-8"></script>
+			<script src="js/common/utils.js" type="text/javascript" charset="utf-8"></script>
+			<!--<script type="text/javascript" src="js/jquery.treegrid.js"></script>-->
+			<script type="text/javascript" src="js/importantPersonController/personType.js"></script>
+	</body>
+
+</html>

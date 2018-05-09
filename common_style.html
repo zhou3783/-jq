@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>公共样式</title>
+		<link rel="shortcut icon" href="favicon.ico">
+		<link href="css/bootstrap.min.css?v=3.3.5" rel="stylesheet">
+		<link href="css/font-awesome.css?v=4.4.0" rel="stylesheet">
+		<link href="css/plugins/datetime/bootstrap-datetimepicker.css" />
+		<link href="css/plugins/zTreeStyle/zTreeStyle.css" rel="stylesheet">
+		<link href="css/checkbox3.min.css" rel="stylesheet">
+		 <!-- jqgrid-->
+        <link href="css/plugins/jqgrid/ui.jqgrid.css?0820" rel="stylesheet">
+        <link href="css/plugins/chosen/chosen.css" rel="stylesheet">
+		<link href="css/style.css?v=4.0.0" rel="stylesheet">
+		<link href="css/yh.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/zTreeStyle/metro.css" />
+		<script type="text/javascript" src="js/jquery.min.js" ></script>
+		
+		<link rel="stylesheet" href="css/tag/jquery-tag-this.css" />
+		<link rel="stylesheet" href="css/tag/jquery-ui-1.9.2.custom.min.css" />
+		
+		<style>
+			 .dropdown-submenu {  
+	            position: relative;  
+	        }  
+	        .dropdown-submenu > .dropdown-menu {  
+	            top: 0;  
+	            left: 100%;  
+	            margin-top: -6px;  
+	            margin-left: -1px;  
+	            -webkit-border-radius: 0 6px 6px 6px;  
+	            -moz-border-radius: 0 6px 6px;  
+	            border-radius: 0 6px 6px 6px;  
+	        }  
+	        .dropdown-submenu:hover > .dropdown-menu {  
+	            display: block;  
+	        }  
+	        .dropdown-submenu > a:after {  
+	            display: block;  
+	            content: " ";  
+	            float: right;  
+	            width: 0;  
+	            height: 0;  
+	            border-color: transparent;  
+	            border-style: solid;  
+	            border-width: 5px 0 5px 5px;  
+	            border-left-color: #ccc;  
+	            margin-top: 5px;  
+	            margin-right: -10px;  
+	        }  
+	        .dropdown-submenu:hover > a:after {  
+	            border-left-color: #fff;  
+	        }  
+	        .dropdown-submenu.pull-left {  
+	            float: none;  
+	        }  
+	        .dropdown-submenu.pull-left > .dropdown-menu {  
+	            left: -100%;  
+	            margin-left: 10px;  
+	            -webkit-border-radius: 6px 0 6px 6px;  
+	            -moz-border-radius: 6px 0 6px 6px;  
+	            border-radius: 6px 0 6px 6px;  
+	        }
+	        .box{
+	        	width: 400px;
+	        	/*height: 300px;*/
+	        	/*border: 1px solid red;*/
+	        }
+	        .box>span{
+	        	display: block;
+	        	width: 100px;
+	        	height: 30px;
+	        	line-height: 30px;
+	        	text-align: center;
+	        	border: 1px solid lightgray;
+	        	border-radius: 3px;
+	        	font-size: 16px;
+	        	color: #262626;
+	        	margin-left: 10px;
+	        	margin-top: 10px;
+	        	float: left;
+	        }
+	        .box>span>span{
+	        	font-size: 14px;
+	        }
+	        .glyphicon{
+	        	cursor: pointer;
+	        }
+		</style>
+	</head>
+	<body>
+		<div class="container-fluid"> 
+			<div class="box" id="box">
+	    	</div>
+		    <div class="row col-lg-12">  
+		        <div class="form-group">  
+	                <!--<input type="hidden" name="category_id" id="category_id" value="" />-->  
+	                <div class="dropdown">
+	                	<!--<input type="text"  id="dLabel" role="button" data-toggle="dropdown" class="btn btn-white" data-target="#" href="javascript:;"/>-->
+	                    <a id="dLabel" style="margin-left: 10px;margin-top: 10px;" role="button" data-toggle="dropdown" class="btn btn-white" data-target="#" href="javascript:;"><span id="select-title">选择分类</span> <span class="caret"></span></a>  
+	                    <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">  
+	                        <li><a href="javascript:;" data-index="1" data-title="一级菜单">一级菜单</a></li>  
+	                        <li class="dropdown-submenu">  
+	                            <a href="javascript:;" data-index="2" data-title="一级菜单">一级菜单</a>  
+	                            <ul class="dropdown-menu">  
+	                                <li><a data-index="2-1" href="javascript:;" data-title="二级菜单">二级菜单</a></li>  
+	                            </ul>  
+	                        </li>  
+	                          
+	                        <li class="dropdown-submenu">  
+	                            <a tabindex="3" href="javascript:;" data-title="一级菜单">一级菜单</a>  
+	                            <ul class="dropdown-menu">  
+	                                <li><a tabindex="3-1" href="javascript:;" data-title="二级菜单">二级菜单</a></li>  
+	                                <li class="divider"></li>  
+	                                <li class="dropdown-submenu">  
+	                                    <a href="javascript:;" data-index="3-2" data-title="二级菜单">二级菜单</a>  
+	                                    <ul class="dropdown-menu">  
+	                                        <li><a href="javascript:;" data-index="3-2-1" data-title="三级菜单">三级菜单</a></li>  
+	                                    </ul>  
+	                                </li>  
+	                            </ul>  
+	                        </li>  
+	                    </ul>  
+	                </div>  
+		        </div>
+		    </div> 
+		    
+		    <div class="example">
+				<input type="text" id="simple-tags" name="simple-tags">
+				<button class="simple-clear-all-button small-button">全部清除</button>
+			</div>
+		    
+		</div>  
+	</body>
+	<script>
+	  
+	
+	
+	$(function(){
+		var  box=document.getElementById("box");
+		$('.dropdown li a').click(function(){ 
+	    title = $(this).attr("data-title");  
+	    id = $(this).attr("data-index");  
+	    $("#select-title").text(title);
+	    var span=document.createElement("span");
+	    var span1=document.createElement("span");
+	    span.innerHTML=title+"<span class='glyphicon glyphicon-remove'></span>";
+	    box.appendChild(span);
+//	    $("#category_id").val(id);  
+		})
+		$(".box").on("click",".glyphicon",function(e){
+//			$(this).parent().hide();
+//			$(this).parent().remove();
+			$(e.target).parent().hide();
+		})
+	})
+	
+	</script>
+		<!-- 全局js -->
+    <script src="js/jquery.min.js?v=2.1.4"></script>
+    <script src="js/bootstrap.min.js?v=3.3.5"></script>
+
+    <!-- 自定义js -->
+    <script src="js/content.js?v=1.0.0"></script>
+ <script src="js/plugins/datetime/bootstrap-datetimepicker.js"></script>
+
+    <!-- Bootstrap-Treeview plugin javascript -->
+    <!--<script src="js/plugins/treeview/bootstrap-treeview.js"></script>
+    <script src="js/demo/treeview-demo.js"></script>-->
+    <script src="js/plugins/ztree/jquery.ztree.core.js"></script>
+   <script src="js/plugins/ztree/jquery.ztree.excheck.js"></script>
+        <!-- jqGrid -->
+    <script src="js/plugins/jqgrid/i18n/grid.locale-cn.js?0820"></script>
+    <script src="js/plugins/jqgrid/jquery.jqGrid.min.js?0820"></script>
+    <script type="text/javascript" src="js/jquery.serializejson.js" ></script>
+
+     <script src="js/plugins/validate/jquery.validate.min.js"></script>
+    <script src="js/plugins/validate/messages_zh.min.js"></script>
+  
+  <script type="text/javascript" src="js/plugins/chosen/chosen.jquery.js" ></script>
+  
+  <script src="js/plugins/layer/layer.min.js"></script>
+   <script type="text/javascript" src="js/jqPaginator.js" ></script>
+    
+    <script src="js/demo/form-validate-demo.js"></script>
+    <script type="text/javascript" src="js/controllerJs/user.js" ></script>
+    <script type="text/javascript" src="js/common/ztreeDept.js" ></script>
+    <script src="js/common/config.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="js/jquery-ui.custom.min.js" ></script>
+	<script type="text/javascript" src="js/tag/jquery.tagthis.js" ></script>
+	<script type="text/javascript" src="js/tag/main.js" ></script>
+	<script type="text/javascript" src="js/tag/prism.js" ></script>
+</html>

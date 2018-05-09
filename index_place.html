@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>场所管理</title>
+		<link rel="shortcut icon" href="favicon.ico">
+		<link href="css/bootstrap.min.css?v=3.3.5" rel="stylesheet">
+		<link href="css/font-awesome.css?v=4.4.0" rel="stylesheet">
+		<link href="css/plugins/treeview/bootstrap-treeview.css" rel="stylesheet">
+		<link href="css/checkbox3.min.css" rel="stylesheet">
+		<!--<link href="css/plugins/cropper/cropper.min.css" rel="stylesheet">-->
+		<!--<link href="css/plugins/datapicker/datepicker3.css" rel="stylesheet">-->
+		<!-- jqgrid-->
+		<link href="css/plugins/jqgrid/ui.jqgrid.css?0820" rel="stylesheet">
+		<link href="css/style.css?v=4.0.0" rel="stylesheet">
+		<link href="css/plugins/chosen/chosen.css" rel="stylesheet">
+		<link href="css/yh.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/zTreeStyle/metro.css" />
+
+	</head>
+
+	<body class="gray-bg">
+		<div class="wrapper wrapper-content animated fadeInRight">
+
+			<div>
+				<div class="col-sm-12">
+					<div class="ibox float-e-margins">
+						<div class="ibox-title">
+							<div class="menu-div">
+								<button class="btn btn-outline btn-primary" data-toggle="modal" data-target="#myModal" id="add-btn">新增 </button>
+								<!--<button class="btn ">新增</button>-->
+								<button class="btn btn-outline btn-primary" data-toggle="modal" id="update-btn">修改</button>
+								<button class="btn btn-outline btn-danger" id="delete-btn">删除</button>
+
+								<button class="btn btn-outline btn-primary" data-toggle="modal" data-target="#myModal1" id="addDep-btn">添加重点部位关系</button>
+								<button class="btn btn-outline btn-danger" id="deleteDep-btn">删除重点部位关系</button>
+								<button class="btn btn-primary" data-toggle="modal" data-target="#myModal2"  id="import-btn">导入</button>
+								<button class="btn btn-primary" id="download-modalExcel">模板下载</button>
+
+							</div>
+							<div class="search-div">
+								<input type="text" class="search" style="width: 16%;margin-right: 1%;" id="namename" placeholder="请输入名称" />
+								<input type="text" class="search" style="width: 16%;margin-right: 1%;" id="codecode" placeholder="请输入编码" />
+								<div class="search" id="searchText4" placeholder="请选择所属部门名称" style="width: 16%;margin-right: 1%;">
+									<select name="stationidList" data-placeholder="选择所属部门" class="chosen-select" style="width:100%; height: 100%;" tabindex="2" id="stationidstationid" value="stationid">
+										<option value=" "></option>
+									</select>
+								</div>
+								<!--<input type="text" class="search" style="width: 16%;margin-right: 1%;" id="searchText2" placeholder="请输入所属部门id" />-->
+								<input type="text" class="search" style="width: 16%;margin-right: 1%;" id="resourceTypeCoderesourceTypeCode" placeholder="请输入资源类型 " />
+								<button class="btn btn-primary btn-sm" id="plsCarTpSch">搜索</button>
+
+							</div>
+							<div class="jqGrid_wrapper">
+								<table id="table_list_1"></table>
+								<div class="" style="float:right;">
+									<ul class="pagination" id="pagination1"></ul>
+								</div>
+							</div>
+
+							<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="width: 100%;">
+								<div class="modal-dialog" style="width: 80%; height: 100%;">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+											<h4 class="modal-title" id="myModalLabel">新增场所信息</h4>
+										</div>
+										<div class="add-hide">
+											<form class="form-horizontal m-t" id="commentForm" action="javascript:placeAction();">
+												<div class="col-sm-12">
+													<div class="add-hide">
+
+														<div class="form-group col-sm-6">
+															<label class="col-sm-4 control-label">地址：</label>
+															<div class="col-sm-8">
+																<input id="address" required="required" placeholder="必填项" type="text" class="form-control" name="address" maxlength="256">
+															</div>
+														</div>
+
+														<div class="form-group col-sm-6">
+															<label class="col-sm-4 control-label">大图：</label>
+															<div class="col-sm-8">
+																<input id="bimage" type="text" class="form-control" name="bimage" maxlength="64">
+															</div>
+														</div>
+
+														<div class="form-group col-sm-6">
+															<label class="col-sm-4 control-label">编码：</label>
+															<div class="col-sm-8">
+																<input id="code" required="required" placeholder="必填项" type="text" class="form-control" name="code" maxlength="32">
+															</div>
+														</div>
+														<div class="form-group col-sm-6">
+															<label class="col-sm-4 control-label">描述：</label>
+															<div class="col-sm-8">
+																<input id="description" type="text" class="form-control" name="description">
+															</div>
+														</div>
+														<div class="form-group col-sm-6">
+															<label class="col-sm-4 control-label">设备名：</label>
+															<div class="col-sm-8">
+																<input id="name" required="required" placeholder="必填项" type="text" class="form-control" name="name" maxlength="255">
+															</div>
+														</div>
+
+														<div class="form-group col-sm-6">
+															<label class="col-sm-4 control-label">场所类别：</label>
+															<div class="col-sm-8">
+																<input id="placetype" type="text" class="form-control" name="placetype" maxlength="200">
+															</div>
+														</div>
+
+														<div class="form-group col-sm-6">
+															<label class="col-sm-4 control-label">所属部门：</label>
+															<div class="col-sm-8">
+																<select name="stationid" data-placeholder="选择所属部门（必填项）..." class="chosen-select" tabindex="2" id="stationid">
+
+																</select>
+																<div class="col-sm-8">
+																</div>
+															</div>
+														</div>
+
+														<div class="form-group col-sm-6">
+															<label class="col-sm-4 control-label">小图：</label>
+															<div class="col-sm-8">
+																<input id="simage" type="text" class="form-control" name="simage" maxlength="64">
+															</div>
+														</div>
+
+														<div class="form-group col-sm-6">
+															<label class="col-sm-4 control-label">资源类型编码：</label>
+															<div class="col-sm-8">
+																<select name="resourceTypeCode" class="chosen-select" tabindex="2" id="resourceTypeCode">
+																	<option value="hotel">hotel</option>
+																	<option value="netbar">netbar</option>
+																</select>
+															</div>
+														</div>
+
+														<div class="form-group col-sm-6">
+															<label class="col-sm-4 control-label">扩展属性表：</label>
+															<div class="col-sm-8">
+																<input id="owner" required="required" type="text" class="form-control" name="owner" placeholder="必填项(T_RES_PLACE_INFO)" value="T_RES_PLACE_INFO">
+															</div>
+														</div>
+
+														<div class="form-group col-sm-6">
+															<label class="col-sm-4 control-label">纬度：</label>
+															<div class="col-sm-8">
+																<input id="latitude" type="number" class="form-control" name="latitude" maxlength="14">
+															</div>
+														</div>
+
+														<div class="form-group col-sm-6">
+															<label class="col-sm-4 control-label">经度：</label>
+															<div class="col-sm-8">
+																<input id="longitude" type="number" class="form-control" name="longitude" maxlength="14">
+															</div>
+														</div>
+
+														<div class="form-group col-sm-6">
+															<label class="col-sm-4 control-label">点位名称：</label>
+															<div class="col-sm-8">
+																<input id="pointName" required="required" placeholder="必填项" type="text" class="form-control" name="pointName">
+															</div>
+														</div>
+
+													</div>
+												</div>
+												<div class="col-sm-12" style="height: 50px; width: 100%;">
+												</div>
+
+												<div class="form-group">
+													<div class="modal-footer">
+														<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+														<button type="submit" class="btn btn-primary" id="saveDB">保存</button>
+													</div>
+												</div>
+											</form>
+
+										</div>
+
+									</div>
+								</div>
+							</div>
+
+							<!--添加重点部位弹框-->
+							<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+								<div class="modal-dialog" style="width:960px">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+											<h4 class="modal-title" id="myModalLabel">酒店、 网吧添加重点部位</h4>
+										</div>
+										<!--<div class="modal-body">-->
+										<!--新增信息-->
+										<div class="add-hide">
+											<div class="jqGrid_wrapper">
+												<table id="table_list_2"></table>
+												<div id="pager_list_2"></div>
+											</div>
+
+											<div class="form-group">
+
+												<div class="modal-footer">
+													<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+													<button type="button" class="btn btn-primary" id="saveImportantPlace">添加</button>
+												</div>
+											</div>
+
+										</div>
+
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+				</div>
+				<div>
+
+				</div>
+				<!--导入-->
+				<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+					<div class="modal-dialog" style="height: 150px; ">
+						<div class="modal-content" style="height: 150px; ">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h4 class="modal-title" id="myModalLabel">导入列表信息</h4>
+							</div>
+						
+							<div class="add-hide addImportant">
+								
+									<form enctype="multipart/form-data" id="uploadExcel">
+									<div class="col-sm-12" >
+										<div class="form-group" >
+											<label class="col-sm-2 control-label" style="padding-top: 10px; ">选择文件</label>	
+											 <div class="col-sm-7">
+							                <input type="file" id="excelFile" class="form-control" name="file">
+							                 </div>
+							                <div class="col-sm-2">
+							                <!--	<button class="btn btn-primary " id="uploadExcelBtn ">导入</button>-->
+							                <input type="button" class="btn btn-primary" id="uploadExcelBtn" value="导入" />
+										    </div>
+										</div>
+										
+									</div>
+									</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- 全局js -->
+			<script src="js/jquery.min.js"></script>
+			<script src="js/bootstrap.min.js"></script>
+
+			<!-- 自定义js -->
+			<script src="js/content.js?v=1.0.0"></script>
+
+			<!--<script src="js/plugins/datapicker/bootstrap-datepicker.js"></script>-->
+			<script src="js/plugins/datetime/bootstrap-datetimepicker.js"></script>
+			<!-- Bootstrap-Treeview plugin javascript -->
+			<script src="js/plugins/treeview/bootstrap-treeview.js"></script>
+			<script src="js/demo/treeview-demo.js"></script>
+
+			<!-- jqGrid -->
+			<script src="js/plugins/jqgrid/i18n/grid.locale-cn.js?0820"></script>
+			<script src="js/plugins/jqgrid/jquery.jqGrid.min.js?0820"></script>
+
+			<script src="js/plugins/validate/jquery.validate.min.js"></script>
+			<script src="js/plugins/validate/messages_zh.min.js"></script>
+			<script type="text/javascript" src="js/jqPaginator.js"></script>
+			<script src="js/plugins/layer/layer.min.js"></script>
+
+			<script src="js/demo/form-validate-demo.js"></script>
+			<script type="text/javascript" src="js/plugins/chosen/chosen.jquery.js"></script>
+			<script src="js/jquery.serializejson.js" type="text/javascript" charset="utf-8"></script>
+			<script src="js/common/config.js" type="text/javascript" charset="utf-8"></script>
+			<script src="js/common/utils.js" type="text/javascript" charset="utf-8"></script>
+			<script type="text/javascript" src="js/mapController/place.js"></script>
+
+	</body>
+
+</html>

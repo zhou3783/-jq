@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>警员管理</title>
+		<link rel="shortcut icon" href="favicon.ico">
+		<link href="css/bootstrap.min.css?v=3.3.5" rel="stylesheet">
+		<link href="css/font-awesome.css?v=4.4.0" rel="stylesheet">
+		<link href="css/plugins/datetime/bootstrap-datetimepicker.css" />
+		<link href="css/plugins/zTreeStyle/zTreeStyle.css" rel="stylesheet">
+		<link href="css/checkbox3.min.css" rel="stylesheet">
+
+		<!--<link href="css/plugins/cropper/cropper.min.css" rel="stylesheet">-->
+		<!--<link href="css/plugins/datapicker/datepicker3.css" rel="stylesheet">-->
+		<!-- jqgrid-->
+		<link href="css/plugins/jqgrid/ui.jqgrid.css?0820" rel="stylesheet">
+		<link href="css/plugins/chosen/chosen.css" rel="stylesheet">
+		<link href="css/style.css?v=4.0.0" rel="stylesheet">
+		<link href="css/yh.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/zTreeStyle/metro.css" />
+	</head>
+
+	<body class="gray-bg">
+		<div class="wrapper wrapper-content animated fadeInRight">
+
+			<div>
+				<div class="col-sm-4">
+					<div class="ibox float-e-margins">
+						<div class="ibox-title">
+							<h5>组织列表</h5>
+							<div class="search-tree">
+								<input type="text" class="search" id="searchText" placeholder="请输入部门名称" /><button class="btn btn-primary btn-sm" id="deptSearch">搜索</button>
+							</div>
+						</div>
+						<div class="ibox-content">
+							<ul id="tree-dep" class="ztree"></ul>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-8">
+					<div class="ibox float-e-margins">
+						<div class="ibox-title">
+							<div class="menu-div">
+								<button class="btn btn-outline btn-primary" data-toggle="modal" data-target="#myModalInsert" id="add-btn">新增 </button>
+								<!--<button class="btn ">新增</button>-->
+								<button class="btn btn-outline btn-primary" data-toggle="modal" data-target="#myModal" id="update-btn">修改</button>
+								<button class="btn btn-outline btn-danger" id="delete-btn">删除</button>
+								<button class="btn btn-primary" data-toggle="modal" data-target="#myModal2"  id="import-btn">导入</button>
+								<button class="btn btn-primary" id="download-modalExcel">模板下载</button>
+							</div>
+							<div class="search-div">
+								<input type="text" class="search" id="searchUserText" placeholder="请输入警员名" /><button class="btn btn-primary btn-sm" id="searchUser">搜索</button>
+							</div>
+							<div class="jqGrid_wrapper">
+								<table id="table_list_1"></table>
+								<div id="pager_list_1"></div>
+							</div>
+							<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+											<h4 class="modal-title" id="myModalLabel">修改警员信息</h4>
+										</div>
+										<!--<div class="modal-body">-->
+										<!--修改用户信息-->
+										<div class="add-hide">
+											<form class="form-horizontal m-t" id="commentForm">
+												<div class="form-group">
+													<label class="col-sm-3 control-label">警员代码：</label>
+													<div class="col-sm-8">
+														<input id="policeCode" name="policeCode" minlength="2" type="text" class="form-control" required="" aria-required="true" placeholder="必填项">
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-sm-3 control-label">警员姓名：</label>
+													<div class="col-sm-8">
+														<input id="name" name="name" minlength="2" type="text" class="form-control" required="" aria-required="true" placeholder="必填项">
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-sm-3 control-label">性别：</label>
+													<div class="col-sm-8">
+														<select class="form-control" id="gender" name="gender">
+															<option value="男">男</option>
+															<option value="女">女</option>
+														</select>
+													</div>
+												</div>
+												<!--	<div class="form-group">
+													<label class="col-sm-3 control-label">所属部门：</label>
+													<div class="col-sm-8">
+														<select name="stationId" data-placeholder="选择所属部门..." class="chosen-select" style="width:350px;" tabindex="2" id="stationId">
+
+														</select>
+														<div class="col-sm-8">
+														</div>
+													</div>
+												</div>-->
+												<div class="form-group">
+													<label class="col-sm-3 control-label">所属部门：</label>
+													<div class="col-sm-8">
+														<input id="stationId" type="hidden" class="form-control" name="stationId" required="" aria-required="true">
+														<input id="stationName" type="text" class="form-control stationName" name="stationName" required="required" aria-required="true" value="123" placeholder="必填项">
+														<div class="parent-div parent-div-dept">
+															<div id="treeview11" class="test"></div>
+
+															<ul id="tree-parent-dept" class="ztree"></ul>
+														</div>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-sm-3 control-label">联系电话：</label>
+													<div class="col-sm-8">
+														<input id="telephone" name="telephone" maxlength="11" type="tel" class="form-control" required="required" aria-required="true" placeholder="必填项 格式：15812345678">
+													</div>
+												</div>
+
+												<div class="form-group">
+													<label class="col-sm-3 control-label">经纬度：</label>
+													<div class="col-sm-4">
+														<input id="longitude" type="number" min="0" max="180" class="form-control" name="longitude" required="" aria-required="true" placeholder="经度">
+													</div>
+													<div class="col-sm-4">
+														<input id="latitude" type="number" min="0" max="90" class="form-control" name="latitude" required="" aria-required="true" placeholder="纬度">
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-sm-3 control-label">警员状态：</label>
+													<div class="col-sm-8">
+														<select class="form-control" name="status" id="status">
+															<option value="0">禁用</option>
+															<option value="1">启用</option>
+														</select>
+													</div>
+												</div>
+												<!--<div class="form-group">
+													<label class="col-sm-3 control-label">警员类型：</label>
+													<div class="col-sm-8">
+														<select name="policeTypeId" data-placeholder="选择警员类型..." class="chosen-select" style="width:350px;" tabindex="2" id="policeTypeId">
+
+														</select>
+														<div class="col-sm-8">
+														</div>
+													</div>
+												</div>-->
+
+												<!--<div class="form-group">
+													<label class="col-sm-3 control-label">职位：</label>
+													<div class="col-sm-8">
+														<select name="policePosition" data-placeholder="选择职位..." class="chosen-select" style="width:350px;" tabindex="2" id="policePosition">
+
+														</select>
+														<div class="col-sm-8">
+														</div>
+													</div>
+												</div>-->
+
+												<div class="form-group">
+													<label class="col-sm-3 control-label">警员类型：</label>
+													<div class="col-sm-8">
+														<input id="policeTypeId" type="hidden" class="form-control" name="policeTypeId" required="" aria-required="true">
+														<input id="policeTypeName" type="text" class="form-control policeTypeName" name="policeTypeName" required="required" aria-required="true" placeholder="必填项">
+														<div class="parent-div parent-div-type">
+															<ul id="tree-parent-type" class="ztree"></ul>
+														</div>
+													</div>
+												</div>
+
+												<div class="form-group">
+													<label class="col-sm-3 control-label">职位：</label>
+													<div class="col-sm-8">
+														<input id="policePosition" type="hidden" class="form-control" name="policePosition" required="" aria-required="true">
+														<input id="policePositionName" type="text" class="form-control policePositionName" name="policePositionName" required="required" aria-required="true" placeholder="必填项">
+														<div class="parent-div parent-div-job">
+															<ul id="tree-parent-job" class="ztree"></ul>
+														</div>
+													</div>
+												</div>
+
+												<div class="form-group">
+													<label class="col-sm-3 control-label">办公电话：</label>
+													<div class="col-sm-8">
+														<input id="officeTel" name="officeTel" maxlength="11" type="tel" class="form-control" required="required" aria-required="true">
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-sm-3 control-label">生日：</label>
+													<div class="col-sm-8">
+														<div class="input-group date" id="date">
+															<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+															<input type="text" value="2014-09-23" id="datetimepicker" class="form-control" name="birthday" placeholder="必填项" required="required">
+														</div>
+													</div>
+
+												</div>
+												<div class="form-group">
+													<label class="col-sm-3 control-label">排序：</label>
+													<div class="col-sm-8">
+														<input id="sort" name="sort" type="number" min="0" class="form-control">
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-sm-3 control-label">逻辑删除：</label>
+													<div class="col-sm-8">
+														<div class="radio3">
+															<input type="radio" id="isDelete1" name="isDelete" value="0">
+															<label for="isDelete1">删除</label>
+														</div>
+														<div class="radio3">
+															<input type="radio" id="isDelete0" name="isDelete" checked="checked" value="1">
+															<label for="isDelete0">不删除</label>
+														</div>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-sm-3 control-label">是否是测试员：</label>
+													<div class="col-sm-8">
+														<div class="radio3">
+															<input type="radio" id="isTestPolice1" name="isTestPolice" value="1">
+															<label for="isTestPolice1">是</label>
+														</div>
+														<div class="radio3">
+															<input type="radio" id="isTestPolice0" name="isTestPolice" checked="checked" value="0">
+															<label for="isTestPolice0">否</label>
+														</div>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-sm-3 control-label">相片：</label>
+													<div class="col-sm-8">
+														<input type="text" class="form-control" id="pictureUrl" name="pictureUrl" accept=".jpg,.png,.png" readonly="readonly">
+													</div>
+												</div>
+
+											</form>
+											<form enctype="multipart/form-data" id="uploadForm" style="height: 50px;">
+												<div class="col-sm-12">
+													<div class="form-group">
+														<label class="col-sm-3 control-label" style="text-align: right;">警员相片：</label>
+														<div class="col-sm-8">
+															<input type="file" id="file" name="file" class="form-control" readonly="readonly" style="width: calc(100% - 55px);float: left;">
+															<input type="button" class="btn btn-primary" id="uploadBtn" value="上传" />
+														</div>
+
+													</div>
+												</div>
+											</form>
+											<div class="form-group">
+												<div class="modal-footer">
+													<button class="btn btn-default" data-dismiss="modal">关闭</button>
+													<button class="btn btn-primary" data-dismiss="modal" id="updatePoliceBtn">保存</button>
+												</div>
+											</div>
+
+										</div>
+										</div></div>
+										</div>
+										
+										<!--</div>-->
+
+										<div class="modal fade" id="myModalInsert" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+											<div class="modal-dialog">
+												<div class="modal-content">
+													<div class="modal-header">
+														<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+														<h4 class="modal-title" id="myModalLabel">新增用户警员信息</h4>
+													</div>
+													<!--<div class="modal-body">-->
+													<!--新增用户信息-->
+													<div class="add-hide">
+														<form class="form-horizontal m-t" id="addcommentForm">
+															<div class="form-group">
+																<label class="col-sm-3 control-label">用户名：</label>
+																<div class="col-sm-8">
+																	<input id="username" name="username" minlength="2" type="text" class="form-control" required="" aria-required="true" placeholder="必填项">
+																</div>
+															</div>
+															<div class="form-group">
+																<label class="col-sm-3 control-label">账号：</label>
+																<div class="col-sm-8">
+																	<input id="loginName" type="text" class="form-control" name="loginName" required="" aria-required="true" placeholder="必填项">
+																</div>
+															</div>
+															<div class="form-group">
+																<label class="col-sm-3 control-label">密码：</label>
+																<div class="col-sm-8">
+																	<input id="pwd" type="text" class="form-control" name="pwd" required="" aria-required="true" placeholder="必填项">
+																</div>
+															</div>
+															<div class="form-group">
+																<label class="col-sm-3 control-label">用户状态：</label>
+																<div class="col-sm-8">
+																	<select class="form-control" name="state" id="state">
+																		<option value="0">禁用</option>
+																		<option value="1">启用</option>
+																	</select>
+																</div>
+
+															</div>
+															<!--<div class="form-group">
+													<label class="col-sm-3 control-label">所属单位：</label>
+													<div class="col-sm-8">
+														<input id="unit" type="text" class="form-control" name="unit" required="" aria-required="true" readonly="readonly">
+													</div>
+												</div>-->
+															<!--<div class="form-group">
+													<label class="col-sm-3 control-label">警员信息：</label>
+													<div class="col-sm-8">
+														<select data-placeholder="选择警员..." class="chosen-select" style="width:350px;" tabindex="2">
+															<option value="">无</option>
+															<option value="1">警员1</option>
+															<option value="1">警员2</option>
+															<option value="1">警员3</option>
+															<option value="1">警员4</option>
+															<option value="1">警员5</option>
+															<option value="1">警员6</option>
+															<option value="1">警员7</option>
+															<option value="1">警员8</option>
+														</select>
+
+													</div>
+												</div>-->
+
+															<div class="form-group">
+																<label class="col-sm-3 control-label">警员代码：</label>
+																<div class="col-sm-8">
+																	<input id="policeCode1" name="policeCode" minlength="2" type="text" class="form-control" required="" aria-required="true" placeholder="必填项">
+																</div>
+															</div>
+															<div class="form-group">
+																<label class="col-sm-3 control-label">警员姓名：</label>
+																<div class="col-sm-8">
+																	<input id="name1" name="name" minlength="2" type="text" class="form-control" required="" aria-required="true" placeholder="必填项">
+																</div>
+															</div>
+															<div class="form-group">
+																<label class="col-sm-3 control-label">性别：</label>
+																<div class="col-sm-8">
+																	<select class="form-control" id="gender1" name="gender">
+																		<option value="男">男</option>
+																		<option value="女">女</option>
+																	</select>
+																</div>
+															</div>
+															<!--<div class="form-group">
+													<label class="col-sm-3 control-label">所属部门：</label>
+													<div class="col-sm-8">
+														<input id="stationId1" type="hidden" class="form-control" name="stationId" required="" aria-required="true">
+															<input id="stationName1" type="text" class="form-control stationName" name="stationName" required="" aria-required="true" value="123">
+														<div class="parent-div parent-div-dept" >
+															<!--<div id="treeview11" class="test"></div>
+															
+															<ul id="tree-parent-dept1" class="ztree"></ul>
+														</div>
+													</div>
+												</div>-->
+															<div class="form-group">
+																<label class="col-sm-3 control-label">所属部门：</label>
+																<div class="col-sm-8">
+																	<select name="stationId" data-placeholder="选择所属部门（必填项）..." class="chosen-select" style="width:350px;" tabindex="2" id="stationId1">
+
+																	</select>
+																	<div class="col-sm-8">
+																	</div>
+																</div>
+															</div>
+															<div class="form-group">
+																<label class="col-sm-3 control-label">联系电话：</label>
+																<div class="col-sm-8">
+																	<input id="telephone1" name="telephone" maxlength="11" type="tel" class="form-control" required="" aria-required="true" placeholder="必填项">
+																</div>
+															</div>
+
+
+															<input type="hidden" class="form-control" name="pictureUrl" id="pictureUrl1">
+
+															<div class="form-group">
+																<label class="col-sm-3 control-label">经纬度：</label>
+																<div class="col-sm-4">
+																	<input id="longitude1" type="number" min="0" max="180" class="form-control" name="longitude" required="" aria-required="true" placeholder="经度">
+																</div>
+																<div class="col-sm-4">
+																	<input id="latitude1" type="number" min="0" max="90" class="form-control" name="latitude" required="" aria-required="true" placeholder="纬度">
+																</div>
+															</div>
+															<div class="form-group">
+																<label class="col-sm-3 control-label">警员状态：</label>
+																<div class="col-sm-8">
+																	<select class="form-control" name="status" id="status1">
+																		<option value="0">禁用</option>
+																		<option value="1">启用</option>
+																	</select>
+																</div>
+															</div>
+															<!--<div class="form-group">
+																<label class="col-sm-3 control-label">警员类型：</label>
+																<div class="col-sm-8">
+																	<input id="policeTypeId1" type="hidden" class="form-control" name="policeTypeId" required="" aria-required="true">
+																	<input id="policeTypeName1" type="text" class="form-control policeTypeName" name="policeTypeName" required="" aria-required="true">
+																	<div class="parent-div parent-div-type">
+																		<ul id="tree-parent-type1" class="ztree"></ul>
+																	</div>
+																</div>
+															</div>
+															<div class="form-group">
+																<label class="col-sm-3 control-label">职位：</label>
+																<div class="col-sm-8">
+																	<input id="policePosition1" type="hidden" class="form-control" name="policePosition" required="" aria-required="true">
+																	<input id="policePositionName1" type="text" class="form-control policePositionName" name="policePositionName" required="" aria-required="true">
+																	<div class="parent-div parent-div-job">
+																		<ul id="tree-parent-job1" class="ztree"></ul>
+																	</div>
+																</div>
+															</div>-->
+
+															<div class="form-group">
+																<label class="col-sm-3 control-label">警员类型：</label>
+																<div class="col-sm-8">
+																	<select name="policeTypeId" data-placeholder="选择警员类型（必填项）..." class="chosen-select" style="width:350px;" tabindex="2" id="policeTypeId1">
+
+																	</select>
+																	<div class="col-sm-8">
+																	</div>
+																</div>
+															</div>
+
+															<div class="form-group">
+																<label class="col-sm-3 control-label">职位：</label>
+																<div class="col-sm-8">
+																	<select name="policePosition" data-placeholder="选择职位（必填项）..." class="chosen-select" style="width:350px;" tabindex="2" id="policePosition1">
+
+																	</select>
+																	<div class="col-sm-8">
+																	</div>
+																</div>
+															</div>
+
+															<div class="form-group">
+																<label class="col-sm-3 control-label">办公电话：</label>
+																<div class="col-sm-8">
+																	<input id="officeTel1" name="officeTel" maxlength="11" type="tel" class="form-control" required="" aria-required="true">
+																</div>
+															</div>
+															<div class="form-group">
+																<label class="col-sm-3 control-label">生日：</label>
+																<div class="col-sm-8">
+																	<div class="input-group date" id="date1">
+																		<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+																		<input type="text" value="2014-09-23" id="datetimepicker1" class="form-control" name="birthday" >
+																	</div>
+																</div>
+															</div>
+															<div class="form-group">
+																<label class="col-sm-3 control-label">排序：</label>
+																<div class="col-sm-8">
+																	<input id="sort" name="sort" type="number" min="0" class="form-control">
+																</div>
+															</div>
+															<div class="form-group">
+																<label class="col-sm-3 control-label">逻辑删除：</label>
+																<div class="col-sm-8">
+																	<div class="radio3">
+																		<input type="radio" id="isDelete3" name="isDelete" value="0">
+																		<label for="isDelete3">删除</label>
+																	</div>
+																	<div class="radio3">
+																		<input type="radio" id="isDelete4" name="isDelete" checked="checked" value="1">
+																		<label for="isDelete4">不删除</label>
+																	</div>
+																</div>
+															</div>
+															<div class="form-group">
+																<label class="col-sm-3 control-label">是否是测试员：</label>
+																<div class="col-sm-8">
+																	<div class="radio3">
+																		<input type="radio" id="isTestPolice3" name="isTestPolice" value="1">
+																		<label for="isTestPolice3">是</label>
+																	</div>
+																	<div class="radio3">
+																		<input type="radio" id="isTestPolice4" name="isTestPolice" checked="checked" value="0">
+																		<label for="isTestPolice4">否</label>
+																	</div>
+																</div>
+															</div>
+
+														</form>
+														<form enctype="multipart/form-data" id="uploadForm1" style="height: 50px;">
+															<div class="col-sm-12">
+																<div class="form-group">
+																	<label class="col-sm-3 control-label" style="text-align: right;">警员相片：</label>
+																	<div class="col-sm-8">
+																		<input type="file" id="file1" name="file" class="form-control" readonly="readonly" style="width: calc(100% - 55px);float: left;">
+																		<input type="button" class="btn btn-primary" id="uploadBtn1" value="上传" />
+																	</div>
+																</div>
+															</div>
+														</form>
+
+														<!--</div>-->
+														<div class="form-group">
+															<div class="modal-footer">
+																<button class="btn btn-default" data-dismiss="modal">关闭</button>
+																<button class="btn btn-primary" data-dismiss="modal" id="savePoliceBtn">保存</button>
+															</div>
+														</div>
+
+													</div>
+
+												</div>
+											</div>
+										</div>
+
+									</div>
+
+								</div>
+							</div>
+
+						</div>
+						<!--导入-->
+				<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+					<div class="modal-dialog" style="height: 150px; ">
+						<div class="modal-content" style="height: 150px; ">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h4 class="modal-title" id="myModalLabel">导入列表信息</h4>
+							</div>
+						
+							<div class="add-hide addImportant">
+								
+									<form enctype="multipart/form-data" id="uploadExcel">
+									<div class="col-sm-12" >
+										<div class="form-group" >
+											<label class="col-sm-2 control-label" style="padding-top: 10px; ">选择文件</label>	
+											 <div class="col-sm-7">
+							                <input type="file" id="excelFile" class="form-control" name="file">
+							                 </div>
+							                <div class="col-sm-2">
+							                <!--	<button class="btn btn-primary " id="uploadExcelBtn ">导入</button>-->
+							                <input type="button" class="btn btn-primary" id="uploadExcelBtn" value="导入" />
+										    </div>
+										</div>
+										
+									</div>
+									</form>
+							</div>
+						</div>
+					</div>
+				</div>
+					</div>
+
+				</div>
+				<div>
+
+				</div>
+			</div>
+
+			<!-- 全局js -->
+			<script src="js/jquery.min.js?v=2.1.4"></script>
+			<script src="js/bootstrap.min.js?v=3.3.5"></script>
+
+			<!-- 自定义js -->
+			<script src="js/content.js?v=1.0.0"></script>
+
+			<script src="js/plugins/datetime/bootstrap-datetimepicker.js"></script>
+			<!-- Bootstrap-Treeview plugin javascript -->
+			<script src="js/plugins/ztree/jquery.ztree.core.js"></script>
+			<script src="js/plugins/ztree/jquery.ztree.excheck.js"></script>
+			<!-- jqGrid -->
+			<script src="js/plugins/jqgrid/i18n/grid.locale-cn.js?0820"></script>
+			<script src="js/plugins/jqgrid/jquery.jqGrid.min.js?0820"></script>
+			<script src="js/plugins/validate/jquery.validate.min.js"></script>
+			<script src="js/plugins/validate/messages_zh.min.js"></script>
+			<script type="text/javascript" src="js/jquery.serializejson.js"></script>
+			<script type="text/javascript" src="js/plugins/chosen/chosen.jquery.js"></script>
+			<script src="js/plugins/layer/layer.min.js"></script>
+			<script src="js/demo/form-validate-demo.js"></script>
+			<script src="js/common/config.js" type="text/javascript" charset="utf-8"></script>
+			<script type="text/javascript" src="js/common/ztreeDept.js"></script>
+			<script type="text/javascript" src="js/controllerJs/police.js"></script>
+
+	</body>
+
+</html>

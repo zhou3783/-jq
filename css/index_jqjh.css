@@ -1,0 +1,407 @@
+.clearfix {
+    overflow: hidden;
+    zoom: 1;
+}
+.form-group {
+    margin-bottom: 20px;
+    vertical-align: top;
+}
+.form-group>label {
+    font-size: 14px;
+}
+.wrapper {
+    position: relative;
+}
+
+.wrapper>.col-sm-3 {
+    position: absolute;
+    top:20px;
+    bottom: 0;
+    left:20px;
+    width: 25%;
+}
+.wrapper>.col-sm-9 {
+    margin-left: 25%;
+    float: inherit;
+}
+.ibox {
+    position: relative;
+}
+.ibox-content {
+    top: 48px;
+    bottom: 0;
+    left:0;
+    width: 100%;
+    overflow: auto;
+}
+
+.menu-div .btn {
+    padding: 3px 12px;
+    margin-right: 5px;
+}
+
+.add-hide .radio3 {
+    float: left;
+    margin-right: 20px;
+}
+
+.form-horizontal .form-group {
+    margin-right: 0px !important;
+    margin-left: 0px !important;;
+}
+
+.add-hide .input-4 {
+    padding-left: 0px;
+}
+
+.police-div {
+    width: 500px;
+    margin: 0 auto;
+}
+
+.chosen-container {
+    width: 100% !important;
+}
+.search-div .form-group {
+    min-width: 180px;
+    margin-right: 15px;
+}
+
+.modal-div {
+    width: 830px;
+}
+
+.modal-div .col-sm-3 {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.modal-div .col-sm-8 {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.modal-div .col-sm-4 {
+    padding-left: 0px;
+
+}
+
+.parent-div {
+    position: absolute;
+    width: 93%;
+    z-index: 99;
+    background: #eee;
+    display: none;
+}
+
+.textarea {
+    resize: none;
+}
+
+.ibox > .ibox-content {
+    min-height: 690px;
+}
+
+.ibox {
+    background: #fff;
+    min-height: 850px;
+}
+
+.float-div > .col-sm-6 {
+    margin-top: -1px;
+    background: #fff;
+    height: 55px
+}
+
+.help-block {
+    margin-top: 0px;
+}
+
+.qx-div {
+    width: 500px;
+    margin: 0 auto;
+
+}
+
+.qx {
+    min-height: 100px;
+}
+
+.qx li {
+    list-style: none;
+    width: 30%;
+    float: left;
+}
+
+.qx li .qx-sj {
+
+}
+
+.footer-group {
+    padding-top: 660px;
+    text-align: center;
+}
+
+.footer-menu {
+
+    text-align: center;
+}
+
+.ibox-title {
+    position: relative;
+    line-height: 30px;
+    padding: 10px 15px;
+}
+
+.menu-btn {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+}
+
+.one-step, .two-step {
+    width: 500px;
+    margin: 0 auto;
+}
+
+.menu-p {
+    font-size: 16px;
+    text-align: center;
+}
+
+.two-step {
+    display: none;
+}
+
+.prev {
+    display: none;
+}
+
+.search {
+    width: 300px;
+    height: 30px;
+    float: left;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+.tree-div {
+    width: 100%;
+    height: 30px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.tree-search {
+    width: 100%;
+    height: 30px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-top: 1px;
+}
+
+.tree-div .fa-search {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    font-size: 20px;
+}
+
+.js {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.search-tree {
+    float: left;
+    margin-top: -7px;
+    margin-left: 12px;
+    width: 75%;
+}
+
+.search-tree .search {
+    width: calc(100% - 50px);
+    border-radius: 3px 0 0 3px;
+}
+.search-tree .btn {
+    border-radius: 0 3px 3px 0;
+}
+
+.databaseSelectedWrap {
+
+}
+.databaseSelectedWrap .form-group {
+    float: left;
+    width: 25%;
+    padding: 0 1%;
+    vertical-align: top;
+}
+.databaseSelectedWrap .form-group.w100p {
+    width: 100%;
+}
+.databaseSelectedWrap .form-group.w50p {
+    width: 50%;
+}
+.databaseSelectedWrap .form-group.w33p {
+    width: 33.33%;
+}
+.databaseSelectedWrap .form-group select {
+    display: none;
+}
+.databaseSelected-wrap {
+    margin-top: 5px;
+}
+.databaseSelected-wrap>label {
+    color: #999;
+    font-weight: normal;
+}
+
+.databaseSelected-wrap ul {
+    list-style: none;
+    padding: 10px;
+    margin: 0;
+    height: 276px;
+    overflow: hidden;
+    overflow-y: auto;
+    border: solid 1px #ccc;
+    border-radius: 4px;
+}
+.databaseSelected-wrap li {
+    list-style: none;
+    padding: 5px 20px 5px 8px;
+    margin-bottom: 8px;
+    background: #f0f0f0;
+    border: solid 1px #dcdcdc;
+    position: relative;
+    border-radius: 4px;
+}
+.databaseSelected-wrap li i {
+    position: absolute;
+    top: 50%;
+    margin-top: -7px;
+    right: 8px;
+    color: #aaa;
+    cursor: pointer;
+}
+.databaseSelected-wrap li i:hover {
+    color: #666;
+}
+
+.event-add-wrap {
+    position: relative;
+    padding-right: 42px;
+}
+.event-add-wrap input {
+   border-radius: 4px 0 0 4px;
+}
+.event-add-wrap .btn {
+    width: 43px;
+    padding: 6px;
+    position: absolute;
+    top:0;
+    right:0;
+    border-radius: 0 4px 4px 0;
+}
+
+.ibox-title h5 {
+    float: inherit;
+}
+.ibox-title h6 {
+    display: block;
+    margin: 2px 0 5px 0;
+}
+
+
+.search-div {
+    text-align: left;
+}
+.search-div .btn {
+    vertical-align: top;
+    margin-top: 35px;
+}
+.search-div .input-search {
+    width: 280px;
+}
+.search-div .form-control[readonly] {
+    background-color: transparent;
+}
+.jeDate-wrap input {
+    display: inline-block;
+    width: 180px;
+    background: url(../img/jedate.png) no-repeat 95% 50%;
+}
+
+.btn-save,.btn-edit,.btn-add {
+    float: right;
+    margin-left: 15px;
+}
+
+.chosen-container-single .chosen-single {
+    line-height: 24px;
+    border-radius: 4px;
+    border:1px solid #ccc;
+}
+
+#orgChart-wrap-1 {
+    background: #7F7F7F;
+    text-align: center;
+}
+.orgchart {
+    background: #7F7F7F;
+    padding: 0 10px;
+    min-height: inherit;
+}
+.orgchart>table:first-child {
+    margin: 10px auto;
+}
+.orgchart {
+    margin-right: 20px;
+}
+.orgchart .node {
+    width: inherit;
+}
+.orgchart .node .title {
+    padding: 0 8px;
+    min-width: 80px;
+}
+.orgchart .node .content {
+    height: 21px;
+}
+.orgchart .node.focused,.orgchart .node:hover {
+    background-color: #2f4050;
+}
+.orgchart .node .bottomEdge {
+    bottom: -10px;
+}
+.orgchart .btn-handle {
+    padding: 1px 2px;
+    line-height:  1;
+    font-size: 12px;
+    margin: 0 2px;
+    display: none;
+}
+
+.orgchart .has-switch span, .orgchart .has-switch label {
+    line-height: 6px;
+    font-size: 12px;
+}
+.orgchart .switch {
+    width: 40px;
+    display: none;
+    overflow: hidden;
+    vertical-align: top;
+    margin-top: 2px;
+}
+.orgchart .has-switch {
+    min-width: inherit;
+}
+.node.green>.title,.node.green>.content {
+    background: #9ce69c;
+}
+.node.grey>.title,.node.grey>.content {
+    background: #a5a5a5;
+}
+
+.ms-choice.disabled {
+    background-color: #eee;
+    outline: none;
+}

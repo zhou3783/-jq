@@ -1,0 +1,26 @@
+{
+  "name": "jp-r1",
+  "version": "1.0.0",
+  "description": "xxx",
+  "main": "gulpfile.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "111"
+  },
+  "keywords": [
+    "jp-r1"
+  ],
+  "author": "yanglong",
+  "license": "BSD-3-Clause",
+  "dependencies": {},
+  "devDependencies": {
+    "babel-plugin-transform-remove-strict-mode": "0.0.2",
+    "babel-preset-es2015": "^6.24.1"
+  }
+}

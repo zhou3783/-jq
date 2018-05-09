@@ -1,0 +1,19 @@
+stages:
+- test_excute_sh
+variables:
+  msName: $CI_PROJECT_NAME
+  msPort: 12001
+  test_hostType: test
+  test_hostName: test.peer6
+test_excute_sh:
+  stage: test_excute_sh
+  script:
+  - sh /opt/jp-ADMIN-msDataMan-web/build.sh $CI_PROJECT_DIR
+  tags:
+  - shell
+  when: manual
+  only:
+  - master
+  environment:
+    name: test
+    url: http://$test_hostName:$msPort

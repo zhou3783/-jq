@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>角色管理</title>
+		<link rel="shortcut icon" href="favicon.ico">
+		<link href="css/bootstrap.min.css?v=3.3.5" rel="stylesheet">
+		<link href="css/font-awesome.css?v=4.4.0" rel="stylesheet">
+		<link href="css/plugins/zTreeStyle/zTreeStyle.css" rel="stylesheet">
+		<link href="css/checkbox3.min.css" rel="stylesheet">
+		<!--<link href="css/plugins/cropper/cropper.min.css" rel="stylesheet">-->
+		<!--<link href="css/plugins/datapicker/datepicker3.css" rel="stylesheet">-->
+		<!-- jqgrid-->
+		<link href="css/plugins/jqgrid/ui.jqgrid.css?0820" rel="stylesheet">
+		<link href="css/style.css?v=4.0.0" rel="stylesheet">
+		<link href="css/yh.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/zTreeStyle/metro.css" />
+		<script src="js/controllerJs/rolebtn.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body class="gray-bg">
+		<div class="wrapper wrapper-content animated fadeInRight">
+
+			<div>
+
+				<div class="col-sm-12">
+					<div class="ibox float-e-margins">
+						<div class="ibox-title">
+							<div class="menu-div">
+								<button class="btn btn-outline btn-primary" data-toggle="modal" data-target="#myModal" id="add-btn">新增 </button>
+								<!--<button class="btn ">新增</button>-->
+								<button class="btn btn-outline btn-primary" data-toggle="modal" id="update-btn">修改</button>
+								<button class="btn btn-outline btn-danger" id="delete-btn">删除</button>
+								<button class="btn btn-outline btn-primary" data-toggle="modal" data-target="#myModal1" id="jssq-btn">角色授权</button>
+								<button class="btn btn-outline btn-danger" data-toggle="modal" data-target="#myModal2" id="jcsq-btn">解除授权</button>
+							</div>
+							<div class="search-div">
+								<input type="text" class="search" id="roletextss" placeholder="按名称搜索..." /><button class="btn btn-primary btn-sm" id="rolebtnss">搜索</button>
+							</div>
+							<div class="jqGrid_wrapper">
+								<table id="table_list_1"></table>
+								<div id="pager_list_1"></div>
+							</div>
+							<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+											<h4 class="modal-title" id="myModalLabel">新增警员信息</h4>
+										</div>
+										<!--<div class="modal-body">-->
+										<!--新增用户信息-->
+										<div class="add-hide">
+											<form class="form-horizontal m-t" id="commentForm" action="javascript:rolebtnbc();">
+												<div class="form-group">
+													<label class="col-sm-3 control-label">角色名称：</label>
+													<div class="col-sm-8">
+														<input id="cname" name="name" minlength="2" type="text" class="form-control" required="" aria-required="true">
+													</div>
+												</div>
+
+												<div class="form-group">
+													<label class="col-sm-3 control-label">等级：</label>
+													<div class="col-sm-8">
+														<select class="form-control" name="stageCode" id="stageCode">
+															<option value="1">市局</option>
+															<option value="1">分局</option>
+															<option value="1">派出所/警务站</option>
+														</select>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-sm-3 control-label">等级排列：</label>
+													<div class="col-sm-8">
+														<input id="privilegeCode" name="privilegeCode" type="number" class="form-control" required="" min="0" max="10000" placeholder="请输入0-10000之间的数字">
+													</div>
+												</div>
+
+												<div class="form-group">
+													<label class="col-sm-3 control-label">备注：</label>
+													<div class="col-sm-8">
+														<textarea id="remark" name="remark" type="text" class="form-control" required=""></textarea>
+													</div>
+												</div>
+
+												<div class="form-group">
+													<div class="modal-footer">
+														<button type="button" class="btn btn-default" data-dismiss="modal" id="rolebtngb">关闭</button>
+														<button type="submit" class="btn btn-primary" id="btnbc">保存</button>
+													</div>
+												</div>
+											</form>
+											<!--</div>-->
+
+										</div>
+
+									</div>
+								</div>
+							</div>
+							<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+											<h4 class="modal-title" id="myModalLabel">授权管理</h4>
+										</div>
+
+										<!--新增用户信息-->
+										<div class="add-hide">
+											<form class="form-horizontal m-t" id="commentForm">
+												<div class="one-step">
+													<p class="menu-p">菜单授权</p>
+													<ul id="treeDemo" class="ztree"></ul>
+												</div>
+												<div class="two-step">
+													<p class="menu-p">权限因子授权</p>
+													<ul id="treeDemo1" class="ztree"></ul>
+												</div>
+											</form>
+											<div class="form-group">
+												<div class="modal-footer">
+													<button class="btn prev">上一步</button>
+													<button class="btn btn-primary next">下一步</button>
+													<button class="btn btn-default" id="rolebtfinish">完成</button>
+
+												</div>
+											</div>
+
+										</div>
+
+									</div>
+								</div>
+							</div>
+							<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+											<h4 class="modal-title" id="myModalLabel">解除授权管理</h4>
+										</div>
+
+										<!--新增用户信息-->
+										<div class="add-hide">
+											<form class="form-horizontal m-t" id="commentForm">
+												<div class="one-step">
+													<p class="menu-p">解除菜单授权</p>
+													<ul id="treeDemo2" class="ztree"></ul>
+												</div>
+												<div class="two-step">
+													<p class="menu-p">解除权限因子授权</p>
+													<ul id="treeDemo3" class="ztree"></ul>
+												</div>
+											</form>
+											<div class="form-group">
+												<div class="modal-footer">
+													<button class="btn prev">上一步</button>
+													<button class="btn btn-primary next">下一步</button>
+													<button class="btn btn-default" id="rolebtfinish1">完成</button>
+
+												</div>
+											</div>
+
+										</div>
+
+									</div>
+								</div>
+							</div>
+							<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+											<h4 class="modal-title" id="myModalLabel2">权限操作</h4>
+										</div>
+										<div class="qx-div">
+											<div class="qx">
+												<ul>
+													<li>
+														<div class="checkbox3 checkbox-success checkbox-inline checkbox-check checkbox-round  checkbox-light">
+															<input type="checkbox" id="checkbox-fa-light-2" checked="">
+															<label for="checkbox-fa-light-2">
+			                                              <div class="qx-sj">权限数据</div>
+			                                            </label>
+														</div>
+
+													</li>
+													<li>
+														<div>权限数据</div>
+													</li>
+													<li>
+														<div>权限数据</div>
+													</li>
+													<li>
+														<div>权限数据</div>
+													</li>
+												</ul>
+											</div>
+
+											<div class="form-group">
+												<div class="modal-footer">
+													<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+
+												</div>
+											</div>
+										</div>
+
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+				</div>
+
+				<!-- 全局js -->
+				<script type="text/javascript" src="js/jquery.min.js"></script>
+				<script src="js/bootstrap.min.js?v=3.3.5"></script>
+
+				<script src="js/plugins/datapicker/bootstrap-datepicker.js"></script>
+				<!-- Bootstrap-Treeview plugin javascript -->
+				<script src="js/plugins/ztree/jquery.ztree.core.js"></script>
+				<script src="js/plugins/ztree/jquery.ztree.excheck.js"></script>
+
+				<!-- jqGrid -->
+				<script src="js/plugins/jqgrid/i18n/grid.locale-cn.js?0820"></script>
+				<script src="js/plugins/jqgrid/jquery.jqGrid.min.js?0820"></script>
+
+				<script src="js/plugins/validate/jquery.validate.min.js"></script>
+				<script src="js/plugins/validate/messages_zh.min.js"></script>
+
+				<script src="js/plugins/layer/layer.min.js"></script>
+
+				<script src="js/plugins/datapicker/bootstrap-datepicker.js"></script>
+				<!-- Bootstrap-Treeview plugin javascript -->
+				<script src="js/plugins/treeview/bootstrap-treeview.js"></script>
+				<script src="js/demo/treeview-demo.js"></script>
+
+				<!-- jqGrid -->
+				<script src="js/plugins/jqgrid/i18n/grid.locale-cn.js?0820"></script>
+				<script src="js/plugins/jqgrid/jquery.jqGrid.min.js?0820"></script>
+
+				<script src="js/plugins/validate/jquery.validate.min.js"></script>
+				<script src="js/plugins/validate/messages_zh.min.js"></script>
+
+				<script src="js/plugins/layer/layer.min.js"></script>
+                <script src="js/common/config.js" type="text/javascript" charset="utf-8"></script>
+				<script src="js/demo/form-validate-demo.js"></script>
+				<script src="js/controllerJs/role.js"></script>
+
+				<script src="js/jquery.serializejson.js" type="text/javascript" charset="utf-8"></script>
+				<script>
+					$(".next").click(function() {
+						$(".one-step").hide();
+						$(".two-step").show();
+						$(".prev").show();
+						$(".next").hide();
+						$("#rolebtfinish").removeClass("btn-default").addClass("btn-primary");
+						$("#rolebtfinish1").removeClass("btn-default").addClass("btn-primary");
+					});
+					$(".prev").click(function() {
+						$(".one-step").show();
+						$(".two-step").hide();
+						$(".prev").hide();
+						$(".next").addClass("btn-primary");
+						$(".next").show();
+						$("#rolebtfinish").addClass("btn-default");
+						$("#rolebtfinish1").addClass("btn-default");
+					});
+
+					var setting = {
+						check: {
+							enable: true
+						},
+						data: {
+							simpleData: {
+								enable: true
+							}
+						},
+						callback: {
+							onCheck: zTreeOnCheck
+						},
+						view: {
+							selectedMulti: true
+						}
+					};
+
+					var setting1 = {
+						check: {
+							enable: true
+						},
+						data: {
+							simpleData: {
+								enable: true
+							}
+						},
+						callback: {
+							onCheck: zTreeOnCheck1
+						},
+						view: {
+							selectedMulti: true
+						}
+					};
+
+					function removeByValue(arr, val) {
+						for(var i = 0; i < arr.length; i++) {
+							if(arr[i] == val) {
+								arr.splice(i, 1);
+								break;
+							}
+						}
+					}
+
+					//					removeByValue(somearray, "tue");
+
+					var usersmenus = [];
+					var usersqxyzs = [];
+
+					function zTreeOnCheck(event, treeId, treeNode) {
+						if(treeNode.checked == true) {
+							usersmenus.push(treeNode.id);
+						} else {
+							removeByValue(usersmenus, treeNode.id);
+						}
+						//						console.log(usersmenus);
+						//						treeNode.check
+						//var checked = treeNode.checked;  
+						//						console.log((treeNode?treeNode.name:"root") + "checked " +(checked?"true":"false"));  
+						//						refreshLayers();
+						//						clearCheckedOldNodes();
+					};
+
+					function zTreeOnCheck1(event, treeId, treeNode) {
+						if(treeNode.checked == true) {
+							usersqxyzs.push(treeNode.id);
+						} else {
+							removeByValue(usersqxyzs, treeNode.id);
+						}
+						//						console.log(usersqxyzs);
+						//						treeNode.check
+						//var checked = treeNode.checked;  
+						//						console.log((treeNode?treeNode.name:"root") + "checked " +(checked?"true":"false"));  
+						//						refreshLayers();
+						//						clearCheckedOldNodes();
+					};
+
+					var zNodes = [];
+					var zNodes1 = [];
+					$.ajax({
+						type: "get",
+						url: YZ.ajaxURLms+"api/jp-BIRM-UserProfile-ms/priFuncs/",
+						async: false,
+						success: function(data) {
+							for(var i = 0; i < data.length; i++) {
+								var o = new Object();
+								o.id = data[i]["id"];
+								o.name = data[i]["name"];
+								if(data[i]["parentPrivilegeFunction"] == null) {
+									o.pId = "";
+								} else {
+									o.pId = data[i]["parentPrivilegeFunction"]["id"];
+								}
+								zNodes.push(o);
+							}
+						}
+					});
+
+					$.ajax({
+						type: "get",
+						url: YZ.ajaxURLms+"api/jp-BIRM-UserProfile-ms/priActions/queryAll/",
+						async: false,
+						success: function(data) {
+							for(var i = 0; i < data.length; i++) {
+								var o = new Object();
+								o.id = data[i]["id"];
+								o.name = data[i]["name"];
+								if(data[i]["parentPrivilegeFunction"] == null) {
+									o.pId = "";
+								} else {
+									o.pId = data[i]["parentPrivilegeFunction"]["id"];
+								}
+								zNodes1.push(o);
+							}
+						}
+					});
+
+					//					var zNodes = [{
+					//							id: 1,
+					//							pId: 0,
+					//							name: "随意勾选 1",
+					//							open: true
+					//						},
+					//						{
+					//							id: 11,
+					//							pId: 1,
+					//							name: "随意勾选 1-1",
+					//							open: true
+					//						},
+					//						{
+					//							id: 111,
+					//							pId: 11,
+					//							name: "随意勾选 1-1-1"
+					//						},
+					//						{
+					//							id: 112,
+					//							pId: 11,
+					//							name: "随意勾选 1-1-2"
+					//						},
+					//						{
+					//							id: 12,
+					//							pId: 1,
+					//							name: "随意勾选 1-2",
+					//							open: true
+					//						},
+					//						{
+					//							id: 121,
+					//							pId: 12,
+					//							name: "随意勾选 1-2-1"
+					//						},
+					//						{
+					//							id: 122,
+					//							pId: 12,
+					//							name: "随意勾选 1-2-2"
+					//						},
+					//						{
+					//							id: 2,
+					//							pId: 0,
+					//							name: "随意勾选 2",
+					//							checked: true,
+					//							open: true
+					//						},
+					//						{
+					//							id: 21,
+					//							pId: 2,
+					//							name: "随意勾选 2-1"
+					//						},
+					//						{
+					//							id: 22,
+					//							pId: 2,
+					//							name: "随意勾选 2-2",
+					//							open: true
+					//						},
+					//						{
+					//							id: 221,
+					//							pId: 22,
+					//							name: "随意勾选 2-2-1",
+					//							checked: true
+					//						},
+					//						{
+					//							id: 222,
+					//							pId: 22,
+					//							name: "随意勾选 2-2-2"
+					//						},
+					//						{
+					//							id: 23,
+					//							pId: 2,
+					//							name: "随意勾选 2-3"
+					//						}
+					//					];
+
+					var code;
+
+					function setCheck() {
+						var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+							py = $("#py").attr("checked") ? "p" : "",
+							sy = $("#sy").attr("checked") ? "s" : "",
+							pn = $("#pn").attr("checked") ? "p" : "",
+							sn = $("#sn").attr("checked") ? "s" : "",
+							type = {
+								"Y": py + sy,
+								"N": pn + sn
+							};
+						zTree.setting.check.chkboxType = type;
+						var zTree1 = $.fn.zTree.getZTreeObj("treeDemo1"),
+							py = $("#py").attr("checked") ? "p" : "",
+							sy = $("#sy").attr("checked") ? "s" : "",
+							pn = $("#pn").attr("checked") ? "p" : "",
+							sn = $("#sn").attr("checked") ? "s" : "",
+							type = {
+								"Y": py + sy,
+								"N": pn + sn
+							};
+
+						zTree1.setting.check.chkboxType = type;
+						showCode('setting.check.chkboxType = { "Y" : "' + type.Y + '", "N" : "' + type.N + '" };');
+					}
+
+					function showCode(str) {
+						if(!code) code = $("#code");
+						code.empty();
+						code.append("<li>" + str + "</li>");
+					}
+
+					//					var a = zTree.getCheckedNodes();
+					//					console.log(a);
+					$("#rolebtfinish").click(function() {
+						var usersmenus = [];
+						var usersqxyzs = [];
+						var a = $.fn.zTree.getZTreeObj("treeDemo").getCheckedNodes();
+						var b = $.fn.zTree.getZTreeObj("treeDemo1").getCheckedNodes();
+						if(a.length == 0 && usersqxyzs.length == 0) {
+							layer.confirm('请指定权限！', {
+								btn: ['是的'] //按钮
+							});
+						} else {
+							for(var i = a.length - 1; i > -1; i--) {
+								usersmenus.push(a[i].id)
+							}
+
+							for(var i = b.length - 1; i > -1; i--) {
+								usersqxyzs.push(b[i].id)
+							}
+							//						console.log(usersmenus);
+							//console.log(usersqxyzs);
+							//						console.log(roleJqGridRowData.id);
+							$.ajax({
+								type: "PUT",
+								url: YZ.ajaxURLms+"api/jp-BIRM-UserProfile-ms/roles/giveRolePrivilege/" + roleJqGridRowData.id + "?functionIds=" + usersmenus + "&actionIds=" + usersqxyzs,
+								//								data: {"functionIds":usersmenus,"actionIds":usersqxyzs},
+								//			data: JSON.stringify(datajson),
+								dataType: "json",
+								async: false,
+								ContentType: "application/json;charset=UTF-8",
+								contentType: "application/json",
+								headers: {
+									"Content-Type": "application/json;charset=UTF-8"
+								},
+								success: function() {
+									$("#rolebtngb").click();
+									layer.msg('授权成功', {
+										icon: 1
+									});
+									setTimeout(function() {
+										location.reload();
+									}, 1000);
+								}
+							});
+							$(".close").click();
+						}
+					});
+
+					$(document).ready(function() {
+						$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+						$.fn.zTree.init($("#treeDemo1"), setting1, zNodes1);
+						//						setCheck();
+						//						$("#py").bind("change", setCheck);
+						//						$("#sy").bind("change", setCheck);
+						//						$("#pn").bind("change", setCheck);
+						//						$("#sn").bind("change", setCheck);
+
+						$.jgrid.defaults.styleUI = 'Bootstrap';
+
+						//树结构节点nodes
+						// var treeViewNodeData;
+						// Examle data for jqGrid
+						//						var mydata = [{
+						//								id: "1",
+						//								invdate: "2010-05-24",
+						//								name: "test",
+						//								note: "note",
+						//								tax: "10.00",
+						//								total: "2111.00"
+						//							},
+						//							{
+						//								id: "2",
+						//								invdate: "2010-05-25",
+						//								name: "test2",
+						//								note: "note2",
+						//								tax: "20.00",
+						//								total: "320.00"
+						//							},
+						//							{
+						//								id: "3",
+						//								invdate: "2007-09-01",
+						//								name: "test3",
+						//								note: "note3",
+						//								tax: "30.00",
+						//								total: "430.00"
+						//							},
+						//							{
+						//								id: "4",
+						//								invdate: "2007-10-04",
+						//								name: "test",
+						//								note: "note",
+						//								tax: "10.00",
+						//								total: "210.00"
+						//							},
+						//							{
+						//								id: "5",
+						//								invdate: "2007-10-05",
+						//								name: "test2",
+						//								note: "note2",
+						//								tax: "20.00",
+						//								total: "320.00"
+						//							},
+						//							{
+						//								id: "6",
+						//								invdate: "2007-09-06",
+						//								name: "test3",
+						//								note: "note3",
+						//								tax: "30.00",
+						//								total: "430.00"
+						//							},
+						//							{
+						//								id: "7",
+						//								invdate: "2007-10-04",
+						//								name: "test",
+						//								note: "note",
+						//								tax: "10.00",
+						//								total: "210.00"
+						//							},
+						//							{
+						//								id: "8",
+						//								invdate: "2007-10-03",
+						//								name: "test2",
+						//								note: "note2",
+						//								amount: "300.00",
+						//								tax: "21.00",
+						//								total: "320.00"
+						//							},
+						//							{
+						//								id: "9",
+						//								invdate: "2007-09-01",
+						//								name: "test3",
+						//								note: "note3",
+						//								amount: "400.00",
+						//								tax: "30.00",
+						//								total: "430.00"
+						//							},
+						//							{
+						//								id: "11",
+						//								invdate: "2007-10-01",
+						//								name: "test",
+						//								note: "note",
+						//								amount: "200.00",
+						//								tax: "10.00",
+						//								total: "210.00"
+						//							},
+						//							{
+						//								id: "12",
+						//								invdate: "2007-10-02",
+						//								name: "test2",
+						//								note: "note2",
+						//								amount: "300.00",
+						//								tax: "20.00",
+						//								total: "320.00"
+						//							},
+						//							{
+						//								id: "13",
+						//								invdate: "2007-09-01",
+						//								name: "test3",
+						//								note: "note3",
+						//								amount: "400.00",
+						//								tax: "30.00",
+						//								total: "430.00"
+						//							},
+						//							{
+						//								id: "14",
+						//								invdate: "2007-10-04",
+						//								name: "test",
+						//								note: "note",
+						//								amount: "200.00",
+						//								tax: "10.00",
+						//								total: "210.00"
+						//							},
+						//							{
+						//								id: "15",
+						//								invdate: "2007-10-05",
+						//								name: "test2",
+						//								note: "note2",
+						//								amount: "300.00",
+						//								tax: "20.00",
+						//								total: "320.00"
+						//							},
+						//							{
+						//								id: "16",
+						//								invdate: "2007-09-06",
+						//								name: "test3",
+						//								note: "note3",
+						//								amount: "400.00",
+						//								tax: "30.00",
+						//								total: "430.00"
+						//							},
+						//							{
+						//								id: "17",
+						//								invdate: "2007-10-04",
+						//								name: "test",
+						//								note: "note",
+						//								amount: "200.00",
+						//								tax: "10.00",
+						//								total: "210.00"
+						//							},
+						//							{
+						//								id: "18",
+						//								invdate: "2007-10-03",
+						//								name: "test2",
+						//								note: "note2",
+						//								amount: "300.00",
+						//								tax: "20.00",
+						//								total: "320.00"
+						//							},
+						//							{
+						//								id: "19",
+						//								invdate: "2007-09-01",
+						//								name: "test3",
+						//								note: "note3",
+						//								amount: "400.00",
+						//								tax: "30.00",
+						//								total: "430.00"
+						//							},
+						//							{
+						//								id: "21",
+						//								invdate: "2007-10-01",
+						//								name: "test",
+						//								note: "note",
+						//								amount: "200.00",
+						//								tax: "10.00",
+						//								total: "210.00"
+						//							},
+						//							{
+						//								id: "22",
+						//								invdate: "2007-10-02",
+						//								name: "test2",
+						//								note: "note2",
+						//								amount: "300.00",
+						//								tax: "20.00",
+						//								total: "320.00"
+						//							},
+						//							{
+						//								id: "23",
+						//								invdate: "2007-09-01",
+						//								name: "test3",
+						//								note: "note3",
+						//								amount: "400.00",
+						//								tax: "30.00",
+						//								total: "430.00"
+						//							},
+						//							{
+						//								id: "24",
+						//								invdate: "2007-10-04",
+						//								name: "test",
+						//								note: "note",
+						//								amount: "200.00",
+						//								tax: "10.00",
+						//								total: "210.00"
+						//							},
+						//							{
+						//								id: "25",
+						//								invdate: "2007-10-05",
+						//								name: "test2",
+						//								note: "note2",
+						//								amount: "300.00",
+						//								tax: "20.00",
+						//								total: "320.00"
+						//							},
+						//							{
+						//								id: "26",
+						//								invdate: "2007-09-06",
+						//								name: "test3",
+						//								note: "note3",
+						//								amount: "400.00",
+						//								tax: "30.00",
+						//								total: "430.00"
+						//							},
+						//							{
+						//								id: "27",
+						//								invdate: "2007-10-04",
+						//								name: "test",
+						//								note: "note",
+						//								amount: "200.00",
+						//								tax: "10.00",
+						//								total: "210.00"
+						//							},
+						//							{
+						//								id: "28",
+						//								invdate: "2007-10-03",
+						//								name: "test2",
+						//								note: "note2",
+						//								amount: "300.00",
+						//								tax: "20.00",
+						//								total: "320.00"
+						//							},
+						//							{
+						//								id: "29",
+						//								invdate: "2007-09-01",
+						//								name: "test3",
+						//								note: "note3",
+						//								amount: "400.00",
+						//								tax: "30.00",
+						//								total: "430.00"
+						//							}
+						//						];
+
+						//						var userJqGridRowData;
+						//						// Configuration for jqGrid Example 1
+						//						$("#table_list_1").jqGrid({
+						//							data: mydata,
+						//							datatype: "local",
+						//							height: 350,
+						//							autowidth: true,
+						//							shrinkToFit: true,
+						//							rowNum: 14,
+						//							rowList: [10, 20, 30],
+						//							colNames: ['序号', '用户名', '账号', '状态', '警员姓名', '状态改变时间', '创建时间'],
+						//							colModel: [{
+						//									name: 'id',
+						//									index: 'id',
+						//									width: 60,
+						//									sorttype: "int"
+						//								},
+						//								{
+						//									name: 'invdate',
+						//									index: 'invdate',
+						//									width: 90,
+						//									sorttype: "date",
+						//									formatter: "date"
+						//								},
+						//								{
+						//									name: 'name',
+						//									index: 'name',
+						//									width: 100
+						//								},
+						//								{
+						//									name: 'amount',
+						//									index: 'amount',
+						//									width: 80,
+						//									align: "left",
+						//									sorttype: "float",
+						//									formatter: "number"
+						//								},
+						//								{
+						//									name: 'tax',
+						//									index: 'tax',
+						//									width: 80,
+						//									align: "left",
+						//									sorttype: "float"
+						//								},
+						//								{
+						//									name: 'total',
+						//									index: 'total',
+						//									width: 80,
+						//									align: "left",
+						//									sorttype: "float"
+						//								},
+						//
+						//								{
+						//									name: 'note',
+						//									index: 'note',
+						//									width: 80,
+						//									sortable: false
+						//								}
+						//							],
+						//							pager: "#pager_list_1",
+						//
+						//							viewrecords: true,
+						//							caption: "",
+						//							hidegrid: false,
+						//							onSelectRow: function(rowId, status) {
+						//								userJqGridRowData = $("#table_list_1").jqGrid("getRowData", rowId);
+						//								console.log(userJqGridRowData);
+						//							}
+						//						});
+
+						// Add responsive to jqGrid
+						//						$(window).bind('resize', function() {
+						//							var width = $('.jqGrid_wrapper').width();
+						//							$('#table_list_1').setGridWidth(width);
+						//
+						//						});
+
+					});
+				</script>
+	</body>
+
+</html>

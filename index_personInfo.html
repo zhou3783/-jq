@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>重点人信息管理</title>
+		<link rel="shortcut icon" href="favicon.ico">
+		<link href="css/bootstrap.min.css?v=3.3.5" rel="stylesheet">
+		<link href="css/font-awesome.css?v=4.4.0" rel="stylesheet">
+		<link href="css/plugins/datetime/bootstrap-datetimepicker.css" />
+		<!--<link href="css/plugins/treeview/bootstrap-treeview.css" rel="stylesheet">-->
+		<link href="css/plugins/zTreeStyle/zTreeStyle.css" rel="stylesheet">
+		<link href="css/checkbox3.min.css" rel="stylesheet">
+
+		<!-- jqgrid-->
+		<link href="css/plugins/jqgrid/ui.jqgrid.css" rel="stylesheet">
+		<link href="css/style.css?v=4.0.0" rel="stylesheet">
+		<link href="css/yh.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/zTreeStyle/metro.css" />
+		<link href="css/plugins/chosen/chosen.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/tag/jquery-tag-this.css" />
+		<link rel="stylesheet" href="css/important.css" />
+		<!--		<link rel="stylesheet" href="css/zTreeStyle/metro.css" />
+-->
+		<style type="text/css">
+			.divcss5 {
+				-webkit-text-size-adjust: none;
+			}
+			
+		</style>
+	</head>
+
+	<body class="gray-bg">
+		<div class="wrapper wrapper-content animated fadeInRight">
+			<div>
+				<div class="col-sm-12">
+					<div class="ibox float-e-margins">
+						<ul id="myTab" class="nav nav-tabs">
+						   <li class="active"><a href="#list" data-toggle="tab">列表展示</a></li>
+						   <li><a href="#card" data-toggle="tab">卡片展示</a></li>
+						  
+						</ul>
+						<div id="myTabContent" class="tab-content">
+							<div class="tab-pane fade in active" id="list">
+								<div class="ibox-title">
+									<div class="menu-div">
+										<button class="btn btn-outline btn-primary" data-toggle="modal" data-target="#myModal" id="add-btn">新增 </button>
+										<button class="btn btn-outline btn-primary" data-toggle="modal" id="update-btn">修改</button>
+										<button class="btn btn-outline btn-danger" id="delete-btn">删除</button>
+		
+										<button class="btn btn-outline btn-primary" data-toggle="modal" data-target="#myModal1" id="look-btn">查看详情</button>
+										<button class="btn btn-primary" data-toggle="modal" data-target="#myModal2"  id="import-btn">导入</button>
+										<button class="btn btn-primary" id="download-modalExcel">模板下载</button>
+		
+									</div>
+									<div class="search-div">
+										<input type="text" class="search" id="searchName" placeholder="姓名" style="width: 12%;margin-right: 1%;padding-left: 5px;" />
+										<input type="text" class="search" id="searchIdcard" placeholder="身份证号" style="width: 12%;margin-right: 1%; padding-left: 5px;" />
+										<input type="text" class="search" id="searchPhone" placeholder="手机" style="width: 12%;margin-right: 1%; padding-left: 5px;" />
+										<div class="search" placeholder="重点人类型" style="width: 12%;margin-right: 1%;border: 0px; padding-left: 5px;">
+											<select name="serachPersonType" data-placeholder="重点人类型" class="chosen-select" style="width:100%; height: 100%;" tabindex="2" id="serachPersonType">
+												<option value=" ">重点人类型</option>
+											</select>
+										</div>
+										<div class="search" placeholder="重点人群体" style="width: 12%;margin-right: 1%;border: 0px; padding-left: 5px;">
+											<select name="serachPersonGroup" data-placeholder="重点人群体" class="chosen-select" style="width:100%; height: 100%;" tabindex="2" id="serachPersonGroup">
+												<option value=" ">重点人群体</option>
+											</select>
+										</div>
+										<select class="search" style="width: 12%;margin-right: 1%; padding-left: 5px;" id="serachPersonLevel">
+											<option value="">类型等级</option>
+											<option value="1">一级</option>
+											<option value="2">二级</option>
+											<option value="3">三级</option>
+										</select>
+										<!--<input type="text" class="search" id="searchText2" placeholder="请输入所属部门id"  style="width: 16%;margin-right: 1%;"/>-->
+										<button class="btn btn-primary btn-sm search-btn" id="plsCarTpSch">搜索</button>
+										<button class="btn btn-primary btn-sm search-btn" id="export-btn">导出</button>
+									</div>
+		
+								</div>
+								<div class="ibox-content">
+									<div class="jqGrid_wrapper">
+										<table id="table_list_jc"></table>
+		
+										<div class="" style="float:right;">
+											<div class="page-div" style="float: right;margin:24px 0;">
+												<span>总页数：<span id="totalPage"></span></span>
+												<span>总记录数:<span id="totalRecord"></span></span>
+											</div>
+											<ul class="pagination" id="pagination1"></ul>
+		
+										</div>
+		
+									</div>
+								</div>
+							</div>
+							<div class="tab-pane fade" id="card">
+								<div class="ibox-title">卡片展示</div>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+
+				<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="width: 100%;">
+					<div class="modal-dialog" style="width: 80%;height: 100%;">
+						<div class="modal-content" style="height: auto;">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h4 class="modal-title" id="myModalLabel">新增重点人信息</h4>
+							</div>
+							<!--<div class="modal-body">-->
+							<!--新增用户信息-->
+							<div class="add-hide addImportant">
+								
+									<form enctype="multipart/form-data" id="uploadForm" style="height: 50px;">
+									<div class="col-sm-6" style="padding-top: 15px;">
+										<div class="form-group" style="height: 50px;">
+											<label class="col-sm-3 control-label" style="text-align: right;">头像：</label>
+											<div class="col-sm-8">
+												<!--<input id="areaId" name="areaId" maxlength="50" type="text" class="form-control" required="required">-->
+												<div id="preview">
+							                        <img id="imghead" border="0" src="img/default.png" onclick="$('#previewImg').click();" style=\"margin-top: 0px!important;\"">
+							                     </div>         
+							                    <input type="file" onchange="previewImage(this)" style="display:none;" id="previewImg" name="file">
+							                    <div class="upload-div">
+								                    <div onclick="$('#previewImg').click();">更换图片</div>
+									                <div onclick="$('#imghead').attr('src','img/default.png');" class="clearImg">清除</div>
+									                <div class="upload-image">上传</div>
+								                </div>
+											</div>
+										</div>
+									</div>
+									</form>
+
+								<form class="form-horizontal m-t" id="commentForm" action="javascript:importantPersonAction();">
+									
+									<div class="col-sm-6">
+										<div class="form-group">
+											
+											<label class="col-sm-3 control-label">姓名：</label>
+											<div class="col-sm-8">
+												<input id="name" name="name" maxlength="50" type="text" class="form-control" required="required">
+												<span class="span-required">(必填)</span>
+											</div>
+										</div>
+									</div>
+									<!--<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">曾用名：</label>
+											<div class="col-sm-8">
+												<input id="formerName" name="formerName" type="text" class="form-control" >
+											</div>
+										</div>
+									</div>-->
+
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">性别：</label>
+											<div class="col-sm-8">
+												
+												<select class="form-control" name="sex" id="sex">
+															<option value="男">男</option>
+															<option value="女">女</option>
+															
+												</select>
+												<span class="span-required">(必填)</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">证件信息：</label>
+											<div class="col-sm-8">
+												<input id="idCardNo" name="idCardNo" maxlength="19" type="text" class="form-control" required="required">
+												<span class="span-required">(必填)</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">户籍地：</label>
+											<div class="col-sm-8">
+												<input id="birthPlace" name="birthPlace" type="text" class="form-control">
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">是否为武汉户籍：</label>
+											<div class="col-sm-8">
+												<select class="form-control" name="isWuhanIdcard" id="isWuhanIdcard">
+															<option value="0">否</option>
+															<option value="1">是</option>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">现住址：</label>
+											<div class="col-sm-8">
+												<input id="currentAddress" name="currentAddress"  type="text" class="form-control">
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+
+										<div class="form-group">
+											<label class="col-sm-3 control-label">手机号：</label>
+											<div class="col-sm-8">
+												<input type="text" id="simple-tags" name="mobile">
+												<span class="span-required">(必填)</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">MAC：</label>
+											<div class="col-sm-8">
+												<!--<input id="threshold" name="threshold" maxlength="38" type="text" class="form-control">-->
+												<input type="text" id="mac-tags" name="">
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">车牌号：</label>
+											<div class="col-sm-8">
+												<input type="text" id="card-tags" name="">
+											</div>
+										</div>
+									</div>
+									
+									
+									
+								<!--	<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">人员类型：</label>
+											<div class="col-sm-8">
+											<select name="typename" data-placeholder="人员类型" class="chosen-select"  tabindex="2" id="typename">
+										       <option value="">无</option>
+									        </select>
+									        </div>
+										</div>
+									</div>-->
+									<!--<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">人员类型大类：</label>
+											<div class="col-sm-8">
+												<input id="" name=""  type="text" class="form-control">
+											</div>
+										</div>
+									</div>-->
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">人员类型：</label>
+											<div class="col-sm-8">
+												<div class="box" id="box"></div>
+												<div class="dropdown1">
+								                    <a id="dLabel" role="button" data-toggle="dropdown" class="btn btn-white" data-target="#" href="javascript:;"><span id="select-title">+新增分类</span> <span class="caret"></span></a>  
+								                    <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">  
+								                        <li><a href="javascript:;" >一级菜单</a></li>  
+								                        <li class="dropdown-submenu">  
+								                            <a href="javascript:;" >一级菜单</a>  
+								                            <ul class="dropdown-menu">  
+								                                <li><a  href="javascript:;" >二级菜单</a></li>  
+								                            </ul>  
+								                        </li>    
+								                        <li class="dropdown-submenu">  
+								                            <a  href="javascript:;" >一级菜单</a>  
+								                            <ul class="dropdown-menu">  
+								                                <li><a  href="javascript:;" >二级菜单</a></li>  
+								                            </ul>  
+								                        </li>  
+								                    </ul>  
+								                </div>  
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+
+										<div class="form-group">
+											<label class="col-sm-3 control-label">所属群体：</label>
+											<div class="col-sm-8">
+												<input id="ownerGroup" name="ownerGroup"  type="text" class="form-control">
+											</div>
+										</div>
+									</div>
+									
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">管辖分局：</label>
+											<div class="col-sm-8">
+												<select name="stationid" data-placeholder="人员类型" class="chosen-select"  tabindex="2" id="stationid">
+										       <option value="">无</option>
+									        </select>
+												
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">管辖派出所：</label>
+											<div class="col-sm-8">
+												
+												<select name="householdid" data-placeholder="人员类型" class="chosen-select"  tabindex="2" id="householdid">
+										       <option value="">无</option>
+									        </select>
+												
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">人员等级：</label>
+											<div class="col-sm-8">
+												<select class="form-control"  id="personLevel" name="personLevel">
+															<option value="1">一级</option>
+															<option value="2">二级</option>
+															<option value="3">三级</option>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">数据来源：</label>
+											<div class="col-sm-8">
+												
+													
+												<select name="reportunit" data-placeholder="人员类型" class="chosen-select"  tabindex="2" id="reportunit">
+										       <option value="">无</option>
+									        </select>
+												
+											</div>
+										</div>
+									</div>
+									
+									<input id="downloadFileId" name="" type="hidden" class="form-control">
+									<input type="hidden" name="reportTime" id="reportTime">
+									<div class="form-group">
+										<div class="modal-footer">
+											<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+											<button type="submit" class="btn btn-primary" >保存</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="width: 100%;">
+					<div class="modal-dialog" style="width: 91%;height: 100%;">
+						<div class="modal-content" style="height: auto;">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h4 class="modal-title" id="myModalLabel">信息详情</h4>
+							</div>
+							<!--<div class="modal-body">-->
+							
+							<form class="form-horizontal m-t" id="dataRetrieval">
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label class="col-sm-3 control-label" style="text-align: right;">头像：</label>
+										<div class="col-sm-8">
+											<div id="preview">
+						                        <img id="imgheadlook" border="0" src="img/default.png">
+						                    </div>  
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label class="col-sm-3 control-label">姓名：</label>
+										<div class="col-sm-8">
+											<input id="name" name="name" type="text" class="form-control">
+										</div>
+									</div>
+								</div>
+								<!--<div class="col-sm-6">
+									<div class="form-group">
+										<label class="col-sm-3 control-label">曾用名：</label>
+										<div class="col-sm-8">
+											<input id="formerName1" name="formerName" maxlength="38" type="text" class="form-control">
+										</div>
+									</div>
+								</div>-->
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label class="col-sm-3 control-label">性别：</label>
+										<div class="col-sm-8">
+											<input id="sex1" name="sex" maxlength="38" type="text" class="form-control">
+										</div>
+									</div>
+								</div>
+
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label class="col-sm-3 control-label">身份证号：</label>
+										<div class="col-sm-8">
+											<input id="idCardNo" name="idCardNo" maxlength="19" type="text" class="form-control">
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label class="col-sm-3 control-label">户籍地：</label>
+										<div class="col-sm-8">
+											<input id="birthPlace" name="birthPlace" maxlength="38" type="text" class="form-control">
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label class="col-sm-3 control-label">是否为武汉户籍：</label>
+										<div class="col-sm-8">
+											<input id="isWuhanIdcard1" name="isWuhanIdcard" maxlength="38" type="text" class="form-control">
+										</div>
+									</div>
+								</div>
+								
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label class="col-sm-3 control-label">现住址：</label>
+										<div class="col-sm-8">
+											<input id="currentAddress1" maxlength="38" type="text" class="form-control">
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label class="col-sm-3 control-label">手机号：</label>
+										<div class="col-sm-8">
+											<div class="box readonly-div" id="lookMobile"></div>
+											<!--<input id="mobile" name="mobile" maxlength="38" type="text" class="form-control" readonly="readonly">-->
+										</div>
+									</div>
+								</div>
+								
+
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label class="col-sm-3 control-label">MAC：</label>
+										<div class="col-sm-8">
+											<!--<input id="socialAccount" name="importSocials.socialAccount" maxlength="38" type="text" class="form-control" readonly="readonly">-->
+											<div class="box readonly-div" id="lookMac"></div>	
+										</div>
+									</div>
+								</div>
+
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label class="col-sm-3 control-label">车牌号：</label>
+										<div class="col-sm-8">
+											<div class="box readonly-div" id="lookCard"></div>
+											<!--<input id="threshold" name="importVechiles.vechileNo" maxlength="38" type="text" class="form-control" readonly="readonly">-->
+										
+										</div>
+									</div>
+								</div>
+								
+								<!--<div class="col-sm-6">
+									<div class="form-group">
+										<label class="col-sm-3 control-label">人员类型大类：</label>
+										<div class="col-sm-8">
+											<div class="box readonly-div" id="box"></div>
+										</div>
+									</div>
+								</div>-->
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label class="col-sm-3 control-label">人员类型：</label>
+										<div class="col-sm-8">
+											<div class="box readonly-div" id="importPersonTypes"></div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label class="col-sm-3 control-label">所属群体：</label>
+										<div class="col-sm-8">
+											<input id="ownerGroup" name="ownerGroup" maxlength="38" type="text" class="form-control">
+										</div>
+									</div>
+								</div>
+
+								
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label class="col-sm-3 control-label">管辖分局：</label>
+										<div class="col-sm-8">
+											<input id="stationName" name="stationName" maxlength="38" type="text" class="form-control">
+										</div>
+									</div>
+								</div>
+
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label class="col-sm-3 control-label">管辖派出所：</label>
+										<div class="col-sm-8">
+											<input id="householdName" name="householdName" maxlength="38" type="text" class="form-control">
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label class="col-sm-3 control-label">人员等级：</label>
+										<div class="col-sm-8">
+											<input id="personLevel1" maxlength="38" type="text" class="form-control">
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label class="col-sm-3 control-label">人员数据来源：</label>
+										<div class="col-sm-8">
+											<input id="reportunitName" maxlength="38" type="text" class="form-control">
+										</div>
+									</div>
+								</div>
+								
+
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label class="col-sm-3 control-label">创建时间：</label>
+										<div class="col-sm-8">
+											<input id="lookcreateTime" name="name" type="text" class="form-control">
+										
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label class="col-sm-3 control-label">更新时间：</label>
+										<div class="col-sm-8">
+											<input id="lookupdateTime" name="name" type="text" class="form-control">
+										
+										</div>
+									</div>
+								</div>
+								
+
+								<div class="modal-footer" style="border-top:0px">
+									<button type="button" class="btn btn-default" data-dismiss="modal" id="cancel">关闭</button>
+
+								</div>
+							</form>
+
+						</div>
+					</div>
+				</div>
+				
+				<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+					<div class="modal-dialog" style="height: 150px; ">
+						<div class="modal-content" style="height: 150px; ">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h4 class="modal-title" id="myModalLabel">导入列表信息</h4>
+							</div>
+						
+							<div class="add-hide addImportant">
+								
+									<form enctype="multipart/form-data" id="uploadExcel">
+									<div class="col-sm-12" >
+										<div class="form-group" >
+											<label class="col-sm-2 control-label" style="padding-top: 10px; ">选择文件</label>	
+											 <div class="col-sm-7">
+							                <input type="file" id="excelFile" class="form-control" name="file">
+							                 </div>
+							                <div class="col-sm-2">
+							                <!--	<button class="btn btn-primary " id="uploadExcelBtn ">导入</button>-->
+							                <input type="button" class="btn btn-primary" id="uploadExcelBtn" value="导入" />
+										    </div>
+										</div>
+										
+									</div>
+									</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+         
+			<!-- 全局js -->
+			<script src="js/jquery.min.js?v=2.1.4 "></script>
+			<script src="js/bootstrap.min.js?v=3.3.5 "></script>
+
+			<!-- 自定义js -->
+			<script src="js/content.js?v=1.0.0 "></script>
+
+			<script src="js/plugins/datetime/bootstrap-datetimepicker.js "></script>
+			<!-- Bootstrap-Treeview plugin javascript -->
+			<!--<script src="js/plugins/treeview/bootstrap-treeview.js "></script>
+    <script src="js/demo/treeview-demo.js "></script>-->
+			<script src="js/plugins/ztree/jquery.ztree.core.js "></script>
+			<script src="js/plugins/ztree/jquery.ztree.excheck.js "></script>
+
+			<!-- jqGrid -->
+			<script src="js/plugins/jqgrid/i18n/grid.locale-cn.js?0820"></script>
+			<script src="js/plugins/jqgrid/jquery.jqGrid.min.js?0820"></script>
+
+			<script src="js/plugins/validate/jquery.validate.min.js"></script>
+			<script src="js/plugins/validate/messages_zh.min.js"></script>
+
+			<script src="js/plugins/layer/layer.min.js"></script>
+			<script type="text/javascript" src="js/jquery.serializejson.js"></script>
+
+			<script src="js/demo/form-validate-demo.js"></script>
+			<script type="text/javascript" src="js/common/ztreeDept.js"></script>
+			<script src="js/jqPaginator.js" type="text/javascript" charset="utf-8"></script>
+			<script type="text/javascript" src="js/plugins/chosen/chosen.jquery.js"></script>
+			<script src="js/common/config.js" type="text/javascript" charset="utf-8"></script>
+			<script src="js/common/utils.js" type="text/javascript" charset="utf-8"></script>
+			
+		    <script type="text/javascript" src="js/jquery-ui.custom.min.js" ></script>
+	        <script type="text/javascript" src="js/tag/jquery.tagthis.js" ></script>
+			<script type="text/javascript" src="js/tag/main.js" ></script>
+			<script type="text/javascript" src="js/tag/prism.js" ></script>
+			
+			<script type="text/javascript" src="js/importantPersonController/personInfo.js" charset="utf-8"></script>
+
+	</body>
+
+</html>

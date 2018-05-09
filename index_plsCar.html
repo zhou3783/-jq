@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>警车类型管理</title>
+		<link rel="shortcut icon" href="favicon.ico">
+		<link href="css/bootstrap.min.css?v=3.3.5" rel="stylesheet">
+		<link href="css/font-awesome.css?v=4.4.0" rel="stylesheet">
+		<link href="css/plugins/datetime/bootstrap-datetimepicker.css" />
+		<!--<link href="css/plugins/treeview/bootstrap-treeview.css" rel="stylesheet">-->
+		<link href="css/plugins/zTreeStyle/zTreeStyle.css" rel="stylesheet">
+		<link href="css/checkbox3.min.css" rel="stylesheet">
+
+		<!-- jqgrid-->
+		<link href="css/plugins/jqgrid/ui.jqgrid.css" rel="stylesheet">
+		<link href="css/style.css?v=4.0.0" rel="stylesheet">
+		<link href="css/yh.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/zTreeStyle/metro.css" />
+		<link href="css/plugins/chosen/chosen.css" rel="stylesheet">
+		<!--		<link rel="stylesheet" href="css/zTreeStyle/metro.css" />
+-->
+		<style type="text/css">
+			.divcss5 {
+				-webkit-text-size-adjust: none;
+			}
+		</style>
+	</head>
+
+	<body class="gray-bg">
+		<div class="wrapper wrapper-content animated fadeInRight">
+			<div>
+				<div class="col-sm-12">
+					<div class="ibox float-e-margins">
+						<div class="ibox-title">
+							<!--<h5>组织列表</h5>-->
+							<div class="search-tree">
+								<div class="col-sm-6">
+									<select class="form-control" name="plsCarTp" id="plsCarTp" style="position: absolute;left: -1.4%;margin-top: -0.4%;">
+											<option value="无">无</option>
+									</select>
+								</div>
+								<input type="text" class="search" id="searchText" placeholder="请输入车牌号..." style="width: 30%;position: absolute;" />
+								<button class="btn btn-primary btn-sm" id="plsCarTpSch" style="position: absolute;left: 63%;top: 15%">搜索</button>
+								<button class="btn btn-primary btn-sm" id="add-btn" style="position: absolute;left: 68%;top: 15%" data-toggle="modal" data-target="#myModal">新增</button>
+								<button class="btn btn-warning btn-sm" id="update-btn" style="position: absolute;left: 73%;top: 15%" data-toggle="modal" data-target="#myModal">修改</button>
+								<button class="btn btn-danger btn-sm" id="delete-btn" style="position: absolute;left: 78%;top: 15%">删除</button>
+								<button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal2"  id="import-btn" style="position: absolute;left: 83%;top: 15%">导入</button>
+								<button class="btn btn-primary btn-sm" id="download-modalExcel" style="position: absolute;left: 88%;top: 15%">模板下载</button>
+							</div>
+
+						</div>
+						<div class="ibox-content">
+							<div class="jqGrid_wrapper">
+								<table id="table_list_jc"></table>
+								<div class="" style="float:right;">
+									<ul class="pagination" id="pagination0"></ul>
+								</div>
+								<!--<div id="pg_pager_list_jc" class="ui-pager-control" role="group">
+									<table class="ui-pg-table ui-common-table ui-pager-table">
+										<tbody>
+											<tr>
+												<td id="pager_list_jc_left" align="left"></td>
+												<td id="pager_list_jc_center" align="center" style="white-space: pre; width: 351px;">
+													<table class="ui-pg-table ui-common-table ui-paging-pager">
+														<tbody>
+															<tr>
+																<td id="first_pager_list_jc" class="ui-pg-button ui-disabled" title="First Page"><span class="glyphicon glyphicon-step-backward"></span></td>
+																<td id="prev_pager_list_jc" class="ui-pg-button ui-disabled" title="Previous Page"><span class="glyphicon glyphicon-backward"></span></td>
+																<td class="ui-pg-button ui-disabled"><span class="ui-separator"></span></td>
+																<td id="input_pager_list_jc" dir="ltr"> <input class="ui-pg-input form-control" type="text" size="2" maxlength="7" value="0" role="textbox"> 共 <span id="sp_1_pager_list_jc">2</span> 页</td>
+																<td class="ui-pg-button ui-disabled"><span class="ui-separator"></span></td>
+																<td id="next_pager_list_jc" class="ui-pg-button" title="Next Page"><span class="glyphicon glyphicon-forward"></span></td>
+																<td id="last_pager_list_jc" class="ui-pg-button" title="Last Page"><span class="glyphicon glyphicon-step-forward"></span></td>
+																<td dir="ltr">
+																	<select class="ui-pg-selbox form-control" role="listbox" title="Records per Page">
+																		<option role="option" value="10">10</option>
+																		<option role="option" value="20">20</option>
+																		<option role="option" value="30">30</option>
+																	</select>
+																</td>
+															</tr>
+														</tbody>
+													</table>
+												</td>
+												<td id="pager_list_jc_right" align="right">
+													<div dir="ltr" style="text-align:right" class="ui-paging-info">1 - 14　共 17 条</div>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>-->
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="width: 100%;">
+					<div class="modal-dialog" style="width: 80%;height: 100%;">
+						<div class="modal-content" style="height: auto;">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h4 class="modal-title" id="myModalLabel">新增警员信息</h4>
+							</div>
+							<!--<div class="modal-body">-->
+							<!--新增用户信息-->
+							<div class="">
+
+								<form class="form-horizontal m-t" id="commentForm" action="javascript:;">
+									<div class="col-sm-6">
+										<div class="add-hide">
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">车牌号：</label>
+												<div class="col-sm-8">
+													<input id="carcode" name="carcode" maxlength="50" type="text" class="form-control" required="required">
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">车辆名称：</label>
+												<div class="col-sm-8">
+													<input id="carName" name="carName" maxlength="50" type="text" class="form-control">
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">车辆类型：</label>
+												<div class="col-sm-8">
+													<select class="form-control" id="carTypeid">
+														
+													</select>
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">车辆颜色：</label>
+												<div class="col-sm-8">
+													<input id="carcolor" name="carcolor" maxlength="50" type="text" class="form-control">
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">车辆符号：</label>
+												<div class="col-sm-8">
+													<input id="carsymbol" name="carsymbol" maxlength="38"  type="number" class="form-control">
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">车辆所属名称：</label>
+												<div class="col-sm-8">
+													<input id="carowner" name="carowner" maxlength="50" type="text" class="form-control">
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">车辆所属密码：</label>
+												<div class="col-sm-8">
+													<input id="carownerpsw" name="carownerpsw" class="form-control" maxlength="50" type="text">
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">车辆所属地址：</label>
+												<div class="col-sm-8">
+													<input id="carowneraddress" name="carowneraddress" type="text" class="form-control" maxlength="50">
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">驾驶员姓名：</label>
+												<div class="col-sm-8">
+													<input id="drivername" name="drivername" type="text" class="form-control" maxlength="50">
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">驾驶员编号：</label>
+												<div class="col-sm-8">
+													<input id="driverlicense" name="driverlicense" type="text" class="form-control" maxlength="50">
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">车辆引擎：</label>
+												<div class="col-sm-8">
+													<input id="carengine" name="carengine" type="text" class="form-control" maxlength="50">
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">车辆底盘：</label>
+												<div class="col-sm-8">
+													<input id="carbatholith" name="carbatholith" type="text" class="form-control" maxlength="50">
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">车辆通信号：</label>
+												<div class="col-sm-8">
+													<input id="carcmmucode" name="carcmmucode" type="text" class="form-control" maxlength="50">
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">车辆样式：</label>
+												<div class="col-sm-8">
+													<input id="carstyle" name="carstyle" type="number" class="form-control">
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">组编号：</label>
+												<div class="col-sm-8">
+													<input id="teamid" name="teamid" type="number" class="form-control" min="12" max="12">
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">通用属性：</label>
+												<div class="col-sm-8">
+													<input id="commattribute" name="commattribute" type="text" class="form-control" maxlength="50">
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">保险类型：</label>
+												<div class="col-sm-8">
+													<input id="insurancetype" name="insurancetype" type="text" class="form-control" maxlength="50">
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">保险价格：</label>
+												<div class="col-sm-8">
+													<input id="insuranceprice" name="insuranceprice" type="number" class="form-control" maxlength="20">
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">WH类型：</label>
+												<div class="col-sm-8">
+													<input id="whtype" name="whtype" type="number" class="form-control">
+												</div>
+											</div>
+											<!--<div class="form-group">
+											<label class="col-sm-3 control-label">备注：</label>
+											<div class="col-sm-8">
+												<textarea id="remark" name="remark" type="text" class="form-control"  ></textarea>
+											</div>
+										</div>-->
+
+											<!--</div>-->
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="add-hide">
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">保险开始时间：</label>
+												<div class="col-sm-8">
+													<div class="input-group date" id="date">
+														<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+														<input type="text" value="" id="insurancestartdate" class="form-control" name="insurancestartdate">
+													</div>
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">保险结束时间：</label>
+												<div class="col-sm-8">
+													<div class="input-group date" id="date1">
+														<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+														<input type="text" value="" id="insuranceenddate" class="form-control" name="insuranceenddate">
+													</div>
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label ">WHLastDate：</label>
+												<div class="col-sm-8 ">
+													<div class="input-group date" id="date2 ">
+														<span class="input-group-addon "><i class="fa fa-calendar "></i></span>
+														<input type="text" id="whlastdate" class="form-control" name="whlastdate">
+													</div>
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">WHEndDate：</label>
+												<div class="col-sm-8">
+													<div class="input-group date" id="date3 ">
+														<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+														<input type="text" id="whenddate" class="form-control" name="whenddate">
+													</div>
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">车辆价格编号：</label>
+												<div class="col-sm-8">
+													<input id="carpriceid" name="carpriceid" length="12" type="number" class="form-control">
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">电话：</label>
+												<div class="col-sm-8">
+													<input id="telphone" name="telphone" maxlength="32" type="number" class="form-control">
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">第一联系人：</label>
+												<div class="col-sm-8">
+													<input id="firstlinkman" name="firstlinkman" maxlength="50" type="text" class="form-control">
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">第一联系人移动电话：</label>
+												<div class="col-sm-8">
+													<input id="firstmob " name="firstmob" maxlength="32" type="number" class="form-control">
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">第一联系人电话：</label>
+												<div class="col-sm-8">
+													<input id="firstphone" name="firstphone" maxlength="32" type="number" class="form-control">
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">第二联系人：</label>
+												<div class="col-sm-8">
+													<input id="secondlinkman" name="secondlinkman" maxlength="50" type="text" class="form-control">
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">第二联系人移动电话：</label>
+												<div class="col-sm-8 ">
+													<input id="secondmob" name="secondmob" maxlength="32" type="number" class="form-control">
+												</div>
+											</div>
+
+											<div class="form-group ">
+												<label class="col-sm-3 control-label ">第二联系人电话：</label>
+												<div class="col-sm-8">
+													<input id="secondphone" name="secondphone" maxlength="32" type="number" class="form-control">
+												</div>
+											</div>
+
+											<div class="form-group ">
+												<label class="col-sm-3 control-label ">报警电话：</label>
+												<div class="col-sm-8 ">
+													<input id="openalarm" name="openalarm" type="number" class="form-control" maxlength ="1">
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">创建时间：</label>
+												<div class="col-sm-8">
+													<div class="input-group date " id="date4 ">
+														<span class="input-group-addon "><i class="fa fa-calendar "></i></span>
+														<input type="text" value="" id="createtime" class="form-control" name="createtime">
+													</div>
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">备注：</label>
+												<div class="col-sm-8">
+													<input id="remark" name="remark" type="text" class="form-control" maxlength="500">
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">经度：</label>
+												<div class="col-sm-8">
+													<input id="longitude" name="longitude" type="number" class="form-control " maxlength="11">
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">纬度：</label>
+												<div class="col-sm-8">
+													<input id="latitude" name="latitude" type="number" class="form-control" maxlength="11">
+												</div>
+											</div>
+
+											<!--1在线2不在线-->
+											<div class="form-group">
+												<label class="col-sm-3 control-label">是否在线：</label>
+												<div class="col-sm-8">
+													<select class="form-control" name="isonline" id="isonline">
+														<option value="1">在线</option>
+														<option value="2" selected="selected">离线</option>
+													</select>
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label">部门ID：</label>
+												<div class="col-sm-8">
+													<select class="chosen-select" name="stationid" id="stationid" data-placeholder="选择部门...">
+													</select>
+													<!--<input id="stationid" name="stationid" type="text" class="form-control" maxlength="36">-->
+												</div>
+											</div>
+
+											<!--<div class="form-group ">
+												<div class="modal-footer ">
+													<button type="button " class="btn btn-default " data-dismiss="modal " id="rolebtngb ">关闭</button>
+													<button type="submit " class="btn btn-primary " id="btnbc ">保存</button>
+												</div>
+											</div>-->
+										</div>
+									</div>
+									<div class="col-sm-12" style="height: 50px; width: 100%;">
+									</div>
+									<div class="modal-footer" style="border-top:0px">
+										<button type="button" class="btn btn-default" data-dismiss="modal" id="cancel" style="position: absolute;bottom: 2%;right: 46%">关闭</button>
+										<button type="submit" class="btn btn-primary" id="plsCarTpSave" style="position: absolute;bottom: 2%;right: 54%;">保存</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--导入-->
+				<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+					<div class="modal-dialog" style="height: 150px; ">
+						<div class="modal-content" style="height: 150px; ">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h4 class="modal-title" id="myModalLabel">导入列表信息</h4>
+							</div>
+						
+							<div class="add-hide addImportant">
+								
+									<form enctype="multipart/form-data" id="uploadExcel">
+									<div class="col-sm-12" >
+										<div class="form-group" >
+											<label class="col-sm-2 control-label" style="padding-top: 10px; ">选择文件</label>	
+											 <div class="col-sm-7">
+							                <input type="file" id="excelFile" class="form-control" name="file">
+							                 </div>
+							                <div class="col-sm-2">
+							                <!--	<button class="btn btn-primary " id="uploadExcelBtn ">导入</button>-->
+							                <input type="button" class="btn btn-primary" id="uploadExcelBtn" value="导入" />
+										    </div>
+										</div>
+										
+									</div>
+									</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- 全局js -->
+			<script src="js/jquery.min.js"></script>
+			<script src="js/bootstrap.min.js"></script>
+
+			<!-- 自定义js -->
+			<script src="js/content.js"></script>
+
+			<script src="js/plugins/datetime/bootstrap-datetimepicker.js "></script>
+			<!-- Bootstrap-Treeview plugin javascript -->
+			<!--<script src="js/plugins/treeview/bootstrap-treeview.js "></script>
+    <script src="js/demo/treeview-demo.js "></script>-->
+			<script src="js/plugins/ztree/jquery.ztree.core.js "></script>
+			<script src="js/plugins/ztree/jquery.ztree.excheck.js "></script>
+
+			<!-- jqGrid -->
+			<script src="js/plugins/jqgrid/i18n/grid.locale-cn.js?0820 "></script>
+			<script src="js/plugins/jqgrid/jquery.jqGrid.min.js?0820 "></script>
+
+			<script src="js/plugins/validate/jquery.validate.min.js "></script>
+			<script src="js/plugins/validate/messages_zh.min.js "></script>
+
+			<script src="js/plugins/layer/layer.min.js "></script>
+			<script type="text/javascript " src="js/jquery.serializejson.js "></script>
+
+			<script src="js/demo/form-validate-demo.js "></script>
+			<script type="text/javascript " src="js/common/ztreeDept.js "></script>
+			<script src="js/jqPaginator.js " type="text/javascript " charset="utf-8"></script>
+			<script type="text/javascript" src="js/plugins/chosen/chosen.jquery.js"></script>
+			<script src="js/common/config.js" type="text/javascript" charset="utf-8"></script>
+			<script src="js/common/utils.js " type="text/javascript " charset="utf-8"></script>
+			<script type="text/javascript " src="js/controllerJs/policeCar.js" charset="utf-8"></script>
+	</body>
+
+</html>

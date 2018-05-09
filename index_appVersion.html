@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>APP版本管理</title>
+		<link rel="shortcut icon" href="favicon.ico">
+		<link href="css/bootstrap.min.css?v=3.3.5" rel="stylesheet">
+		<link href="css/font-awesome.css?v=4.4.0" rel="stylesheet">
+		<link href="css/plugins/treeview/bootstrap-treeview.css" rel="stylesheet">
+		<link href="css/checkbox3.min.css" rel="stylesheet">
+		<!--<link href="css/plugins/cropper/cropper.min.css" rel="stylesheet">-->
+		<!--<link href="css/plugins/datapicker/datepicker3.css" rel="stylesheet">-->
+		<!-- jqgrid-->
+		<link href="css/plugins/jqgrid/ui.jqgrid.css?0820" rel="stylesheet">
+		<link href="css/style.css?v=4.0.0" rel="stylesheet">
+		<link href="css/plugins/chosen/chosen.css" rel="stylesheet">
+		<link href="css/yh.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/zTreeStyle/metro.css" />
+	</head>
+
+	<body class="gray-bg">
+		<div class="wrapper wrapper-content animated fadeInRight">
+
+			<div>
+				<!--<div class="col-sm-4">
+		            <div class="ibox float-e-margins">
+		                <div class="ibox-title">
+		                    <h5>组织列表</h5>
+		                    
+		                </div>
+		                <div class="ibox-content">
+		                    <div id="treeview7" class="test"></div>
+		                </div>
+		            </div>
+		        </div>-->
+				<div class="col-sm-12">
+					<div class="ibox float-e-margins">
+						<div class="ibox-title">
+							<div class="menu-div">
+								<button class="btn btn-outline btn-primary" data-toggle="modal" data-target="#myModal" id="add-btn">新增 </button>
+								<!--<button class="btn ">新增</button>-->
+							<!--	<button class="btn btn-outline btn-primary" data-toggle="modal" id="update-btn">修改</button>-->
+								<button class="btn btn-outline btn-danger" id="delete-btn">删除</button>
+								<a class="btn btn-outline btn-primary" data-toggle="modal" id="upload-btn">下载</a>
+							</div>
+							<div class="search-div">
+								<input type="text" class="search" id="serachText" placeholder="请输入版本号" /><button class="btn btn-primary btn-sm" id="serachBtn">搜索</button>
+							</div>
+							<div class="jqGrid_wrapper">
+								<table id="table_list_1"></table>
+								<div id="pager_list_1"></div>
+							<!--	<ul class="pagination" id="pagination1" style=" float: right;"></ul>-->
+							</div>
+							<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+											<h4 class="modal-title" id="myModalLabel">新增版本信息</h4>
+										</div>
+										<!--<div class="modal-body">-->
+										<!--新增用户信息-->
+										<div class="add-hide">
+											<form class="form-horizontal m-t" id="commentForm" action="javascript:appAction();" style="height: 350px;">
+
+												<div class="form-group">
+													<label class="col-sm-3 control-label">版本类型：</label>
+													<div class="col-sm-8">
+														<div class="radio3">
+															<input type="radio" name="ifUse" id="ifUse1" value="1" checked="checked">
+															<label for="ifUse1">APP</label>
+														</div>
+
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-sm-3 control-label">版本号：</label>
+													<div class="col-sm-8">
+														<input id="versionCode" type="text" class="form-control" name="versionCode" placeholder="版本号">
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-sm-3 control-label">版本名称：</label>
+													<div class="col-sm-8">
+														<input id="versionName" type="text" class="form-control" name="versionName" placeholder="版本名称">
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-sm-3 control-label">版本文件地址：</label>
+													<div class="col-sm-8">
+														<input id="downloadFileId" type="text" class="form-control" name="downloadFileId" readonly="readonly">
+													</div>
+												</div>
+
+												<div class="form-group">
+													<label class="col-sm-3 control-label">更新说明：</label>
+													<div class="col-sm-8">
+														<textarea id="updateDescribe" type="text" class="form-control" name="updateDescribe"></textarea>
+													</div>
+												</div>
+
+												<div class="form-group">
+													<div class="modal-footer" style="margin-top: 25px;">
+														<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+														<button class="btn btn-primary" type="submit">保存</button>
+													</div>
+												</div>
+
+											</form>
+											<form enctype="multipart/form-data" id="uploadForm">
+												<div class="col-sm-12" style="position: absolute;bottom: 15%;">
+													<div class="form-group">
+														<label class="col-sm-2 control-label" style="padding-left: 0px;padding-right: 0px;left: 55px;    top: 5px;">版本文件：</label>
+														<div class="col-sm-8" style="width: 350px;">
+															<input type="file" id="file" name="file" class="form-control " readonly="readonly" style="margin-left: 40px;width: 306px;">
+
+														</div>
+														<div class="col-sm-2">
+															<input type="button" class="btn btn-primary " id="uploadBtn" value="上传" />
+														</div>
+													</div>
+												</div>
+											</form>
+											<!--</div>-->
+
+										</div>
+
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+				</div>
+				<div>
+
+				</div>
+			</div>
+
+			<!-- 全局js -->
+			<script src="js/jquery.min.js?v=2.1.4"></script>
+			<script src="js/bootstrap.min.js?v=3.3.5"></script>
+
+			<!-- 自定义js -->
+			<script src="js/content.js?v=1.0.0"></script>
+
+			<script src="js/plugins/datapicker/bootstrap-datepicker.js"></script>
+			<!-- Bootstrap-Treeview plugin javascript -->
+			<script src="js/plugins/treeview/bootstrap-treeview.js"></script>
+			<script src="js/demo/treeview-demo.js"></script>
+
+			<script type="text/javascript" src="js/jqPaginator.js"></script>
+			<!-- jqGrid -->
+			<script src="js/plugins/jqgrid/i18n/grid.locale-cn.js"></script>
+			<script src="js/plugins/jqgrid/jquery.jqGrid.min.js"></script>
+
+			<script src="js/plugins/validate/jquery.validate.min.js"></script>
+			<script src="js/plugins/validate/messages_zh.min.js"></script>
+
+			<script src="js/plugins/layer/layer.min.js"></script>
+            <script src="js/common/config.js" type="text/javascript" charset="utf-8"></script>
+			<script src="js/demo/form-validate-demo.js"></script>
+			<script type="text/javascript" src="js/plugins/chosen/chosen.jquery.js"></script>
+			<script src="js/jquery.serializejson.js" type="text/javascript" charset="utf-8"></script>
+			<script type="text/javascript" src="js/mapController/appController.js"></script>
+
+			<!--<script type="text/javascript" src="js/controllerJs/jurisdiction.js"></script>
+			<script src="js/controllerJs/jurisdictionbtn.js" type="text/javascript" charset="utf-8"></script>-->
+	</body>
+
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>权限管理</title>
+		<link rel="shortcut icon" href="favicon.ico">
+		<link href="css/bootstrap.min.css?v=3.3.5" rel="stylesheet">
+		<link href="css/font-awesome.css?v=4.4.0" rel="stylesheet">
+		<link href="css/plugins/treeview/bootstrap-treeview.css" rel="stylesheet">
+		<link href="css/checkbox3.min.css" rel="stylesheet">
+		<!--<link href="css/plugins/cropper/cropper.min.css" rel="stylesheet">-->
+		<!--<link href="css/plugins/datapicker/datepicker3.css" rel="stylesheet">-->
+		<!-- jqgrid-->
+		<link href="css/plugins/jqgrid/ui.jqgrid.css?0820" rel="stylesheet">
+		<link href="css/style.css?v=4.0.0" rel="stylesheet">
+		<link href="css/plugins/chosen/chosen.css" rel="stylesheet">
+		<link href="css/yh.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/zTreeStyle/metro.css" />
+	</head>
+
+	<body class="gray-bg">
+		<div class="wrapper wrapper-content animated fadeInRight">
+
+			<div>
+				<!--<div class="col-sm-4">
+		            <div class="ibox float-e-margins">
+		                <div class="ibox-title">
+		                    <h5>组织列表</h5>
+		                    
+		                </div>
+		                <div class="ibox-content">
+		                    <div id="treeview7" class="test"></div>
+		                </div>
+		            </div>
+		        </div>-->
+				<div class="col-sm-12">
+					<div class="ibox float-e-margins">
+						<div class="ibox-title">
+							<div class="menu-div">
+								<button class="btn btn-outline btn-primary" data-toggle="modal" data-target="#myModal" id="add-btn">新增 </button>
+								<!--<button class="btn ">新增</button>-->
+								<button class="btn btn-outline btn-primary" data-toggle="modal" id="update-btn">修改</button>
+								<button class="btn btn-outline btn-danger" id="delete-btn">删除</button>
+							</div>
+							<div class="search-div">
+								<input type="text" class="search" id="qxtextss" placeholder="按名称搜索..."/><button class="btn btn-primary btn-sm" id="qxbtnss">搜索</button>
+							</div>
+							<div class="jqGrid_wrapper">
+								<table id="table_list_1"></table>
+								<div id="pager_list_1"></div>
+							</div>
+							<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+											<h4 class="modal-title" id="myModalLabel">新增警员信息</h4>
+										</div>
+										<!--<div class="modal-body">-->
+										<!--新增用户信息-->
+										<div class="add-hide">
+											<form class="form-horizontal m-t" id="commentForm" action="javascript:jurisdictionbtnbc();">
+												<div class="form-group">
+													<label class="col-sm-3 control-label">菜单：</label>
+													<div class="col-sm-8">
+														<select name="menuId" data-placeholder="选择菜单..." class="chosen-select" style="width:350px;" tabindex="2" id="xzfcd">
+															<option value="">无</option>
+														</select>
+														<div class="col-sm-8">
+														</div>
+													</div>
+												</div>
+
+												<div class="form-group">
+													<label class="col-sm-3 control-label">名称：</label>
+													<div class="col-sm-8">
+														<input id="cname" type="text" class="form-control" name="name">
+													</div>
+												</div>
+
+												<div class="form-group">
+													<label class="col-sm-3 control-label">备注：</label>
+													<div class="col-sm-8">
+														<textarea id="remark" name="remark" type="text" class="form-control"></textarea>
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="modal-footer">
+														<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+														<button class="btn btn-primary" type="submit">保存</button>
+													</div>
+												</div>
+
+											</form>
+											<!--</div>-->
+
+										</div>
+
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+				</div>
+				<div>
+
+				</div>
+			</div>
+
+			<!-- 全局js -->
+			<script src="js/jquery.min.js?v=2.1.4"></script>
+			<script src="js/bootstrap.min.js?v=3.3.5"></script>
+
+			<!-- 自定义js -->
+			<script src="js/content.js?v=1.0.0"></script>
+
+			<script src="js/plugins/datapicker/bootstrap-datepicker.js"></script>
+			<!-- Bootstrap-Treeview plugin javascript -->
+			<script src="js/plugins/treeview/bootstrap-treeview.js"></script>
+			<script src="js/demo/treeview-demo.js"></script>
+
+			<!-- jqGrid -->
+			<script src="js/plugins/jqgrid/i18n/grid.locale-cn.js?0820"></script>
+			<script src="js/plugins/jqgrid/jquery.jqGrid.min.js?0820"></script>
+
+			<script src="js/plugins/validate/jquery.validate.min.js"></script>
+			<script src="js/plugins/validate/messages_zh.min.js"></script>
+
+			<script src="js/plugins/layer/layer.min.js"></script>
+
+			<script src="js/demo/form-validate-demo.js"></script>
+			<script type="text/javascript" src="js/plugins/chosen/chosen.jquery.js"></script>
+			<script src="js/controllerJs/jurisdictionbtn.js" type="text/javascript" charset="utf-8"></script>
+			<script src="js/common/config.js" type="text/javascript" charset="utf-8"></script>
+			<script src="js/jquery.serializejson.js" type="text/javascript" charset="utf-8"></script>
+			<script type="text/javascript" src="js/controllerJs/jurisdiction.js"></script>
+
+	</body>
+
+</html>

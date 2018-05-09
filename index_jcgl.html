@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>警车类型管理</title>
+		<link rel="shortcut icon" href="favicon.ico">
+		<link href="css/bootstrap.min.css?v=3.3.5" rel="stylesheet">
+		<link href="css/font-awesome.css?v=4.4.0" rel="stylesheet">
+		<!--<link href="css/plugins/treeview/bootstrap-treeview.css" rel="stylesheet">-->
+		<link href="css/plugins/zTreeStyle/zTreeStyle.css" rel="stylesheet">
+		<link href="css/checkbox3.min.css" rel="stylesheet">
+		<!-- jqgrid-->
+		<link href="css/plugins/jqgrid/ui.jqgrid.css?0820" rel="stylesheet">
+		<link href="css/style.css?v=4.0.0" rel="stylesheet">
+		<link href="css/yh.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/zTreeStyle/metro.css" />
+		<style type="text/css">
+			.ui-jqgrid .ui-pg-table {
+				position: relative;
+				padding: 1px 0;
+				width: auto;
+				margin: 0px -10%;
+			}
+		</style>
+		<!--		<link rel="stylesheet" href="css/zTreeStyle/metro.css" />
+-->
+	</head>
+
+	<body class="gray-bg">
+		<div class="wrapper wrapper-content animated fadeInRight">
+
+			<div>
+
+				<div class="col-sm-6">
+					<div class="ibox float-e-margins">
+						<div class="ibox-title">
+							<!--<h5>组织列表</h5>-->
+							<!--<div class="search-tree">
+								<input type="text" class="search" id="searchText" placeholder="请输入警车类型名称..." /><button class="btn btn-primary btn-sm" id="plsCarTpSch" style="position: absolute;left: 56%;top: 8%">搜索</button>
+							</div>-->
+
+						</div>
+						<div class="ibox-content">
+							<div class="jqGrid_wrapper">
+								<table id="table_list_jclx"></table>
+								<div id="pager_list_jclx"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="ibox float-e-margins">
+						<div class="ibox-title">
+							<div class="menu-div">
+								<button class="btn btn-outline btn-warning" data-toggle="modal" id="update-btn">编辑</button>
+								<button class="btn btn-outline btn-primary" id="add-btn">新增 </button>
+								<button class="btn btn-outline btn-danger" id="delete-btn">删除</button>
+							</div>
+							<div class="add-hide">
+								<form class="form-horizontal m-t float-div" id="commentForm" action="javascript:;">
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label class="col-sm-5 control-label" style="text-align: left;">警车类型名称：</label>
+											<div class="col-sm-7">
+												<input id="type" name="type" maxlength="100" type="text" class="form-control" readonly="readonly" required="required" style="margin-left: -30%;width: 350%;">
+											</div>
+										</div>
+									</div>
+									<div class="footer-group" id="addBtnDiv">
+										<button class="btn btn-primary" id="plsCarTpSave" disabled="disabled" style="position: absolute;top: 16%;right: 50%;" type="submit">保存</button>
+										<button type="button" class="btn btn-primary" disabled="disabled" id="cancel" style="position: absolute;top: 16%;left: 51%;">取消</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<div>
+
+				</div>
+			</div>
+
+			<!-- 全局js -->
+			<script src="js/jquery.min.js?v=2.1.4"></script>
+			<script src="js/bootstrap.min.js?v=3.3.5"></script>
+
+			<!-- 自定义js -->
+			<script src="js/content.js?v=1.0.0"></script>
+
+			<script src="js/plugins/datapicker/bootstrap-datepicker.js"></script>
+			<!-- Bootstrap-Treeview plugin javascript -->
+			<!--<script src="js/plugins/treeview/bootstrap-treeview.js"></script>
+    <script src="js/demo/treeview-demo.js"></script>-->
+			<script src="js/plugins/ztree/jquery.ztree.core.js"></script>
+			<script src="js/plugins/ztree/jquery.ztree.excheck.js"></script>
+
+			<!-- jqGrid -->
+			<script src="js/plugins/jqgrid/i18n/grid.locale-cn.js?0820"></script>
+			<script src="js/plugins/jqgrid/jquery.jqGrid.min.js?0820"></script>
+
+			<script src="js/plugins/validate/jquery.validate.min.js"></script>
+			<script src="js/plugins/validate/messages_zh.min.js"></script>
+
+			<script src="js/plugins/layer/layer.min.js"></script>
+			<script type="text/javascript" src="js/jquery.serializejson.js"></script>
+
+			<script src="js/demo/form-validate-demo.js"></script>
+			<script type="text/javascript" src="js/common/ztreeDept.js"></script>
+			<script src="js/common/config.js" type="text/javascript" charset="utf-8"></script>
+			<script src="js/common/utils.js" type="text/javascript" charset="utf-8"></script>
+			<script type="text/javascript" src="js/controllerJs/policeCarType.js"></script>
+	</body>
+
+</html>

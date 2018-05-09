@@ -1,0 +1,153 @@
+.menu-div .btn{
+	padding: 3px 12px;
+	margin-right: 5px;
+}
+.add-hide .radio3{
+	float: left;
+    margin-right: 20px;
+}
+.form-horizontal .form-group{
+	margin-right: 0px!important; 
+	margin-left: 0px!important;; 
+}
+.add-hide .input-4{
+	padding-left: 0px;
+}
+.police-div{
+	width: 500px;
+	margin: 0 auto;
+}
+.chosen-container{
+	width: 100%!important;
+}
+.modal-div{
+	width: 830px;
+}
+.modal-div .col-sm-3{
+	padding-left: 0px;
+	padding-right: 0px;
+}
+.modal-div .col-sm-8{
+	padding-left: 0px;
+	padding-right: 0px;
+}
+.modal-div .col-sm-4{
+	padding-left: 0px;
+	
+}
+.parent-div{
+	position: absolute;
+    width: 93%;
+    z-index: 99;
+    background: #eee;
+    display: none;
+}
+.textarea{
+	resize: none;
+}
+.ibox>.ibox-content{
+	min-height: 690px;
+}
+.ibox{
+	    background: #fff;
+    min-height: 850px;
+}
+.float-div>.col-sm-6{
+	margin-top: -1px;
+    background: #fff;
+        height: 55px
+}
+.help-block{
+	margin-top: 0px;
+}
+.qx-div{
+	width: 500px;
+	margin: 0 auto;
+	
+}
+.qx{
+	min-height: 100px;
+}
+.qx li{
+	list-style: none;
+	width: 30%;
+	float: left;
+}
+.qx li .qx-sj{
+	
+}
+.footer-group{
+	padding-top: 660px;
+    text-align: center;
+}
+.footer-menu{
+	
+    text-align: center;
+}
+.ibox-title{
+	position: relative;
+}
+.menu-btn{
+	position: absolute;
+    top: 5px;
+    right: 10px;
+}
+.one-step,.two-step{
+	    width: 500px;
+    margin: 0 auto;
+}
+.menu-p{
+	font-size: 16px;
+	text-align: center;
+}
+.two-step{
+	display: none;
+}
+.prev{
+	display: none;
+}
+.search{
+	    width: 300px;
+    height: 30px;
+    float: left;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+}
+.search-div{
+	    width: 100%;
+    height: 45px;
+    float: right;
+    margin-top: 5px;
+}
+.tree-div{
+	width: 100%;
+	height: 30px;
+	margin: 0 auto;
+	position: relative;
+}
+.tree-search{
+	width: 100%;
+    height: 30px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+        margin-top: 1px;
+}
+.tree-div .fa-search{
+	position: absolute;
+	    right: 10px;
+    top: 5px;
+    font-size: 20px;
+}
+.js{
+	    width: 90%;
+    margin: 0 auto;
+}
+.search-tree{
+	    float: left;
+    margin-top: -7px;
+    margin-left: 12px;
+    width: 60%;
+}
+.search-tree .search{
+	width: calc(100% - 50px);
+}
