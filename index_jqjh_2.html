@@ -46,9 +46,16 @@
                                 <option v-for="i in unitsAll" :value="i.id">{{i.name}}</option>
                             </select>
                         </div>
-                        <div class="form-group inline" type="viewName">
+                        <div class="form-group inline" type="viewName" itemIdName="viewNameId">
                             <label>视图名称：</label>
-                            <input class="form-control" placeholder="请输入视图名称" :value="addItems.viewName" v-on:input="valueChange">
+                            <!-- <input class="form-control" placeholder="请输入视图名称" :value="addItems.viewName" v-on:input="valueChange"> -->
+                            <select  class="multiple-select block" 
+                                 v-on:click="multipleSelectChange"    style="display: none;" multiple >
+                                <option selected = "selected" disabled = "disabled" value="JJdb">接警</option>
+                                <option value="CJdb">处警</option>
+                                <option value="FKdb">反馈</option>
+                            </select>
+
                         </div>
                         <div class="form-group inline" type="viewUserName">
                             <label>用户名：</label>
@@ -71,7 +78,7 @@
                         <div class="form-group inline" type="caseClasses" itemIdName="caseClassId">
                             <label>案件类别：</label>
                             <select v-on:click="multipleSelectChange" class="multiple-select block" multiple style="display: none;">
-                                <option v-for="i in caseClassesAll" :value="i.id">{{i.name}}</option>
+                                <option v-for="i in caseClassesAll" :value="i.id"   >{{i.name}}</option>
                             </select>
                         </div>
                         <div class="form-group inline" type="caseSmallClasses" itemIdName="caseSmallClassId">
@@ -146,6 +153,11 @@
                         <div class="form-group inline" type="viewName">
                             <label>视图名称：</label>
                             <input class="form-control" :value="editItems.viewName" v-on:input="valueChange" :disabled="!editing">
+                            <select name="" id="" multiple>
+                                <option value="接警"></option>
+                                <option value="处理"></option>
+                                <option value="反馈"></option>
+                            </select>
                         </div>
                         <div class="form-group inline" type="viewUserName">
                             <label>用户名：</label>
