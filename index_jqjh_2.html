@@ -72,19 +72,19 @@
                         <div class="form-group inline" type="caseTypes" itemIdName="caseTypeId">
                             <label>案件类型：</label>
                             <select v-on:click="multipleSelectChange" class="multiple-select block" multiple data-placeholder="" style="display: none;">
-                                <option v-for="i in caseTypesAll" :value="i.id">{{i.name}}</option>
+                                <option v-for="i in caseTypesAll" :value="i.id">{{i.typeName}}</option>
                             </select>
                         </div>
                         <div class="form-group inline" type="caseClasses" itemIdName="caseClassId">
                             <label>案件类别：</label>
                             <select v-on:click="multipleSelectChange" class="multiple-select block" multiple style="display: none;">
-                                <option v-for="i in caseClassesAll" :value="i.id"   >{{i.name}}</option>
+                                <option v-for="i in caseClassesAll" :value="i.id">{{i.typeName}}</option>
                             </select>
                         </div>
                         <div class="form-group inline" type="caseSmallClasses" itemIdName="caseSmallClassId">
                             <label>案件细类：</label>
                             <select v-on:click="multipleSelectChange" class="multiple-select block" multiple style="display: none;">
-                                <option v-for="i in caseSmallClassesAll" :value="i.id">{{i.name}}</option>
+                                <option v-for="i in caseSmallClassesAll" :value="i.id">{{i.typeName}}</option>
                             </select>
                         </div>
 
@@ -152,11 +152,16 @@
                         </div>
                         <div class="form-group inline" type="viewName">
                             <label>视图名称：</label>
-                            <input class="form-control" :value="editItems.viewName" v-on:input="valueChange" :disabled="!editing">
-                            <select name="" id="" multiple>
+                            <!-- <input class="form-control" :value="editItems.viewName" v-on:input="valueChange" :disabled="!editing"> -->
+                            <!-- <select name="" id="" multiple>
                                 <option value="接警"></option>
                                 <option value="处理"></option>
                                 <option value="反馈"></option>
+                            </select> -->
+                            <select class="multiple-select block" v-on:click="multipleSelectChange" style="display: none;" multiple>
+                                <option selected="selected" disabled="disabled" value="JJdb">接警</option>
+                                <option value="CJdb">处警</option>
+                                <option value="FKdb">反馈</option>
                             </select>
                         </div>
                         <div class="form-group inline" type="viewUserName">
