@@ -42,8 +42,9 @@
 
                         <div class="form-group inline" type="units" itemIdName="unitId">
                             <label>单位：</label>
-                            <select v-on:click="chosenSelectChange" class="chosen-select block" style="display: none;">
-                                <option v-for="i in unitsAll" :value="i.id">{{i.name}}</option>
+                            <select v-on:click="chosenSelectChange" class="chosen-select block" style="display: none;"> 
+                              <option value="">--未选择--</option>
+                              <option v-for="i in unitsAll" :value="i.unitId">{{i.unitName}}</option>
                             </select>
                         </div>
                         <div class="form-group inline" type="viewName" itemIdName="viewNameId">
@@ -138,31 +139,34 @@
                 </div>
                 <div class="ibox-content databaseSelectedWrap">
                     <div role="form" class="clearfix">
-                        <div class="form-group inline" type="units" itemIdName="unitId">
-                            <label>单位：</label>
-                            <select v-on:click="multipleSelectChange" class="multiple-select block" multiple :disabled="!editing" style="display: none;">
-                                <option v-for="i in unitsAll" :value="i.id" :selected="i.selected">{{i.name}}</option>
-                            </select>
+                        <!-- <div class="form-group inline" type="units" itemIdName="unitId"> -->
+                            <!-- <label>单位：</label> -->
+                             <!-- <select v-on:click="chosenSelectChange" class="chosen-select block" style="display: none;">  -->
+<!-- <option v-for="i in unitsAll" :value="i.unitId" :selected="editItems.units[0].unitId==i.unitId">{{i.unitName}}</option> -->
+                              <!-- <option :value="editItems.units[0].unitId">{{editItems._unitName}}</option> -->
+                            <!-- </select> -->
+                            <!-- <select v-on:click="multipleSelectChange" class="multiple-select block" multiple :disabled="!editing" style="display: none;">
+                              <option v-for="i in unitsAll" :value="i.id" :selected="editItems.units[0].unitId==i.id">{{i.unitName}}</option>
+                            </select> -->
                             <!--<div class="databaseSelected-wrap">
                                 <label class="selected-condition">已有条件：</label>
                                 <ul>
                                     <li v-if="editItems.units.length>0" v-for="i in editItems.units" :pid="i.unitId">{{ i.name }}<i class="fa fa-times-circle" v-on:click="delete_select"></i></li>
                                 </ul>
                             </div>-->
+                        <!-- </div> -->
+                        <div class="form-group inline">
+                            <label>单位：</label>
+<div>{{editItems._unitName}}</div>
                         </div>
                         <div class="form-group inline" type="viewName">
                             <label>视图名称：</label>
-                            <!-- <input class="form-control" :value="editItems.viewName" v-on:input="valueChange" :disabled="!editing"> -->
-                            <!-- <select name="" id="" multiple>
-                                <option value="接警"></option>
-                                <option value="处理"></option>
-                                <option value="反馈"></option>
-                            </select> -->
                             <select class="multiple-select block" v-on:click="multipleSelectChange" style="display: none;" multiple>
                                 <option selected="selected" disabled="disabled" value="JJdb">接警</option>
-                                <option value="CJdb">处警</option>
-                                <option value="FKdb">反馈</option>
+                                <option value="CJdb" :selected="editItems.viewName.indexOf('CJdb') > 0">处警</option>
+                                <option value="FKdb" :selected="editItems.viewName.indexOf('FKdb') > 0">反馈</option>
                             </select>
+                            
                         </div>
                         <div class="form-group inline" type="viewUserName">
                             <label>用户名：</label>
@@ -179,7 +183,7 @@
                         <div class="form-group inline" type="caseTypes" itemIdName="caseTypeId">
                             <label>案件类型：</label>
                             <select v-on:click="multipleSelectChange" class="multiple-select block" multiple :disabled="!editing" style="display: none;">
-                                <option v-for="i in caseTypesAll" :value="i.id" :selected="i.selected">{{i.name}}</option>
+<option v-for="i in caseTypesAll" :value="i.id" :selected="i.selected">{{i.typeName}}</option>
                             </select>
                             <div class="databaseSelected-wrap">
                                 <label class="selected-condition">已有条件：</label>
@@ -191,7 +195,7 @@
                         <div class="form-group inline" type="caseClasses" itemIdName="caseClassId">
                             <label>案件类别：</label>
                             <select v-on:click="multipleSelectChange" class="multiple-select block" multiple :disabled="!editing" style="display: none;">
-                                <option v-for="i in caseClassesAll" :value="i.id" :selected="i.selected">{{i.name}}</option>
+<option v-for="i in caseClassesAll" :value="i.id" :selected="i.selected">{{i.typeName}}</option>
                             </select>
                             <div class="databaseSelected-wrap">
                                 <label class="selected-condition">已有条件：</label>
@@ -203,7 +207,7 @@
                         <div class="form-group inline" type="caseSmallClasses" itemIdName="caseSmallClassId">
                             <label>案件类别：</label>
                             <select v-on:click="multipleSelectChange" class="multiple-select block" multiple :disabled="!editing" style="display: none;">
-                                <option v-for="i in caseSmallClassesAll" :value="i.id" :selected="i.selected">{{i.name}}</option>
+<option v-for="i in caseSmallClassesAll" :value="i.id" :selected="i.selected">{{i.typeName}}</option>
                             </select>
                             <div class="databaseSelected-wrap">
                                 <label class="selected-condition">已有条件：</label>

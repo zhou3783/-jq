@@ -31,41 +31,17 @@ $(document).ready(function () {
     });
     
  
-
- var unitsAll = [{
-     name: "江岸分局库",
-     id: "40001"
- }, {
-     name: "江汉分局库",
-     id: "40002"
- }, {
-     name: "硚口分局库",
-     id: "40003"
- }, {
-     name: "武昌分局库",
-     id: "40004"
- }, {
-     name: "洪山分局库",
-     id: "40005"
- }, {
-     name: "青山分局库",
-     id: "40006"
- }, {
-     name: "汉阳分局库",
-     id: "40007"
- }, {
-     name: "新洲分局库",
-     id: "40008"
- }, {
-     name: "江夏分局库",
-     id: "40009"
- }, {
-     name: "蔡甸分局库",
-     id: "40010"
- }, {
-     name: "黄陂分局库",
-     id: "40011"
- }];
+    var unitsAll = [];
+    $.ajax({
+        url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/policeStationInfos/",
+        type: "get",
+        dataType: "json",
+        async: false,
+        contentType: 'application/json;charset=UTF-8',
+        success: function success(data) {
+            unitsAll = data;
+        }
+    }); //init caseTypesAll
  var caseTypesAll = [];
  $.ajax({
      url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/eventTypes/findByLever/1",
@@ -100,7 +76,7 @@ $(document).ready(function () {
         "viewName": "",
         "viewPassword": "",
         "viewUserName": "",
-        "zjkId": ""
+        "zjkId": "4"
     };
     $('.col-sm-9').on('mouseover', '.node', function () {
         var $self = $(this);
@@ -181,13 +157,13 @@ $(document).ready(function () {
                             title = '<a class="btn btn-warning btn-handle btn-handle-delete">删除</a>';
 
                             childrenViews.push({
-                                'id': item.unitId,
+                                'id': item.id,
                                 'name': item.viewName,
                                 'title': title
                             });
                         });
                         oc.addChildren($self, childrenViews);
-                        $('.switch')['bootstrapSwitch']();
+                        //$('.switch')['bootstrapSwitch']();
                     }
                 }
             });
@@ -204,61 +180,74 @@ $(document).ready(function () {
     }).on('click', '.btn-handle-edit', function (e) {
         vueTemp1.type = 'edit';
         vueTemp1.editing = false;
+        var id = $(this).parents('.node').attr('id');
+        console.log(id)
         vueTemp1.editViewId = id;
         $.ajax({
-            url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/views/" + id,
+            url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/views/byUnitId/" + id,
             type: "get",
             dataType: "json",
             async: false,
             contentType: 'application/json;charset=UTF-8',
             success: function success(data) {
                 var jsonArr_edit = data;
-
-                jsonArr_edit.caseTypes.forEach(function (item) {
-                    caseTypesAll.forEach(function (i) {
-                        if (item.caseTypeId == i.id) {
-                            item.name = i.name;
-                            i.selected = true;
-                        }
-                    });
-                });
-                jsonArr_edit.caseClasses.forEach(function (item) {
-                    item.selected = true;
-                    caseClassesAll.forEach(function (i) {
-                        if (item.caseClassId == i.id) {
-                            item.name = i.name;
-                            i.selected = true;
-                        }
-                    });
-                });
-                jsonArr_edit.caseSmallClasses.forEach(function (item) {
-                    item.selected = true;
-                    caseSmallClassesAll.forEach(function (i) {
-                        if (item.caseSmallClassId == i.id) {
-                            item.name = i.name;
-                            i.selected = true;
-                        }
-                    });
-                });
-                jsonArr_edit.units.forEach(function (item) {
-                    item.selected = true;
-                    unitsAll.forEach(function (i) {
-                        if (item.unitId == i.id) {
-                            item.name = i.name;
-                            i.selected = true;
-                        }
-                    });
-                });
-
+                // console.log(data);s
+                // jsonArr_edit.caseTypes.forEach(function (item) {
+                //     caseTypesAll.forEach(function (i) {
+                //         if (item.caseTypeId == i.id) {
+                //             item.name = i.name;
+                //             i.selected = true;
+                //         }
+                //     });
+                // });
+                // jsonArr_edit.caseClasses.forEach(function (item) {
+                //     item.selected = true;
+                //     caseClassesAll.forEach(function (i) {
+                //         if (item.caseClassId == i.id) {
+                //             item.name = i.name;
+                //             i.selected = true;
+                //         }
+                //     });
+                // });
+                // jsonArr_edit.caseSmallClasses.forEach(function (item) {
+                //     item.selected = true;
+                //     caseSmallClassesAll.forEach(function (i) {
+                //         if (item.caseSmallClassId == i.id) {
+                //             item.name = i.name;
+                //             i.selected = true;
+                //         }
+                //     });
+                // });
+                // jsonArr_edit.units.forEach(function (item) {
+                //     item.selected = true;
+                //     unitsAll.forEach(function (i) {
+                //         if (item.unitId == i.unitId) {
+                //             item.name = i.name;
+                //             i.selected = true;
+                //         }
+                //     });
+                // });
                 vueTemp1.editItems = jsonArr_edit;
-
+                var _unitId = vueTemp1.editItems.units[0].unitId;
+                var _unitName = '';
+                
+                vueTemp1.unitsAll.forEach(function(item) {
+                    if (item.unitId == _unitId){
+                        _unitName = item.unitName;
+                    } 
+                })
+                vueTemp1.editItems['_unitName'] = _unitName;
+                // console.log(vueTemp1.editItems.units[0].unitId)
+                
+                
                 setTimeout(function () {
                     vueTemp1.initSelect();
+                    vueTemp1.refreshSelect();
                 }, 10);
             }
         });
     }).on('click', '.btn-handle-delete', function (e) {
-        e.stopPropagation();
+        // e.stopPropagation();
         var id = $(this).parents('.node').attr('id');
         $.ajax({
             url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/views/" + id,
@@ -266,7 +255,10 @@ $(document).ready(function () {
             dataType: "json",
             async: false,
             success: function success(data) {
-                location.href = location.href;
+                 setTimeout(() => {
+                     location.href = location.href;
+                 }, 10);
+                 console.log("delete")
             }
         });
     }).on('change', 'input[data-name=selectItem]', function (e) {
@@ -333,6 +325,7 @@ $(document).ready(function () {
             //selcet是这里初始化的,这里是改变的时候的关键
             refreshSelect() {
                 var $currentSelect = $('.' + this.type + 'Wrap').find('select.multiple-select');
+                var $currentUnitSelect = $('.' + this.type + 'Wrap').find('select.chosen-select').chosen();
                 //不知道为什么refresh需要等候几秒钟再触发，测试出来的。         
                 setTimeout(function () {
                     $currentSelect.multipleSelect("refresh");
@@ -357,7 +350,8 @@ $(document).ready(function () {
                     }).trigger('click');
                 }
 
-                var $currentUnitSelect = $('.' + this.type + 'Wrap').find('select.chosen-select').chosen();
+                 var $currentUnitSelect = $('.' + this.type + 'Wrap').find('select.chosen-select').chosen();
+                // var $currentUnitSelect = $('.' + this.type + 'Wrap').find('select.chosen-select')
             },
             delete_select: function delete_select(e) {
                 var $self = $(e.target);
@@ -377,8 +371,10 @@ $(document).ready(function () {
             add_save: function add_save(e) {
                 var self = this;
                 var $self = $(e.target);
-                var _addItems = JSON.stringify(this.addItems);
                 this.addItems.zjkId = this.addId;
+                var _addItems = JSON.stringify(this.addItems);
+                
+                
                 $.ajax({
                     // url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/views/",
                     url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/views/",
@@ -389,8 +385,11 @@ $(document).ready(function () {
                     data: _addItems,
                     contentType: 'application/json;charset=UTF-8',
                     success: function success(data) {
-                        location.href = location.href;
-                        console.log('success')
+                        setTimeout(() => {
+                            location.href = location.href;
+                        }, 10);
+                        
+                        console.log('add_save')
                     }
                 });
                 console.log(JSON.stringify(this.addItems)); //保存的数据是好的
@@ -516,8 +515,6 @@ $(document).ready(function () {
                         self.caseSmallClassesAll = dataArray2;
                         this.refreshSelect();
 
-                        // console.log(dataArray)
-                        // this.chosenSelectChange();
                         break;
     
 
