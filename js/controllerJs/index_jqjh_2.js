@@ -1,6 +1,6 @@
 $(document).ready(function () {
     //$.jgrid.defaults.styleUI = 'Bootstrap';
-    
+
     var zjksAll = {};
     var currentViews = [];
 
@@ -24,13 +24,16 @@ $(document).ready(function () {
                         'class': 'green'
                     });
                 } else {
-                    zjksAll.children.push({'name': item.zjkName, 'id': item.id});
+                    zjksAll.children.push({
+                        'name': item.zjkName,
+                        'id': item.id
+                    });
                 }
             });
         }
     });
-    
- 
+
+
     var unitsAll = [];
     $.ajax({
         url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/policeStationInfos/",
@@ -42,17 +45,17 @@ $(document).ready(function () {
             unitsAll = data;
         }
     }); //init caseTypesAll
- var caseTypesAll = [];
- $.ajax({
-     url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/eventTypes/findByLever/1",
-     type: "get",
-     dataType: "json",
-     async: false,
-     contentType: 'application/json;charset=UTF-8',
-     success: function success(data) {
-         caseTypesAll = data;
-     }
- }); //init caseTypesAll
+    var caseTypesAll = [];
+    $.ajax({
+        url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/eventTypes/findByLever/1",
+        type: "get",
+        dataType: "json",
+        async: false,
+        contentType: 'application/json;charset=UTF-8',
+        success: function success(data) {
+            caseTypesAll = data;
+        }
+    }); //init caseTypesAll
 
     var oc = $('#orgChart-wrap-1').orgchart({
         'data': zjksAll,
@@ -181,7 +184,7 @@ $(document).ready(function () {
         vueTemp1.type = 'edit';
         vueTemp1.editing = false;
         var id = $(this).parents('.node').attr('id');
-        console.log(id)
+        // console.log(id)
         vueTemp1.editViewId = id;
         $.ajax({
             url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/views/byUnitId/" + id,
@@ -190,7 +193,71 @@ $(document).ready(function () {
             async: false,
             contentType: 'application/json;charset=UTF-8',
             success: function success(data) {
+                console.log(data)
                 var jsonArr_edit = data;
+                var caseSmallClassesArray = '';
+                var caseClassesString = '';
+                var caseTypesString = '';
+                jsonArr_edit.caseSmallClasses.forEach(function (item, index) {
+                    if (index === 0) {
+                        caseSmallClassesArray = item.caseSmallClassId;
+                    } else {
+                        caseSmallClassesArray = caseSmallClassesArray + "," + item.caseSmallClassId;
+                    }
+                })
+                jsonArr_edit.caseClasses.forEach(function (item, index) {
+                    if (index === 0) {
+                        caseClassesString = item.caseClassId;
+                    } else {
+                        caseClassesString = caseClassesString + "," + item.caseClassId;
+                    }
+                })
+                jsonArr_edit.caseTypes.forEach(function (item, index) {
+                    if (index === 0) {
+                        caseTypesString = item.caseTypeId;
+                    } else {
+                        caseTypesString = caseTypesString + "," + item.caseTypeId;
+                    }
+                })
+
+                if (caseSmallClassesArray.length > 0) {
+                    $.ajax({
+                        url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/eventTypes/findByIds/" + caseSmallClassesArray,
+                        type: "get",
+                        async: false,
+                        contentType: 'application/json;charset=UTF-8',
+                        success: function (data) {
+                            console.log(data)
+                            jsonArr_edit.caseSmallClasses['SmallClasses'] = data;
+                            // jsonArr_edit.caseSmallClasses['nameList'] = data.split(',')
+                        }
+                    })
+
+                } else if (caseClassesString.length > 0) {
+                    $.ajax({
+                        url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/eventTypes/findByIds/" + caseClassesString,
+                        type: "get",
+                        async: false,
+                        contentType: 'application/json;charset=UTF-8',
+                        success: function (data) {
+                            console.log(data)
+                            jsonArr_edit.caseClasses['caseClasses'] = data;
+                        }
+                    })
+                } else if (caseTypesString.length > 0) {
+                    $.ajax({
+                        url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/eventTypes/findByIds/" + caseTypesString,
+                        type: "get",
+                        async: false,
+                        contentType: 'application/json;charset=UTF-8',
+                        success: function (data) {
+                            console.log(data)
+                            jsonArr_edit.caseTypes['caseTypes'] = data;
+                        }
+                    })
+                }
+
+
                 // console.log(data);s
                 // jsonArr_edit.caseTypes.forEach(function (item) {
                 //     caseTypesAll.forEach(function (i) {
@@ -227,19 +294,21 @@ $(document).ready(function () {
                 //         }
                 //     });
                 // });
+
+                // editItems.caseSmallClasses
                 vueTemp1.editItems = jsonArr_edit;
                 var _unitId = vueTemp1.editItems.units[0].unitId;
                 var _unitName = '';
-                
-                vueTemp1.unitsAll.forEach(function(item) {
-                    if (item.unitId == _unitId){
+
+                vueTemp1.unitsAll.forEach(function (item) {
+                    if (item.unitId == _unitId) {
                         _unitName = item.unitName;
-                    } 
+                    }
                 })
                 vueTemp1.editItems['_unitName'] = _unitName;
                 // console.log(vueTemp1.editItems.units[0].unitId)
-                
-                
+
+
                 setTimeout(function () {
                     vueTemp1.initSelect();
                     vueTemp1.refreshSelect();
@@ -255,10 +324,10 @@ $(document).ready(function () {
             dataType: "json",
             async: false,
             success: function success(data) {
-                 setTimeout(() => {
-                     location.href = location.href;
-                 }, 10);
-                 console.log("delete")
+                setTimeout(() => {
+                    location.href = location.href;
+                }, 10);
+                console.log("delete")
             }
         });
     }).on('change', 'input[data-name=selectItem]', function (e) {
@@ -350,7 +419,7 @@ $(document).ready(function () {
                     }).trigger('click');
                 }
 
-                 var $currentUnitSelect = $('.' + this.type + 'Wrap').find('select.chosen-select').chosen();
+                var $currentUnitSelect = $('.' + this.type + 'Wrap').find('select.chosen-select').chosen();
                 // var $currentUnitSelect = $('.' + this.type + 'Wrap').find('select.chosen-select')
             },
             delete_select: function delete_select(e) {
@@ -373,8 +442,8 @@ $(document).ready(function () {
                 var $self = $(e.target);
                 this.addItems.zjkId = this.addId;
                 var _addItems = JSON.stringify(this.addItems);
-                
-                
+
+
                 $.ajax({
                     // url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/views/",
                     url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/views/",
@@ -388,7 +457,7 @@ $(document).ready(function () {
                         setTimeout(() => {
                             location.href = location.href;
                         }, 10);
-                        
+
                         console.log('add_save')
                     }
                 });
@@ -473,7 +542,7 @@ $(document).ready(function () {
                         $options.each(function () {
                             let id = $(this).attr('value');
                             $.ajax({
-                               
+
                                 url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/eventTypes/findByParentId/" + id,
                                 // url: "http://172.17.99.112:10014/api/jp-HCZZ-PAMonitor-app-ms/eventTypes/findByParentId/10",
                                 type: "get",
@@ -481,8 +550,8 @@ $(document).ready(function () {
                                 async: false,
                                 contentType: 'application/json;charset=UTF-8',
                                 success: function success(data) {
-                                  dataArray = dataArray.concat(data);
-                                //   console.log(data)
+                                    dataArray = dataArray.concat(data);
+                                    //   console.log(data)
                                 }
                             })
 
@@ -503,8 +572,8 @@ $(document).ready(function () {
                                 async: false,
                                 contentType: 'application/json;charset=UTF-8',
                                 success: function success(data) {
-                                  dataArray2 = dataArray2.concat(data);
-                                //   console.log(data)
+                                    dataArray2 = dataArray2.concat(data);
+                                    //   console.log(data)
                                 }
                             })
 
@@ -516,7 +585,7 @@ $(document).ready(function () {
                         this.refreshSelect();
 
                         break;
-    
+
 
                 }
             },
