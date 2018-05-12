@@ -71,7 +71,7 @@
                             <input class="form-control" placeholder="请输入基本信息" :value="addItems.comments" v-on:input="valueChange">
                         </div>
                         <div class="form-group inline" type="caseTypes" itemIdName="caseTypeId">
-                            <label>vueTemp1</label>
+                            <label>案件类型：</label>
                             <select v-on:click="multipleSelectChange" class="multiple-select block" multiple data-placeholder="" style="display: none;">
                                 <option v-for="i in caseTypesAll" :value="i.id" :selected="i.selected" >{{i.typeName}}</option>
                             </select>
@@ -183,13 +183,13 @@
                         <div class="form-group inline" type="caseTypes" itemIdName="caseTypeId">
                             <label>案件类型：</label>
                             <select v-on:click="multipleSelectChange" class="multiple-select block" multiple :disabled="!editing" style="display: none;">
-                                <option v-for="i in caseTypesAll" :value="i.id" :selected="i.selected">{{i.typeName}}</option>
+                                <option v-for="i in caseTypesAll" :value="i.id" :selected="i.selected == true">{{i.typeName}}</option>
                             </select>
                             <div class="databaseSelected-wrap">
                                 <label class="selected-condition">已有条件：</label>
                                 <ul>
-                                    <li v-if="editItems.caseTypes.length>0" v-for="i in editItems.caseTypes" :pid="i.caseTypeId">{{ i.typeName }}
-                                        <i class="fa fa-times-circle" v-on:click="delete_select"></i>
+                                    <li v-if="editItems.caseTypes.length>0" v-for="i in editItems.caseTypes" >{{ i.typeName }}
+                                        <i class="fa fa-times-circle" v-on:click="delete_select($event,i.caseTypeId,i.id)"></i>
                                     </li>
                                 </ul>
                             </div>

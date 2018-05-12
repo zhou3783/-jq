@@ -259,44 +259,7 @@ $(document).ready(function () {
                 }
 
 
-                // console.log(data);s
-                // jsonArr_edit.caseTypes.forEach(function (item) {
-                //     caseTypesAll.forEach(function (i) {
-                //         if (item.caseTypeId == i.id) {
-                //             item.name = i.name;
-                //             i.selected = true;
-                //         }
-                //     });
-                // });
-                // jsonArr_edit.caseClasses.forEach(function (item) {
-                //     item.selected = true;
-                //     caseClassesAll.forEach(function (i) {
-                //         if (item.caseClassId == i.id) {
-                //             item.name = i.name;
-                //             i.selected = true;
-                //         }
-                //     });
-                // });
-                // jsonArr_edit.caseSmallClasses.forEach(function (item) {
-                //     item.selected = true;
-                //     caseSmallClassesAll.forEach(function (i) {
-                //         if (item.caseSmallClassId == i.id) {
-                //             item.name = i.name;
-                //             i.selected = true;
-                //         }
-                //     });
-                // });
-                // jsonArr_edit.units.forEach(function (item) {
-                //     item.selected = true;
-                //     unitsAll.forEach(function (i) {
-                //         if (item.unitId == i.unitId) {
-                //             item.name = i.name;
-                //             i.selected = true;
-                //         }
-                //     });
-                // });
-
-                // editItems.caseSmallClasses
+              
                 vueTemp1.editItems = jsonArr_edit;
                 var _unitId = vueTemp1.editItems.units[0].unitId;
                 var _unitName = '';
@@ -357,7 +320,28 @@ $(document).ready(function () {
         });
     }).on('change', 'input[data-name=selectItem]', function (e) {
         var $self = $(this);
-        $self.parents('.ms-parent').siblings('select.multiple-select').trigger('click');
+        var _self = vueTemp1;
+        if (vueTemp1.type == 'edit') {
+            var _id = $self.parents('.ms-parent').siblings('select.multiple-select').context.value;
+            var _checked = $self.parents('.ms-parent').siblings('select.multiple-select').context.checked;
+            var _type = $self.parents('.ms-parent').siblings('select.multiple-select').parents('.form-group').attr('type');
+            var _typeAll = _type + 'All';
+            var _typeId = _self.zuhetype(_type);
+            for (var i = 0; i < vueTemp1.editItems[_type].length; i++) {
+                if (vueTemp1.editItems[_type][i].id == _id || vueTemp1.editItems[_type][i][_typeId] == _id) { //默认选中
+
+                    vueTemp1[_typeAll].forEach(function (item1) {
+                        if (_id == item1.id) {
+                            item1.selected = _checked;
+                        }
+                    });
+                }
+            }
+        }
+        
+    $self.parents('.ms-parent').siblings('select.multiple-select').trigger('click');
+   
+        
     }).on('change', 'input[data-name=selectAll]', function (e) {
         var $self = $(this);
         $self.parents('.ms-parent').siblings('select.multiple-select').trigger('click');
@@ -416,7 +400,7 @@ $(document).ready(function () {
                 var self = this;
                 setTimeout(function () {
                     self.initSelect();
-                }, 100);
+                }, 500);
             },
             editing: function editing(val) {
                 if (this.editing) $("select.multiple-select").multipleSelect("enable");
@@ -429,14 +413,13 @@ $(document).ready(function () {
             //selcet是这里初始化的,这里是改变的时候的关键
             refreshSelect() {
                 var self = this;
-                    var $currentSelect = $('.' + self.type + 'Wrap').find('select.multiple-select');
-                    var $currentUnitSelect = $('.' + self.type + 'Wrap').find('select.chosen-select').chosen();
-                    //不知道为什么refresh需要等候几秒钟再触发，测试出来的。         
-                    setTimeout(function () {
+                var $currentSelect = $('.' + self.type + 'Wrap').find('select.multiple-select');
+                var $currentUnitSelect = $('.' + self.type + 'Wrap').find('select.chosen-select').chosen();
+               
+                    setTimeout(function (){
                         $currentSelect.multipleSelect("refresh");
-                        console.log('refresh')
-                    }, 100);
-                
+                    },1000)
+          
             },
             initSelect: function initSelect() {
                 var self = this;
@@ -465,20 +448,43 @@ $(document).ready(function () {
 
                 
             },
-            delete_select: function delete_select(e) {
+            zuhetype: function zuhetype(_type) {
+                var _typeId = '';
+                if (_type == 'caseTypes') {
+                  return  _typeId = 'caseTypeId';
+                } else if (_type == 'caseClasses') {
+                  return _typeId = 'caseClassId';
+                } else if (_type == 'caseSmallClasses') {
+                  return _typeId = 'caseSmallClassId';
+                }
+            },
+            delete_select: function delete_select(e, caseTypeId, id) {
+          
                 var $self = $(e.target);
                 var $parent = $self.parents('.form-group');
-                var id = $self.parent().attr('pid');
                 var type = $parent.attr('type');
                 var idName = $parent.attr('itemIdName');
                 var self = this;
                 var items = self[self.type + 'Items'];
                 if (self.type == "edit" && !self.editing) return;
-                items[type].forEach(function (item, index) {
-                    if (item[idName] == id) {
-                        items[type].pop(index);
-                    }
-                });
+                var _typeId = self.zuhetype(type);
+                var _typeAll = type + 'All';
+                 for (var i = 0; i < self.editItems[type].length; i++) {
+                     
+                     if (self.editItems[type][i].id == caseTypeId || self.editItems[type][i][_typeId] == caseTypeId || self.editItems[type][i].id == id || self.editItems[type][i][_typeId] == id) { //默认选中
+                         self[_typeAll].forEach(function (item1) {
+                             if (caseTypeId == item1.id || id == item1.id) {
+                                 console.log(id)
+                                 console.log(item1)
+                                 item1.selected = false;
+                                 self.editItems[type].splice(i, 1)
+                                 self.refreshSelect();
+                             }
+                         });
+                     }
+                 }
+                
+                
             },
             add_save: function add_save(e) {
                 var self = this;
@@ -547,7 +553,7 @@ $(document).ready(function () {
                 var idName = $parent.attr('itemIdName');
                 var $options = $self.find('option:selected');
                 var items = self[self.type + 'Items'];
- 
+                items[type] = [];
                 if ($options.length <= 0) {
                     items[type] = [];
                     return;
@@ -576,7 +582,6 @@ $(document).ready(function () {
                 $options.each(function () {
                     var _id = $(this).attr('value');
                     var _typeAll = type +'All';
-                    // _type = type.substring(0,type.length - 1);//去掉末尾的s
                     if (type == 'caseTypes'){
                         var _typeId = 'caseTypeId';
                     } else if (type == 'caseClasses'){
@@ -584,22 +589,22 @@ $(document).ready(function () {
                     } else if (type == 'caseSmallClasses') {
                         var _typeId = 'caseSmallClassId';
                     }
-                    console.log(_typeId)
-                    // var _typeId = _type + 'Id'; //caseTypeId caseClassId caseSmallClassId
-                    
+                   
                     //edit
-                    console.log(self.editItems[type])
-                    for (var i = 0; i < self.editItems[type].length; i++ ){
-                        if (self.editItems[type][i].id == _id || self.editItems[type][i][_typeId] == _id) { //默认选中
-                            
-                            return;
-                        }else {//不是默认选中
-                            self[_typeAll].forEach(function (item1) {
-                                if (_id == item1.id) {
-                                    item1.selected = true;
-                                }
-                            });
-                            
+                    // console.log(self.editItems[type])
+                    if (self.type == 'edit') {
+                        for (var i = 0; i < self.editItems[type].length; i++ ){
+                            if (self.editItems[type][i].id == _id || self.editItems[type][i][_typeId] == _id) { //默认选中
+                                
+                                return;
+                            }else {//不是默认选中
+                                self[_typeAll].forEach(function (item1) {
+                                    if (_id == item1.id) {
+                                        item1.selected = true;
+                                    }
+                                });
+                                
+                            }
                         }
                     }
                    
