@@ -181,7 +181,7 @@ $(document).ready(function () {
             vueTemp1.initSelect();
         }, 10);
     }).on('click', '.btn-handle-edit', function (e) {
-        vueTemp1.type = 'edit';
+        var self = vueTemp1;
         vueTemp1.editing = false;
         var id = $(this).parents('.node').attr('id');
         // console.log(id)
@@ -228,7 +228,7 @@ $(document).ready(function () {
                         contentType: 'application/json;charset=UTF-8',
                         success: function (data) {
                             console.log(data)
-                            jsonArr_edit.caseSmallClasses['SmallClasses'] = data;
+                            jsonArr_edit.caseSmallClasses = data;
                             // jsonArr_edit.caseSmallClasses['nameList'] = data.split(',')
                         }
                     })
@@ -241,10 +241,11 @@ $(document).ready(function () {
                         contentType: 'application/json;charset=UTF-8',
                         success: function (data) {
                             console.log(data)
-                            jsonArr_edit.caseClasses['caseClasses'] = data;
+                            jsonArr_edit.caseClasses = data;
                         }
                     })
                 } else if (caseTypesString.length > 0) {
+                    jsonArr_edit.caseTypes = [];
                     $.ajax({
                         url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/eventTypes/findByIds/" + caseTypesString,
                         type: "get",
@@ -252,7 +253,7 @@ $(document).ready(function () {
                         contentType: 'application/json;charset=UTF-8',
                         success: function (data) {
                             console.log(data)
-                            jsonArr_edit.caseTypes['caseTypes'] = data;
+                            jsonArr_edit.caseTypes = data;
                         }
                     })
                 }
@@ -308,6 +309,30 @@ $(document).ready(function () {
                 vueTemp1.editItems['_unitName'] = _unitName;
                 // console.log(vueTemp1.editItems.units[0].unitId)
 
+                jsonArr_edit.caseTypes.forEach(function (item) {
+                    self.caseTypesAll.forEach(function (item1) {
+                        if (item.id == item1.id) {
+                            item1.selected = true;
+                        }
+                    });
+                });
+                jsonArr_edit.caseClasses.forEach(function (item) {
+                    self.caseClassesAll.forEach(function (item1) {
+                        if (item.id == item1.id) {
+                            item1.selected = true;
+                        }
+                    });
+                });
+                jsonArr_edit.caseSmallClasses.forEach(function (item) {
+                    self.caseSmallClassesAll.forEach(function (item1) {
+                        if (item.id == item1.id) {
+                            item1.selected = true;
+                        }
+                    });
+                });
+
+
+                vueTemp1.type = 'edit';
 
                 setTimeout(function () {
                     vueTemp1.initSelect();
@@ -361,6 +386,14 @@ $(document).ready(function () {
     $('#4').click();
     $('#4').parent().parent().siblings('.nodes').find('.node').addClass('green');
 
+    // $('.' + self.type + 'Wrap').find('select.multiple-select').onClick(function (view) {
+    //     console.log('onClick')
+    //     /*
+    //     view.label: the text of the checkbox item
+    //     view.checked: the checked of the checkbox item
+    //     */
+    // })
+
     var vueTemp1 = new Vue({
         el: '#vue-temp-1',
         data: {
@@ -381,9 +414,9 @@ $(document).ready(function () {
         watch: {
             editItems: function editItems(val) {
                 var self = this;
-                /*setTimeout(function () {
+                setTimeout(function () {
                     self.initSelect();
-                }, 100);*/
+                }, 100);
             },
             editing: function editing(val) {
                 if (this.editing) $("select.multiple-select").multipleSelect("enable");
@@ -391,36 +424,46 @@ $(document).ready(function () {
             },
         },
         methods: {
+             
+          
             //selcet是这里初始化的,这里是改变的时候的关键
             refreshSelect() {
-                var $currentSelect = $('.' + this.type + 'Wrap').find('select.multiple-select');
-                var $currentUnitSelect = $('.' + this.type + 'Wrap').find('select.chosen-select').chosen();
-                //不知道为什么refresh需要等候几秒钟再触发，测试出来的。         
-                setTimeout(function () {
-                    $currentSelect.multipleSelect("refresh");
-                    console.log('refresh')
-                }, 100);
+                var self = this;
+                    var $currentSelect = $('.' + self.type + 'Wrap').find('select.multiple-select');
+                    var $currentUnitSelect = $('.' + self.type + 'Wrap').find('select.chosen-select').chosen();
+                    //不知道为什么refresh需要等候几秒钟再触发，测试出来的。         
+                    setTimeout(function () {
+                        $currentSelect.multipleSelect("refresh");
+                        console.log('refresh')
+                    }, 100);
+                
             },
             initSelect: function initSelect() {
-                var $currentSelect = $('.' + this.type + 'Wrap').find('select.multiple-select');
+                var self = this;
+                setTimeout(function () {
+                    var $currentSelect = $('.' + self.type + 'Wrap').find('select.multiple-select');
 
-                if (this.type == 'add') {
-                    $currentSelect.siblings('.ms-parent.multiple-select').find('.ms-choice').removeClass('disabled');
-                } else {
-                    $currentSelect.siblings('.ms-parent.multiple-select').find('.ms-choice').addClass('disabled');
-                }
+                    if (self.type == 'add') {
+                        $currentSelect.siblings('.ms-parent.multiple-select').find('.ms-choice').removeClass('disabled');
+                    } else {
+                        $currentSelect.siblings('.ms-parent.multiple-select').find('.ms-choice').addClass('disabled');
+                    }
 
-                if ($currentSelect.siblings('.multiple-select').length > 0) {
-                    //点击的项被显示
-                    $currentSelect.multipleSelect("refresh").trigger('click');
-                } else {
-                    $currentSelect.multipleSelect({
-                        width: "100%"
-                    }).trigger('click');
-                }
+                    if ($currentSelect.siblings('.multiple-select').length > 0) {
+                        //点击的项被显示
+                        $currentSelect.multipleSelect("refresh").trigger('click');
+                    } else {
+                        $currentSelect.multipleSelect({
+                            width: "100%"
+                        }).trigger('click');
+                    }
 
-                var $currentUnitSelect = $('.' + this.type + 'Wrap').find('select.chosen-select').chosen();
-                // var $currentUnitSelect = $('.' + this.type + 'Wrap').find('select.chosen-select')
+                    var $currentUnitSelect = $('.' + self.type + 'Wrap').find('select.chosen-select').chosen();
+                
+
+                }, 10);
+
+                
             },
             delete_select: function delete_select(e) {
                 var $self = $(e.target);
@@ -494,7 +537,9 @@ $(document).ready(function () {
                     this.editItems[type] = $self.val();
                 }
             },
+           
             multipleSelectChange: function multipleSelectChange(e) {
+                
                 var self = this;
                 var $self = $(e.target);
                 var $parent = $self.parents('.form-group');
@@ -502,7 +547,7 @@ $(document).ready(function () {
                 var idName = $parent.attr('itemIdName');
                 var $options = $self.find('option:selected');
                 var items = self[self.type + 'Items'];
-                items[type] = [];
+ 
                 if ($options.length <= 0) {
                     items[type] = [];
                     return;
@@ -529,9 +574,38 @@ $(document).ready(function () {
                 }
 
                 $options.each(function () {
+                    var _id = $(this).attr('value');
+                    var _typeAll = type +'All';
+                    // _type = type.substring(0,type.length - 1);//去掉末尾的s
+                    if (type == 'caseTypes'){
+                        var _typeId = 'caseTypeId';
+                    } else if (type == 'caseClasses'){
+                        var _typeId = 'caseClassId';
+                    } else if (type == 'caseSmallClasses') {
+                        var _typeId = 'caseSmallClassId';
+                    }
+                    console.log(_typeId)
+                    // var _typeId = _type + 'Id'; //caseTypeId caseClassId caseSmallClassId
+                    
+                    //edit
+                    console.log(self.editItems[type])
+                    for (var i = 0; i < self.editItems[type].length; i++ ){
+                        if (self.editItems[type][i].id == _id || self.editItems[type][i][_typeId] == _id) { //默认选中
+                            
+                            return;
+                        }else {//不是默认选中
+                            self[_typeAll].forEach(function (item1) {
+                                if (_id == item1.id) {
+                                    item1.selected = true;
+                                }
+                            });
+                            
+                        }
+                    }
+                   
                     items[type].push({});
                     items[type][items[type].length - 1][idName] = $(this).attr('value');
-                    items[type][items[type].length - 1]['name'] = $(this).text();
+                    items[type][items[type].length - 1]['typeName'] = $(this).text();
                 });
 
 
@@ -551,15 +625,24 @@ $(document).ready(function () {
                                 contentType: 'application/json;charset=UTF-8',
                                 success: function success(data) {
                                     dataArray = dataArray.concat(data);
+                                    self.caseClassesAll = dataArray;
+                                    self.refreshSelect();
                                     //   console.log(data)
                                 }
                             })
 
                         });
-                        self.caseClassesAll = dataArray;
+                        
                         //假数据
                         // self.caseClassesAll = caseClassesAll;
-                        this.refreshSelect();
+                        // self.editItems.caseTypes.forEach(function (item) {
+                        //     self.caseTypesAll.forEach(function (item1) {
+                        //         if (item.id == item1.id) {
+                        //             item1.selected = true;
+                        //         }
+                        //     });
+                        // });
+                        
                         break;
                     case "caseClasses":
                         let dataArray2 = [];
@@ -582,8 +665,7 @@ $(document).ready(function () {
                         // this.caseSmallClassesAll = caseSmallClassesAll;
                         //成功后的测试
                         self.caseSmallClassesAll = dataArray2;
-                        this.refreshSelect();
-
+                        self.refreshSelect();
                         break;
 
 
@@ -611,6 +693,7 @@ $(document).ready(function () {
 
             tempSave: function tempSave(e) {
                 var data = this.editItems;
+                console.log(data)
                 this.editing = false;
                 var id = $('.editWrap').attr('edit-view-id');
                 delete data.id;
@@ -623,6 +706,9 @@ $(document).ready(function () {
                     async: false,
                     success: function success(data) {
                         alert('修改成功');
+                    },
+                    error: function () {
+                        alert("修改失败");
                     }
                 });
             },
