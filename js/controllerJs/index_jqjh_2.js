@@ -227,8 +227,21 @@ $(document).ready(function () {
                         async: false,
                         contentType: 'application/json;charset=UTF-8',
                         success: function (data) {
-                            console.log(data)
+                            var parentId = data[0].parentId;
                             jsonArr_edit.caseSmallClasses = data;
+                            $.ajax({
+                                url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/eventTypes/findByParentId/" + parentId,
+                                type: "get",
+                                dataType: "json",
+                                async: false,
+                                contentType: 'application/json;charset=UTF-8',
+                                success: function success(data) {
+                                    self.caseSmallClassesAll = data;
+                                    //   console.log(data)
+                                }
+                            })
+
+                            
                             // jsonArr_edit.caseSmallClasses['nameList'] = data.split(',')
                         }
                     })
@@ -241,7 +254,19 @@ $(document).ready(function () {
                         contentType: 'application/json;charset=UTF-8',
                         success: function (data) {
                             console.log(data)
+                            
+                            $.ajax({
+                                url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/eventTypes/findByLever/1",
+                                type: "get",
+                                dataType: "json",
+                                async: false,
+                                contentType: 'application/json;charset=UTF-8',
+                                success: function success(data) {
+                                    caseTypesAll = data;
+                                }
+                            }); //init caseTypesAll
                             jsonArr_edit.caseClasses = data;
+                            self.caseClassesAll = data;
                         }
                     })
                 } else if (caseTypesString.length > 0) {
@@ -300,7 +325,7 @@ $(document).ready(function () {
                 setTimeout(function () {
                     vueTemp1.initSelect();
                     vueTemp1.refreshSelect();
-                }, 10);
+                }, 1000);
             }
         });
     }).on('click', '.btn-handle-delete', function (e) {
@@ -329,10 +354,10 @@ $(document).ready(function () {
             var _typeId = _self.zuhetype(_type);
             for (var i = 0; i < vueTemp1.editItems[_type].length; i++) {
                 if (vueTemp1.editItems[_type][i].id == _id || vueTemp1.editItems[_type][i][_typeId] == _id) { //默认选中
-
                     vueTemp1[_typeAll].forEach(function (item1) {
                         if (_id == item1.id) {
                             item1.selected = _checked;
+                            console.log(item1)
                         }
                     });
                 }
@@ -370,20 +395,11 @@ $(document).ready(function () {
     $('#4').click();
     $('#4').parent().parent().siblings('.nodes').find('.node').addClass('green');
 
-    // $('.' + self.type + 'Wrap').find('select.multiple-select').onClick(function (view) {
-    //     console.log('onClick')
-    //     /*
-    //     view.label: the text of the checkbox item
-    //     view.checked: the checked of the checkbox item
-    //     */
-    // })
 
     var vueTemp1 = new Vue({
         el: '#vue-temp-1',
         data: {
             caseTypesAll: caseTypesAll,
-            // caseClassesAll: caseClassesAll,
-            // caseSmallClassesAll: caseSmallClassesAll,
             caseClassesAll: [],
             caseSmallClassesAll: [],
             unitsAll: unitsAll,
@@ -400,7 +416,7 @@ $(document).ready(function () {
                 var self = this;
                 setTimeout(function () {
                     self.initSelect();
-                }, 500);
+                }, 50);
             },
             editing: function editing(val) {
                 if (this.editing) $("select.multiple-select").multipleSelect("enable");
@@ -434,7 +450,8 @@ $(document).ready(function () {
 
                     if ($currentSelect.siblings('.multiple-select').length > 0) {
                         //点击的项被显示
-                        $currentSelect.multipleSelect("refresh").trigger('click');
+                        // $currentSelect.multipleSelect("refresh").trigger('click');
+                        $currentSelect.multipleSelect("refresh");
                     } else {
                         $currentSelect.multipleSelect({
                             width: "100%"
@@ -458,8 +475,18 @@ $(document).ready(function () {
                   return _typeId = 'caseSmallClassId';
                 }
             },
-            delete_select: function delete_select(e, caseTypeId, id) {
-          
+            delete_select1: function delete_select1(event,i,items,name){
+                var self = this;
+                items.forEach(function(item,index){
+                    if(item.id === i.id){
+                        console.log()
+                        self.editItems[name].splice(index, 1);
+                    }
+                })
+            },
+            delete_select: function delete_select(e, TypeId, id) {
+                console.log(id)
+                console.log(TypeId)
                 var $self = $(e.target);
                 var $parent = $self.parents('.form-group');
                 var type = $parent.attr('type');
@@ -469,21 +496,25 @@ $(document).ready(function () {
                 if (self.type == "edit" && !self.editing) return;
                 var _typeId = self.zuhetype(type);
                 var _typeAll = type + 'All';
+                console.log(self.editItems[type])
+                // console.log(TypeId)
                  for (var i = 0; i < self.editItems[type].length; i++) {
-                     
-                     if (self.editItems[type][i].id == caseTypeId || self.editItems[type][i][_typeId] == caseTypeId || self.editItems[type][i].id == id || self.editItems[type][i][_typeId] == id) { //默认选中
+                     if (self.editItems[type][i].id == id || self.editItems[type][i].id == TypeId || self.editItems[type][i][_typeId] == id || self.editItems[type][i][_typeId] == TypeId) { //默认选中
                          self[_typeAll].forEach(function (item1) {
-                             if (caseTypeId == item1.id || id == item1.id) {
+                             if (TypeId == item1.id || id == item1.id) {
                                  console.log(id)
+                                 console.log(TypeId)
                                  console.log(item1)
                                  item1.selected = false;
                                  self.editItems[type].splice(i, 1)
-                                 self.refreshSelect();
+                                 
                              }
                          });
                      }
                  }
-                
+                setTimeout(function(){
+                    self.refreshSelect();
+                }, 200);
                 
             },
             add_save: function add_save(e) {
@@ -670,7 +701,9 @@ $(document).ready(function () {
                         // this.caseSmallClassesAll = caseSmallClassesAll;
                         //成功后的测试
                         self.caseSmallClassesAll = dataArray2;
-                        self.refreshSelect();
+                        setTimeout(function() {
+                            self.refreshSelect();
+                        }, 100);
                         break;
 
 
@@ -703,7 +736,7 @@ $(document).ready(function () {
                 var id = $('.editWrap').attr('edit-view-id');
                 delete data.id;
                 $.ajax({
-                    url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/" + id,
+                    url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/views/",
                     type: "put",
                     dataType: "json",
                     data: JSON.stringify(data),
@@ -712,9 +745,9 @@ $(document).ready(function () {
                     success: function success(data) {
                         alert('修改成功');
                     },
-                    error: function () {
-                        alert("修改失败");
-                    }
+                    // error: function () {
+                    //     alert("修改失败");
+                    // }
                 });
             },
             tempEdit: function tempEdit(e) {
