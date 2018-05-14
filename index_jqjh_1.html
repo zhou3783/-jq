@@ -7,7 +7,7 @@
 
     <link rel="stylesheet" rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/font-awesome.min.css"/>
-
+    <link rel="stylesheet" href="css/multiple-select.css" />
     <!-- Data Tables -->
     <link rel="stylesheet" href="css/plugins/dataTables/dataTables.bootstrap.css"/>
     <link rel="stylesheet" href="css/jedate.css"/>
@@ -19,223 +19,169 @@
 
 <body class="gray-bg">
 <div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title" style="margin-bottom: 20px;">
-                    <div class="search-div">
-                        <form role="form" class="">
-                            <div class="form-group inline">
-                                <label for="view">视图名：</label>
-                                <select data-placeholder="视图名" class="chosen-select block" id="view" style="display:none;">
-                                    <option value="0" selected>--</option>
-                                    <option value="1">江岸分局视图</option>
-                                    <option value="2">江汉分局视图</option>
-                                    <option value="3">硚口分局视图</option>
-                                    <option value="3">武昌分局视图</option>
-                                    <option value="4">洪山分局视图</option>
-                                    <option value="5">青山分局视图</option>
-                                    <option value="6">汉阳分局视图</option>
-                                    <option value="7">新洲分局视图</option>
-                                    <option value="8">江夏分局视图</option>
-                                    <option value="9">蔡甸分局视图</option>
-                                    <option value="10">汉南分局视图</option>
-                                    <option value="11">黄陂分局视图</option>
-                                </select>
-                            </div>
-                            <div class="form-group inline">
-                                <label for="inpstart">时段：</label>
-                                <div class="jeDate-wrap">
-                                    <input type="text" class="form-control workinput wicon" id="inpstart" readonly>
-                                    <span>至</span>
-                                    <input type="text" class="form-control workinput wicon" id="inpend" readonly>
+<div id="vue-temp-1">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title" style="margin-bottom: 20px;">
+                            <div class="search-div">
+                                <div role="form" class="">
+                                    <div class="form-group inline">
+                                        <label for="view">视图名：</label>
+                                        <select data-placeholder="视图名" class="chosen-select block" id="view" style="display:none;">
+                                            <option value="0" selected>--</option>
+                                            <option value="1">江岸分局视图</option>
+                                            <option value="2">江汉分局视图</option>
+                                            <option value="3">硚口分局视图</option>
+                                            <option value="3">武昌分局视图</option>
+                                            <option value="4">洪山分局视图</option>
+                                            <option value="5">青山分局视图</option>
+                                            <option value="6">汉阳分局视图</option>
+                                            <option value="7">新洲分局视图</option>
+                                            <option value="8">江夏分局视图</option>
+                                            <option value="9">蔡甸分局视图</option>
+                                            <option value="10">汉南分局视图</option>
+                                            <option value="11">黄陂分局视图</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group inline">
+                                        <label for="inpstart">时段：</label>
+                                        <div class="jeDate-wrap">
+                                            <input type="text" class="form-control workinput wicon" id="inpstart" readonly>
+                                            <span>至</span>
+                                            <input type="text" class="form-control workinput wicon" id="inpend" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="form-group inline">
+                                        <label for="level">等级：</label>
+                                        <select data-placeholder="来源" class="chosen-select block" id="level" style="display:none;">
+                                            <option value="0" selected>--</option>
+                                            <option value="1">1级</option>
+                                            <option value="2">2级</option>
+                                            <option value="3">3级</option>
+                                        </select>
+                                    </div>
+<!-- 三级联动选择 -->
+                                    <div class="form-group inline" type="caseTypes" itemIdName="caseTypeId">
+                                        <label>案件类型：</label>
+                                        <select class="multiple-select caseTypesSelectHock block" multiple ref="caseTypesAll" data-placeholder="" >
+                                            <option v-for="(i, index) in caseTypesAll" :value="i.id" :key="index" >{{i.typeName}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group inline" type="caseClasses" itemIdName="caseClassId">
+                                        <label>案件类别：</label>
+                                        <select class="multiple-select caseClassesSelectHock block" multiple ref="caseClassesAll" data-placeholder="" >
+                                            <option v-for="(i, index) in caseClassesAll" :value="i.id" :key="index">{{i.typeName}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group inline" type="caseSmallClasses" itemIdName="caseSmallClassId">
+                                        <label>案件细类：</label>
+                                        <select class="multiple-select caseSmallClassesSelectHock block" multiple ref="caseSmallClassesAll" data-placeholder="" >
+                                            <option v-for="(i, index) in caseSmallClassesAll" :value="i.id" :key="index">{{i.typeName}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group inline">
+                                        <label>&nbsp;</label>
+                                        <input v-model="inputValue" placeholder="流水号、报警电话、报警人、摘要" class="form-control input-search"  />
+                                    </div>
+                                    <button class="btn btn-primary" id="plsCarTpSch" @click="search">查询</button>
                                 </div>
-                            </div>
-                            <div class="form-group inline">
-                                <label for="source">来源：</label>
-                                <select data-placeholder="来源" class="chosen-select block" id="source" style="display:none;">
-                                    <option value="0" selected>--</option>
-                                    <option value="1">110</option>
-                                    <option value="2">120</option>
-                                    <option value="3">118</option>
-                                </select>
-                            </div>
-                            <div class="form-group inline">
-                                <label for="level">等级：</label>
-                                <select data-placeholder="来源" class="chosen-select block" id="level" style="display:none;">
-                                    <option value="0" selected>--</option>
-                                    <option value="1">1级</option>
-                                    <option value="2">2级</option>
-                                    <option value="3">3级</option>
-                                </select>
-                            </div>
-                            <div class="form-group inline">
-                                <label for="type">类型：</label>
-                                <select data-placeholder="来源" class="chosen-select block" id="type" style="display:none;">
-                                    <option value="0" selected>--</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                </select>
-                            </div><!--
-                            <div class="form-group inline">
-                                <label for="unit">单位：</label>
-                                <select data-placeholder="来源" class="chosen-select block" id="unit" style="display:none;">
-                                    <option value="0" selected>&#45;&#45;</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                </select>
-                            </div>-->
-                            <div class="form-group inline">
-                                <label>&nbsp;</label>
-                                <input placeholder="流水号、报警电话、报警人、摘要" class="form-control input-search" />
-                            </div>
-                            <button class="btn btn-primary" id="plsCarTpSch">搜索</button>
-                        </form>
 
+                            </div>
+                            <!--<input type="text" class="search" id="searchText2" placeholder="请输入所属部门id"  style="width: 16%;margin-right: 1%;"/>-->
+                            <!--<input type="text" class="search" id="searchText3" placeholder="请输入资源类型编码" style="width: 16%;margin-right: 1%;"/>-->
+
+                        </div>
+                        <div class="ibox-content">
+
+                            <table class="table table-striped table-bordered table-hover dataTables-example">
+                                <thead>
+                                <tr>
+                                    <th>案发地址</th>
+                                    <th>警情摘要</th>
+                                    <th>流水号</th>
+                                    <th>分局</th>
+                                    <th>案件类型</th>
+                                    <th>案件类别</th>
+                                    <th>案件细类</th>
+                                    <th>报警电话</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>汉阳区永安堂</td>
+                                    <td>报警人被打，要民警速到</td>
+                                    <td>2018000001</td>
+                                    <td>类型</td>
+                                    <td>类别</td>
+                                    <td class="center">细类</td>
+                                    <td>1111</td>
+                                    <td>内容</td>
+                                </tr>
+                                <tr>
+                                    <td>竹叶山 新竹小路 湘江出租屋巷内</td>
+                                    <td>举报此处有人赌博</td>
+                                    <td>2018000002</td>
+                                    <td>类型</td>
+                                    <td>类别</td>
+                                    <td class="center">细类</td>
+                                    <td>1111</td>
+                                    <td>内容</td>
+                                </tr>
+                                <tr>
+                                    <td>古田一路东风路跟知音茶城门口</td>
+                                    <td>两小车相擦</td>
+                                    <td>2018000003</td>
+                                    <td>类型</td>
+                                    <td>类别</td>
+                                    <td class="center">细类</td>
+                                    <td>1111</td>
+                                    <td>内容</td>
+                                </tr>
+                                <tr>
+                                    <td>新华西路642号 锦江之星8530房间</td>
+                                    <td>房内一些化妆品被盗</td>
+                                    <td>2018000004</td>
+                                    <td>类型</td>
+                                    <td>类别</td>
+                                    <td class="center">细类</td>
+                                    <td>1111</td>
+                                    <td>内容</td>
+                                </tr>
+                                <tr>
+                                    <td>六支沟革新大道路口</td>
+                                    <td>货车擦到行人，无人受伤</td>
+                                    <td>2018000005</td>
+                                    <td>类型</td>
+                                    <td>类别</td>
+                                    <td class="center">细类</td>
+                                    <td>1111</td>
+                                    <td>内容</td>
+                                </tr>
+                                </tfoot>
+                            </table>
+
+                        </div>
                     </div>
-                    <!--<input type="text" class="search" id="searchText2" placeholder="请输入所属部门id"  style="width: 16%;margin-right: 1%;"/>-->
-                    <!--<input type="text" class="search" id="searchText3" placeholder="请输入资源类型编码" style="width: 16%;margin-right: 1%;"/>-->
-
-                </div>
-                <div class="ibox-content">
-
-                    <table class="table table-striped table-bordered table-hover dataTables-example">
-                        <thead>
-                        <tr>
-                            <th>案发地址</th>
-                            <th>警情摘要</th>
-                            <th>流水号</th>
-                            <th>分局</th>
-                            <th>案件类型</th>
-                            <th>案件类别</th>
-                            <th>案件细类</th>
-                            <th>报警电话</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>汉阳区永安堂</td>
-                            <td>报警人被打，要民警速到</td>
-                            <td>2018000001</td>
-                            <td>类型</td>
-                            <td>类别</td>
-                            <td class="center">细类</td>
-                            <td>1111</td>
-                            <td>内容</td>
-                        </tr>
-                        <tr>
-                            <td>竹叶山 新竹小路 湘江出租屋巷内</td>
-                            <td>举报此处有人赌博</td>
-                            <td>2018000002</td>
-                            <td>类型</td>
-                            <td>类别</td>
-                            <td class="center">细类</td>
-                            <td>1111</td>
-                            <td>内容</td>
-                        </tr>
-                        <tr>
-                            <td>古田一路东风路跟知音茶城门口</td>
-                            <td>两小车相擦</td>
-                            <td>2018000003</td>
-                            <td>类型</td>
-                            <td>类别</td>
-                            <td class="center">细类</td>
-                            <td>1111</td>
-                            <td>内容</td>
-                        </tr>
-                        <tr>
-                            <td>新华西路642号 锦江之星8530房间</td>
-                            <td>房内一些化妆品被盗</td>
-                            <td>2018000004</td>
-                            <td>类型</td>
-                            <td>类别</td>
-                            <td class="center">细类</td>
-                            <td>1111</td>
-                            <td>内容</td>
-                        </tr>
-                        <tr>
-                            <td>六支沟革新大道路口</td>
-                            <td>货车擦到行人，无人受伤</td>
-                            <td>2018000005</td>
-                            <td>类型</td>
-                            <td>类别</td>
-                            <td class="center">细类</td>
-                            <td>1111</td>
-                            <td>内容</td>
-                        </tr>
-                        </tfoot>
-                    </table>
 
                 </div>
             </div>
-
         </div>
     </div>
-</div>
-</div>
-</body>
+<script src="js/vue.js?v=1.0.0"></script>
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/multiple-select.js"></script>
 <script type="text/javascript" src="js/plugins/dataTables/jquery.dataTables.js"></script>
 <script type="text/javascript" src="js/plugins/dataTables/dataTables.bootstrap.js"></script>
 <script type="text/javascript" src="js/plugins/chosen/chosen.jquery.js"></script>
 <script type="text/javascript" src="js/jquery.jedate.min.js"></script>
+<script src="js/common/config.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" src="js/content.js"></script>
-<script>
-    $(document).ready(function () {
+<script type="text/javascript" src="js/controllerJs/index_jqjh_1.js"></script>
 
-        $(".chosen-select").chosen({width:"180px"});
-        var start = {
-            format: 'YYYY-MM-DD hh:mm:ss',
-            minDate: '2014-06-16 23:59:59', //设定最小日期为当前日期
-            isinitVal: true,
-            maxDate: $.nowDate({DD: 0}), //最大日期
-            okfun: function (obj) {
-                end.minDate = obj.val; //开始日选好后，重置结束日的最小日期
-                endDates();
-            }
-        };
-        var end = {
-            format: 'YYYY-MM-DD- hh:mm:ss',
-            minDate: $.nowDate({DD: 0}), //设定最小日期为当前日期
-            maxDate: '2099-06-16 23:59:59', //最大日期
-            okfun: function (obj) {
-                start.maxDate = obj.val; //将结束日的初始值设定为开始日的最大日期
-            }
-        };
-        //这里是日期联动的关键
-        function endDates() {
-            //将结束日期的事件改成 false 即可
-            end.trigger = false;
-            $("#inpend").jeDate(end);
-        }
-
-        $('#inpstart').jeDate(start);
-        $('#inpend').jeDate(end);
-
-        //或者是
-        $.jeDate('#inpstart', start);
-        $.jeDate('#inpend', end);
-
-        /* $(".dataTables-example").dataTable();
-         var oTable = $("#editable").dataTable();
-         oTable.$("td").editable("../example_ajax.php", {
-         "callback": function (sValue, y) {
-         var aPos = oTable.fnGetPosition(this);
-         oTable.fnUpdate(sValue, aPos[0], aPos[1])
-         }, "submitdata": function (value, settings) {
-         return {"row_id": this.parentNode.getAttribute("id"), "column": oTable.fnGetPosition(this)[2]}
-         }, "width": "90%", "height": "100%"
-         })*/
+</div>
+</body>
 
 
-    });
-    console.log($(".dataTables-example tr"));
-    //  function fnClickAddRow() {
-    //      $("#editable").dataTable().fnAddData(["Custom row", "New row", "New row", "New row", "New row"])
-    //      console.log( $("#editable").dataTable())
-    //  };
-</script>
 </html>
