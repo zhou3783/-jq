@@ -27,21 +27,9 @@
                             <div class="search-div">
                                 <div role="form" class="">
                                     <div class="form-group inline">
-                                        <label for="view">视图名：</label>
+                                        <label for="view">分局名称：</label>
                                         <select data-placeholder="视图名" class="chosen-select block" id="view" style="display:none;">
-                                            <option value="0" selected>--</option>
-                                            <option value="1">江岸分局视图</option>
-                                            <option value="2">江汉分局视图</option>
-                                            <option value="3">硚口分局视图</option>
-                                            <option value="3">武昌分局视图</option>
-                                            <option value="4">洪山分局视图</option>
-                                            <option value="5">青山分局视图</option>
-                                            <option value="6">汉阳分局视图</option>
-                                            <option value="7">新洲分局视图</option>
-                                            <option value="8">江夏分局视图</option>
-                                            <option value="9">蔡甸分局视图</option>
-                                            <option value="10">汉南分局视图</option>
-                                            <option value="11">黄陂分局视图</option>
+                                            <option v-for="(i, index) in unitsAll" :value="i.unitId" :key="index" >{{i.unitName}}</option>
                                         </select>
                                     </div>
                                     <div class="form-group inline">
@@ -80,10 +68,10 @@
                                             <option v-for="(i, index) in caseSmallClassesAll" :value="i.id" :key="index">{{i.typeName}}</option>
                                         </select>
                                     </div>
-                                    <div class="form-group inline">
+                                    <!-- <div class="form-group inline">
                                         <label>&nbsp;</label>
                                         <input v-model="inputValue" placeholder="流水号、报警电话、报警人、摘要" class="form-control input-search"  />
-                                    </div>
+                                    </div> -->
                                     <button class="btn btn-primary" id="plsCarTpSch" @click="search">查询</button>
                                 </div>
 
@@ -96,72 +84,53 @@
 
                             <table class="table table-striped table-bordered table-hover dataTables-example">
                                 <thead>
-                                <tr>
-                                    <th>案发地址</th>
-                                    <th>警情摘要</th>
-                                    <th>流水号</th>
-                                    <th>分局</th>
-                                    <th>案件类型</th>
-                                    <th>案件类别</th>
-                                    <th>案件细类</th>
-                                    <th>报警电话</th>
-                                </tr>
+                                    <tr>
+                                        <th>案发地址</th>
+                                        <th>警情摘要</th>
+                                        <th>流水号</th>
+                                        <th>分局</th>
+                                        <th>案件类型</th>
+                                        <th>案件类别</th>
+                                        <th>案件细类</th>
+                                        <th>报警电话</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>汉阳区永安堂</td>
-                                    <td>报警人被打，要民警速到</td>
-                                    <td>2018000001</td>
-                                    <td>类型</td>
-                                    <td>类别</td>
-                                    <td class="center">细类</td>
-                                    <td>1111</td>
-                                    <td>内容</td>
-                                </tr>
-                                <tr>
-                                    <td>竹叶山 新竹小路 湘江出租屋巷内</td>
-                                    <td>举报此处有人赌博</td>
-                                    <td>2018000002</td>
-                                    <td>类型</td>
-                                    <td>类别</td>
-                                    <td class="center">细类</td>
-                                    <td>1111</td>
-                                    <td>内容</td>
-                                </tr>
-                                <tr>
-                                    <td>古田一路东风路跟知音茶城门口</td>
-                                    <td>两小车相擦</td>
-                                    <td>2018000003</td>
-                                    <td>类型</td>
-                                    <td>类别</td>
-                                    <td class="center">细类</td>
-                                    <td>1111</td>
-                                    <td>内容</td>
-                                </tr>
-                                <tr>
-                                    <td>新华西路642号 锦江之星8530房间</td>
-                                    <td>房内一些化妆品被盗</td>
-                                    <td>2018000004</td>
-                                    <td>类型</td>
-                                    <td>类别</td>
-                                    <td class="center">细类</td>
-                                    <td>1111</td>
-                                    <td>内容</td>
-                                </tr>
-                                <tr>
-                                    <td>六支沟革新大道路口</td>
-                                    <td>货车擦到行人，无人受伤</td>
-                                    <td>2018000005</td>
-                                    <td>类型</td>
-                                    <td>类别</td>
-                                    <td class="center">细类</td>
-                                    <td>1111</td>
-                                    <td>内容</td>
-                                </tr>
+                                    <tr v-for="(i, index) in allList" :key="index">
+                                        <td>{{i.afdz}}</td>
+                                        <td>{{i.jqzy}}</td>
+                                        <td>{{i.lsh}}</td>
+                                        <td>{{i.fj}}</td>
+                                        <td>{{i.lx}}</td>
+                                        <td>{{i.lb}}</td>
+                                        <td class="center">{{i.ajdh}}</td>
+                                        <td>{{i.neirong}}</td>
+                                    </tr>
+                                
                                 </tfoot>
                             </table>
-
+                          
+                                <ul class="pagination" style="font-size: 20px;">
+                                    <li>
+                                        <a @click="fenYe('Previous')"aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <span v-for="(i, index) in numberList" @click="fenYe(i.num)" :key="index">{{i.num}}</span>
+                                    </li>
+                                    <li>
+                                        <a @click="fenYe('Next')" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                       
+                            <div class="echarts">
+                                <div id="myChart" :style="{width:'100%', height:'300px'}"></div>
+                            </div>
                         </div>
+                        
                     </div>
 
                 </div>
@@ -175,6 +144,7 @@
 <script type="text/javascript" src="js/plugins/dataTables/jquery.dataTables.js"></script>
 <script type="text/javascript" src="js/plugins/dataTables/dataTables.bootstrap.js"></script>
 <script type="text/javascript" src="js/plugins/chosen/chosen.jquery.js"></script>
+<script type="text/javascript" src="js/plugins/echarts/echarts-all.js"></script>
 <script type="text/javascript" src="js/jquery.jedate.min.js"></script>
 <script src="js/common/config.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" src="js/content.js"></script>
