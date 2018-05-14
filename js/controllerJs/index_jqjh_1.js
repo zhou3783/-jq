@@ -1,16 +1,4 @@
 $(document).ready(function () {
-     
-
-     /* $(".dataTables-example").dataTable();
-      var oTable = $("#editable").dataTable();
-      oTable.$("td").editable("../example_ajax.php", {
-      "callback": function (sValue, y) {
-      var aPos = oTable.fnGetPosition(this);
-      oTable.fnUpdate(sValue, aPos[0], aPos[1])
-      }, "submitdata": function (value, settings) {
-      return {"row_id": this.parentNode.getAttribute("id"), "column": oTable.fnGetPosition(this)[2]}
-      }, "width": "90%", "height": "100%"
-      })*/
 var json_search = {
     "jjdwdm":'',
     "startTime":'',
@@ -214,7 +202,6 @@ var vueTemp1 = new Vue({
                     })
                 }
             });
-            // _self.unitsAll
         },
         selectedChange: function ( id) {
             console.log(id)
@@ -369,7 +356,6 @@ var vueTemp1 = new Vue({
                     }
                 })
             })
-            console.log(_self.caseClassesAll)
             //通过一级初始化二级的数据
             _self.caseClassesAll = _session;
        },
@@ -832,9 +818,6 @@ var vueTemp1 = new Vue({
                     data: [_self.allList.length, 100]
                 }]
             });
-            
-                    console.log(json_search)
-            
         },
         drawLine: function() {
             var _self = this;
@@ -873,6 +856,5 @@ var vueTemp1 = new Vue({
         this.refreshcaseSmallClassesAll();
     }
 });
-
 
 });
