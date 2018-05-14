@@ -28,7 +28,7 @@
                                 <div role="form" class="">
                                     <div class="form-group inline">
                                         <label for="view">分局名称：</label>
-                                        <select data-placeholder="视图名" class="chosen-select block" id="view" style="display:none;">
+                                        <select data-placeholder="视图名" class="chosen-select chosen-select-view block" id="view" style="display:none;">
                                             <option v-for="(i, index) in unitsAll" :value="i.unitId" :key="index" >{{i.unitName}}</option>
                                         </select>
                                     </div>
@@ -42,7 +42,7 @@
                                     </div>
                                     <div class="form-group inline">
                                         <label for="level">等级：</label>
-                                        <select data-placeholder="来源" class="chosen-select block" id="level" style="display:none;">
+                                        <select data-placeholder="来源" class="chosen-select chosen-select-jb block" id="level" style="display:none;">
                                             <option value="0" selected>--</option>
                                             <option value="1">1级</option>
                                             <option value="2">2级</option>
@@ -51,14 +51,14 @@
                                     </div>
 <!-- 三级联动选择 -->
                                     <div class="form-group inline" type="caseTypes" itemIdName="caseTypeId">
-                                        <label>案件类型：</label>
-                                        <select class="multiple-select caseTypesSelectHock block" multiple ref="caseTypesAll" data-placeholder="" >
+                                        <label>案件类型：</label><!--multiple js也要改一些-->
+                                        <select class="multiple-select caseTypesSelectHock block"  ref="caseTypesAll" multiple data-placeholder="" >
                                             <option v-for="(i, index) in caseTypesAll" :value="i.id" :key="index" >{{i.typeName}}</option>
                                         </select>
                                     </div>
                                     <div class="form-group inline" type="caseClasses" itemIdName="caseClassId">
                                         <label>案件类别：</label>
-                                        <select class="multiple-select caseClassesSelectHock block" multiple ref="caseClassesAll" data-placeholder="" >
+                                        <select class="multiple-select caseClassesSelectHock block"  ref="caseClassesAll" multiple data-placeholder="" >
                                             <option v-for="(i, index) in caseClassesAll" :value="i.id" :key="index">{{i.typeName}}</option>
                                         </select>
                                     </div>
@@ -97,14 +97,14 @@
                                 </thead>
                                 <tbody>
                                     <tr v-for="(i, index) in allList" :key="index">
-                                        <td>{{i.afdz}}</td>
-                                        <td>{{i.jqzy}}</td>
-                                        <td>{{i.lsh}}</td>
-                                        <td>{{i.fj}}</td>
-                                        <td>{{i.lx}}</td>
-                                        <td>{{i.lb}}</td>
-                                        <td class="center">{{i.ajdh}}</td>
-                                        <td>{{i.neirong}}</td>
+                                        <td>{{i.afdd}}</td>
+                                        <td>{{i.bjnr}}</td>
+                                        <td>{{i.hjlsh}}</td>
+                                        <td>{{i.jjdwdm}}</td>
+                                        <td>{{i.bjlbdm}}</td>
+                                        <td>{{i.bjlxdm}}</td>
+                                        <td class="center">{{i.bjxldm}}</td>
+                                        <td>{{i.bJDH}}</td>
                                     </tr>
                                 
                                 </tfoot>
