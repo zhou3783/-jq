@@ -27,7 +27,8 @@ var vueTemp1 = new Vue({
             showList : [],
             allList: [],
             numberList: [],
-            myChart: null
+            myChart: null,
+            totalsJQNum : undefined
             
         }
        
@@ -128,10 +129,14 @@ var vueTemp1 = new Vue({
               }
             }
             if (index === 'Next'){
-                if (_self.nowIndex + 1 >  _self.endIndex) {
+                console.log('last')
+                console.log(_self.nowIndex)
+                console.log(_self.endIndex)
+                if (_self.nowIndex + 2 >  _self.endIndex) {
                     _self.nowIndex = 0;
-                    _self.numberList = [];
-                    _self.initFenTiao();
+                    // // _self.numberList = [];
+                    // _self.initFenTiao();
+                    
                 }else{
                     var _end = _self.numberList[_self.numberList.length - 1].num;
                     if (_self.nowIndex + 1 > _self.xishuIndex) {
@@ -151,6 +156,14 @@ var vueTemp1 = new Vue({
             if (!isNaN(index)) {
                 _self.nowIndex = index;
             }
+            //更改显示列表
+            var _star = _self.nowIndex*_self.xishuIndex
+            if (_self.nowIndex + 1 >  _self.endIndex) {
+                _self.showList = _self.allList.slice(_star)
+                return;
+            }
+            _self.showList = _self.allList.slice(_star, 6 + _star)
+            // console.log(_self.showList)
             console.log(_self.nowIndex)
         },
         shuzuquchong: function(arr){
@@ -378,444 +391,58 @@ var vueTemp1 = new Vue({
             //通过二级初始化三级的数据
             _self.caseSmallClassesAll = _session;
         },
-        search: function search() {
+        search: function () {
             var _self = this;
-            _self.allList = [
-                {
-                        "xzqh": "420100",
-                        "jjdbh": "20171116T01602404",
-                        "gljjdbh": null,
-                        "bjfsdm": "1",
-                        "jjlxdm": "1",
-                        "cllxdm": "1",
-                        "jjdwdm": "420100250000",
-                        "jjygh": "531",
-                        "jjyxm": "吴文超",
-                        "jjtbh": "T016",
-                        "hrsj": "2017-11-16 10:01:13",
-                        "bjsj": "2017-11-16 10:01:30",
-                        "startTime": null,
-                        "endTime": null,
-                        "hzsj": null,
-                        "hrsc": null,
-                        "jjsc": 64,
-                        "bJDH": "18627909828",
-                        "yhxm": null,
-                        "yhdz": null,
-                        "bjrxm": "朱",
-                        "bjrxb": "1",
-                        "lxdh": "18627909828",
-                        "afdd": "黄陂/政通检测站",
-                        "bjnr": "昨天报过警，起纠纷。现报警人在现场，称对方私自开走我货车。",
-                        "gxdwdm": "420116000000",
-                        "bjlbdm": "20",
-                        "bjlxdm": "209900",
-                        "bjxldm": null,
-                        "bjchpzl": null,
-                        "bjcph": null,
-                        "bkrs": null,
-                        "ssrs": null,
-                        "swrs": null,
-                        "rsjzlxdm": null,
-                        "qhbwdm": null,
-                        "rsjzjgdm": null,
-                        "qhlc": null,
-                        "rswzbh": null,
-                        "yfwxp": null,
-                        "rsmj": null,
-                        "jqjb": "2",
-                        "zhdj": null,
-                        "scbz": null,
-                        "xzb": "114.365346",
-                        "yzb": "30.914284",
-                        "sjgxsj": "2017-11-16 10:02:40",
-                        "jjdzt": "0",
-                        "sfrgsc": "0",
-                        "cjbs": "1",
-                        "cfbj": "0",
-                        "hjlsh": "2017111602187S001",
-                        "tsgn": "1",
-                        "bz": null,
-                        "fadzlb": "99",
-                        "fadzlx": null,
-                        "nxhm": "393615",
-                        "scscsj": "2017-11-16 10:02:40"
-                    },
-                    {
-                        "xzqh": "420100",
-                        "jjdbh": "20171116T00402415",
-                        "gljjdbh": null,
-                        "bjfsdm": "1",
-                        "jjlxdm": "1",
-                        "cllxdm": "1",
-                        "jjdwdm": "420100250000",
-                        "jjygh": "178",
-                        "jjyxm": "崔颖",
-                        "jjtbh": "T004",
-                        "hrsj": "2017-11-16 10:02:31",
-                        "bjsj": "2017-11-16 10:02:46",
-                        "startTime": null,
-                        "endTime": null,
-                        "hzsj": null,
-                        "hrsc": null,
-                        "jjsc": 53,
-                        "bJDH": "13597576241",
-                        "yhxm": null,
-                        "yhdz": null,
-                        "bjrxm": "匿名",
-                        "bjrxb": "1",
-                        "lxdh": "13597576241",
-                        "afdd": "青年路客运站",
-                        "bjnr": "上厕所的时候车走了，行李都在车上，客运站不处理， 求助。",
-                        "gxdwdm": "420103000000",
-                        "bjlbdm": "50",
-                        "bjlxdm": "500200",
-                        "bjxldm": null,
-                        "bjchpzl": null,
-                        "bjcph": null,
-                        "bkrs": null,
-                        "ssrs": null,
-                        "swrs": null,
-                        "rsjzlxdm": null,
-                        "qhbwdm": null,
-                        "rsjzjgdm": null,
-                        "qhlc": null,
-                        "rswzbh": null,
-                        "yfwxp": null,
-                        "rsmj": null,
-                        "jqjb": "3",
-                        "zhdj": null,
-                        "scbz": null,
-                        "xzb": "114.271382",
-                        "yzb": "30.592124",
-                        "sjgxsj": "2017-11-16 10:05:09",
-                        "jjdzt": "0",
-                        "sfrgsc": "0",
-                        "cjbs": "1",
-                        "cfbj": "0",
-                        "hjlsh": "2017111602207S001",
-                        "tsgn": "1",
-                        "bz": null,
-                        "fadzlb": "22",
-                        "fadzlx": "221",
-                        "nxhm": "393603",
-                        "scscsj": "2017-11-16 10:05:09"
-                    },
-                    {
-                        "xzqh": "420100",
-                        "jjdbh": "20171116T01902443",
-                        "gljjdbh": null,
-                        "bjfsdm": "1",
-                        "jjlxdm": "1",
-                        "cllxdm": "1",
-                        "jjdwdm": "420100250000",
-                        "jjygh": "144",
-                        "jjyxm": "李丽娜",
-                        "jjtbh": "T019",
-                        "hrsj": "2017-11-16 10:04:20",
-                        "bjsj": "2017-11-16 10:04:21",
-                        "startTime": null,
-                        "endTime": null,
-                        "hzsj": null,
-                        "hrsc": null,
-                        "jjsc": 87,
-                        "bJDH": "15927122152",
-                        "yhxm": null,
-                        "yhdz": null,
-                        "bjrxm": "仇",
-                        "bjrxb": "2",
-                        "lxdh": "15927122152",
-                        "afdd": "珞南所",
-                        "bjnr": "早上手机被扒报过警，求助民警再联系。",
-                        "gxdwdm": "420111000000",
-                        "bjlbdm": "50",
-                        "bjlxdm": "509900",
-                        "bjxldm": null,
-                        "bjchpzl": null,
-                        "bjcph": null,
-                        "bkrs": null,
-                        "ssrs": null,
-                        "swrs": null,
-                        "rsjzlxdm": null,
-                        "qhbwdm": null,
-                        "rsjzjgdm": null,
-                        "qhlc": null,
-                        "rswzbh": null,
-                        "yfwxp": null,
-                        "rsmj": null,
-                        "jqjb": "3",
-                        "zhdj": null,
-                        "scbz": null,
-                        "xzb": "114.358876",
-                        "yzb": "30.52009",
-                        "sjgxsj": "2017-11-16 10:06:20",
-                        "jjdzt": "0",
-                        "sfrgsc": "0",
-                        "cjbs": "1",
-                        "cfbj": "0",
-                        "hjlsh": "2017111602226S001",
-                        "tsgn": "1",
-                        "bz": null,
-                        "fadzlb": "11",
-                        "fadzlx": null,
-                        "nxhm": "393618",
-                        "scscsj": "2017-11-16 10:06:20"
-                    },
-                    {
-                        "xzqh": "420100",
-                        "jjdbh": "20171116T02402313",
-                        "gljjdbh": null,
-                        "bjfsdm": "1",
-                        "jjlxdm": "1",
-                        "cllxdm": "1",
-                        "jjdwdm": "420100250000",
-                        "jjygh": "549",
-                        "jjyxm": "周玉佳",
-                        "jjtbh": "T024",
-                        "hrsj": "2017-11-16 09:51:57",
-                        "bjsj": "2017-11-16 09:52:18",
-                        "startTime": null,
-                        "endTime": null,
-                        "hzsj": null,
-                        "hrsc": null,
-                        "jjsc": 486,
-                        "bJDH": "15878611873",
-                        "yhxm": null,
-                        "yhdz": null,
-                        "bjrxm": "王",
-                        "bjrxb": "1",
-                        "lxdh": "15878611873",
-                        "afdd": "欢乐大道杨家西湾公交站附近(武汉火车站往杨家西湾方向)洪山区利民办事处旁边路口进去100米小区内左边第一栋1403",
-                        "bjnr": "自己怀疑儿子和儿子的女友和传销有关。自己和老伴去看他们时，他们带自己到处听课。现老伴不愿回来，自己叶联系不上他们了。",
-                        "gxdwdm": "420111000000",
-                        "bjlbdm": "50",
-                        "bjlxdm": "509900",
-                        "bjxldm": null,
-                        "bjchpzl": null,
-                        "bjcph": null,
-                        "bkrs": null,
-                        "ssrs": null,
-                        "swrs": null,
-                        "rsjzlxdm": null,
-                        "qhbwdm": null,
-                        "rsjzjgdm": null,
-                        "qhlc": null,
-                        "rswzbh": null,
-                        "yfwxp": null,
-                        "rsmj": null,
-                        "jqjb": "3",
-                        "zhdj": null,
-                        "scbz": null,
-                        "xzb": "0",
-                        "yzb": "0",
-                        "sjgxsj": "2017-11-16 10:08:26",
-                        "jjdzt": "0",
-                        "sfrgsc": "0",
-                        "cjbs": "1",
-                        "cfbj": "0",
-                        "hjlsh": "2017111602123S001",
-                        "tsgn": "1",
-                        "bz": null,
-                        "fadzlb": "12",
-                        "fadzlx": "121",
-                        "nxhm": "393623",
-                        "scscsj": "2017-11-16 10:08:26"
-                    },
-                    {
-                        "xzqh": "420100",
-                        "jjdbh": "20171116T03102460",
-                        "gljjdbh": null,
-                        "bjfsdm": "1",
-                        "jjlxdm": "1",
-                        "cllxdm": "1",
-                        "jjdwdm": "420100250000",
-                        "jjygh": "437",
-                        "jjyxm": "李梦蝶",
-                        "jjtbh": "T031",
-                        "hrsj": "2017-11-16 10:06:53",
-                        "bjsj": "2017-11-16 10:06:54",
-                        "startTime": null,
-                        "endTime": null,
-                        "hzsj": null,
-                        "hrsc": null,
-                        "jjsc": 57,
-                        "bJDH": "13037115501",
-                        "yhxm": null,
-                        "yhdz": null,
-                        "bjrxm": "徐",
-                        "bjrxb": "1",
-                        "lxdh": "13037115501",
-                        "afdd": "雅安街 南湖医院旁边",
-                        "bjnr": "8月交通事故后，对方一直不接我电话，行车证还在对方手中。",
-                        "gxdwdm": "420100170000",
-                        "bjlbdm": "50",
-                        "bjlxdm": "509900",
-                        "bjxldm": null,
-                        "bjchpzl": null,
-                        "bjcph": null,
-                        "bkrs": null,
-                        "ssrs": null,
-                        "swrs": null,
-                        "rsjzlxdm": null,
-                        "qhbwdm": null,
-                        "rsjzjgdm": null,
-                        "qhlc": null,
-                        "rswzbh": null,
-                        "yfwxp": null,
-                        "rsmj": null,
-                        "jqjb": "3",
-                        "zhdj": null,
-                        "scbz": null,
-                        "xzb": "114.325303",
-                        "yzb": "30.521871",
-                        "sjgxsj": "2017-11-16 10:09:00",
-                        "jjdzt": "0",
-                        "sfrgsc": "0",
-                        "cjbs": "1",
-                        "cfbj": "0",
-                        "hjlsh": "2017111602245S001",
-                        "tsgn": "1",
-                        "bz": null,
-                        "fadzlb": "16",
-                        "fadzlx": null,
-                        "nxhm": "393639",
-                        "scscsj": "2017-11-16 10:09:00"
-                    },
-                    {
-                        "xzqh": "420100",
-                        "jjdbh": "20171116T01502483",
-                        "gljjdbh": null,
-                        "bjfsdm": "1",
-                        "jjlxdm": "1",
-                        "cllxdm": "1",
-                        "jjdwdm": "420100250000",
-                        "jjygh": "183",
-                        "jjyxm": "曾诚",
-                        "jjtbh": "T015",
-                        "hrsj": "2017-11-16 10:07:38",
-                        "bjsj": "2017-11-16 10:07:39",
-                        "startTime": null,
-                        "endTime": null,
-                        "hzsj": null,
-                        "hrsc": null,
-                        "jjsc": 43,
-                        "bJDH": "18627779220",
-                        "yhxm": null,
-                        "yhdz": null,
-                        "bjrxm": "匿名",
-                        "bjrxb": "1",
-                        "lxdh": "18627779220",
-                        "afdd": "古田二路武汉癫痫医院",
-                        "bjnr": "医院被盗（损失待查）。",
-                        "gxdwdm": "420104000000",
-                        "bjlbdm": "20",
-                        "bjlxdm": "201000",
-                        "bjxldm": "201099",
-                        "bjchpzl": null,
-                        "bjcph": null,
-                        "bkrs": null,
-                        "ssrs": null,
-                        "swrs": null,
-                        "rsjzlxdm": null,
-                        "qhbwdm": null,
-                        "rsjzjgdm": null,
-                        "qhlc": null,
-                        "rswzbh": null,
-                        "yfwxp": null,
-                        "rsmj": null,
-                        "jqjb": "2",
-                        "zhdj": null,
-                        "scbz": null,
-                        "xzb": "114.20686",
-                        "yzb": "30.610804",
-                        "sjgxsj": "2017-11-16 10:10:13",
-                        "jjdzt": "0",
-                        "sfrgsc": "0",
-                        "cjbs": "1",
-                        "cfbj": "0",
-                        "hjlsh": "2017111602252S001",
-                        "tsgn": "1",
-                        "bz": null,
-                        "fadzlb": "10",
-                        "fadzlx": "102",
-                        "nxhm": "393614",
-                        "scscsj": "2017-11-16 10:10:13"
-                    },
-                    {
-                        "xzqh": "420100",
-                        "jjdbh": "20171116T03102493",
-                        "gljjdbh": null,
-                        "bjfsdm": "1",
-                        "jjlxdm": "1",
-                        "cllxdm": "1",
-                        "jjdwdm": "420100250000",
-                        "jjygh": "437",
-                        "jjyxm": "李梦蝶",
-                        "jjtbh": "T031",
-                        "hrsj": "2017-11-16 10:09:35",
-                        "bjsj": "2017-11-16 10:09:36",
-                        "startTime": null,
-                        "endTime": null,
-                        "hzsj": null,
-                        "hrsc": null,
-                        "jjsc": 85,
-                        "bJDH": "13367267605",
-                        "yhxm": null,
-                        "yhdz": null,
-                        "bjrxm": "江",
-                        "bjrxb": "1",
-                        "lxdh": "13367267605",
-                        "afdd": "武胜路江山如画小区2期内",
-                        "bjnr": "发现放包里价值4000多元的手机被偷，联系方式同上。",
-                        "gxdwdm": "420104000000",
-                        "bjlbdm": "10",
-                        "bjlxdm": "100100",
-                        "bjxldm": "100199",
-                        "bjchpzl": null,
-                        "bjcph": null,
-                        "bkrs": null,
-                        "ssrs": null,
-                        "swrs": null,
-                        "rsjzlxdm": null,
-                        "qhbwdm": null,
-                        "rsjzjgdm": null,
-                        "qhlc": null,
-                        "rswzbh": null,
-                        "yfwxp": null,
-                        "rsmj": null,
-                        "jqjb": "2",
-                        "zhdj": null,
-                        "scbz": null,
-                        "xzb": "0",
-                        "yzb": "0",
-                        "sjgxsj": "2017-11-16 10:11:40",
-                        "jjdzt": "0",
-                        "sfrgsc": "0",
-                        "cjbs": "1",
-                        "cfbj": "0",
-                        "hjlsh": "2017111602263S001",
-                        "tsgn": "1",
-                        "bz": null,
-                        "fadzlb": "12",
-                        "fadzlx": "121",
-                        "nxhm": "393639",
-                        "scscsj": "2017-11-16 10:11:40"
-                    }];
-
-
-                _self.allList.forEach(function(item,index){
-                    if(index < _self.xishuIndex){
-                        _self.showList.push(item)
-                    }
-                })
-                allNum = 10
-                console.log(_self.allList.length)
+            var _yongzongshujuceshi = [];
+            _self.allList = [];
+            $.ajax({
+                        url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/jjdb/all",
+                        type: "post",
+                        dataType: "json",
+                        async: false,
+                        data: JSON.stringify(json_search),
+                        contentType: 'application/json;charset=UTF-8',
+                        success: function success(data) {
+                            _self.totalsJQNum = data.length;
+                            _yongzongshujuceshi = data;
+                            console.log(data)
+                        }
+                    })
+            $.ajax({
+                url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/jjdb/fromView",
+                type: "post",
+                dataType: "json",
+                async: false,
+                data: JSON.stringify(json_search),
+                contentType: 'application/json;charset=UTF-8',
+                success: function success(data) {
+                    _self.allList = data;
+                    console.log(data)
+                }
+            })
+                _self.allList = _yongzongshujuceshi;
+                //初始化列表
+                _self.showList = _self.allList.slice(0,6)
+            
+                console.log(_self.showList)
+                //初始化分页条
+                _number = parseInt(_self.allList.length/_self.xishuIndex)
+                if (_self.allList.length % _self.xishuIndex > 0){
+                    _number++;
+                }
+                _self.endIndex = _number
+                for(var i = 0; i < _number;i++){
+                    _self.numberList.push({
+                        num:i
+                    })
+                }
+              
             // 填入数据
             _self.myChart.setOption({
                 series: [{
                     // 根据名字对应到相应的系列
                     name: '销量',
-                    data: [_self.allList.length, 100]
+                    data: [_self.totalsJQNum, _self.allList.length]
                 }]
             });
         },

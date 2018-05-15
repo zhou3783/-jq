@@ -92,11 +92,13 @@
                                         <th>案件类型</th>
                                         <th>案件类别</th>
                                         <th>案件细类</th>
-                                        <th>报警电话</th>
+                                        <th>接警警察</th>
+                                        <th>报警人姓名</th>
+                                        <th>报警人电话</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="(i, index) in allList" :key="index">
+                                    <tr v-for="(i, index) in showList" :key="index">
                                         <td>{{i.afdd}}</td>
                                         <td>{{i.bjnr}}</td>
                                         <td>{{i.hjlsh}}</td>
@@ -104,6 +106,8 @@
                                         <td>{{i.bjlbdm}}</td>
                                         <td>{{i.bjlxdm}}</td>
                                         <td class="center">{{i.bjxldm}}</td>
+                                        <td>{{i.jjyxm}}</td>
+                                        <td>{{i.bjrxm}}</td>
                                         <td>{{i.bJDH}}</td>
                                     </tr>
                                 
@@ -117,7 +121,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <span v-for="(i, index) in numberList" @click="fenYe(i.num)" :key="index">{{i.num}}</span>
+                                        <span v-for="(i, index) in numberList" @click="fenYe(i.num)" :key="index">{{i.num+1}}</span>
                                     </li>
                                     <li>
                                         <a @click="fenYe('Next')" aria-label="Next">

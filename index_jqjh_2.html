@@ -52,9 +52,9 @@
                             <!-- <input class="form-control" placeholder="请输入视图名称" :value="addItems.viewName" v-on:input="valueChange"> -->
                             <select  class="multiple-select block" 
                                  v-on:click="multipleSelectChange"    style="display: none;" multiple >
-                                <option selected = "selected" disabled = "disabled" value="JJdb">接警</option>
-                                <option value="CJdb">处警</option>
-                                <option value="FKdb">反馈</option>
+                                <option selected = "selected" disabled = "disabled" value="JJDB">接警</option>
+                                <option value="CJDB">处警</option>
+                                <option value="FKDB">反馈</option>
                             </select>
 
                         </div>
@@ -98,7 +98,9 @@
                             <div class="databaseSelected-wrap">
                                 <label class="selected-condition">已有条件：</label>
                                 <ul>
-                                    <li v-for="i in addItems.alarmCalls">{{ i.alarmCall }}<i class="fa fa-times-circle" v-on:click="delete_select" ></i></li>
+                                    <li v-for="(i, index) in addItems.alarmCalls" :key="index">{{ i.alarmCall }}
+<i class="fa fa-times-circle" v-on:click="delete_selectAdd(addItems.alarmCalls,index)"></i>
+</li>
                                 </ul>
                             </div>
                         </div>
@@ -111,7 +113,9 @@
                             <div class="databaseSelected-wrap">
                                 <label class="selected-condition">已有条件：</label>
                                 <ul>
-                                    <li v-for="i in addItems.caseAddrs">{{ i.caseAddrKeywords }}<i class="fa fa-times-circle" v-on:click="delete_select" ></i></li>
+                                    <li v-for="(i,index) in addItems.caseAddrs">{{ i.caseAddrKeywords }}
+<i class="fa fa-times-circle" v-on:click="delete_selectAdd(addItems.caseAddrs,index)"></i>
+</li>
                                 </ul>
                             </div>
                         </div>
@@ -124,7 +128,9 @@
                             <div class="databaseSelected-wrap">
                                 <label class="selected-condition">已有条件：</label>
                                 <ul>
-                                    <li v-for="i in addItems.caseContents">{{ i.caseContentKeywords }}<i class="fa fa-times-circle" v-on:click="delete_select" ></i></li>
+                                    <li v-for="(i, index) in addItems.caseContents">{{ i.caseContentKeywords }}
+<i class="fa fa-times-circle" v-on:click="delete_selectAdd(addItems.caseContents, index)"></i>
+</li>
                                 </ul>
                             </div>
                         </div>

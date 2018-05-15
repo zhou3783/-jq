@@ -475,6 +475,9 @@ $(document).ready(function () {
                   return _typeId = 'caseSmallClassId';
                 }
             },
+            delete_selectAdd: function(name,index){
+                name.splice(index,1)
+            },
             delete_select1: function delete_select1(event,i,items,name){
                 var self = this;
                 items.forEach(function(item,index){
@@ -496,22 +499,25 @@ $(document).ready(function () {
                 if (self.type == "edit" && !self.editing) return;
                 var _typeId = self.zuhetype(type);
                 var _typeAll = type + 'All';
-                console.log(self.editItems[type])
-                // console.log(TypeId)
-                 for (var i = 0; i < self.editItems[type].length; i++) {
-                     if (self.editItems[type][i].id == id || self.editItems[type][i].id == TypeId || self.editItems[type][i][_typeId] == id || self.editItems[type][i][_typeId] == TypeId) { //默认选中
-                         self[_typeAll].forEach(function (item1) {
-                             if (TypeId == item1.id || id == item1.id) {
-                                 console.log(id)
-                                 console.log(TypeId)
-                                 console.log(item1)
-                                 item1.selected = false;
-                                 self.editItems[type].splice(i, 1)
-                                 
-                             }
-                         });
-                     }
-                 }
+                // console.log(self.editItems[type])
+                console.log(items[type])
+                
+                    for (var i = 0; i < self.editItems[type].length; i++) {
+                        if (self.editItems[type][i].id == id || self.editItems[type][i].id == TypeId || self.editItems[type][i][_typeId] == id || self.editItems[type][i][_typeId] == TypeId) { //默认选中
+                            self[_typeAll].forEach(function (item1) {
+                                if (TypeId == item1.id || id == item1.id) {
+                                    console.log(id)
+                                    console.log(TypeId)
+                                    console.log(item1)
+                                    item1.selected = false;
+                                    self.editItems[type].splice(i, 1)
+
+                                }
+                            });
+                        }
+                    }
+                
+               
                 setTimeout(function(){
                     self.refreshSelect();
                 }, 200);
