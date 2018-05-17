@@ -28,7 +28,8 @@ var vueTemp1 = new Vue({
             allList: [],
             numberList: [],
             myChart: null,
-            totalsJQNum : undefined
+            totalsJQNum : undefined,
+            zhanshi: false
             
         }
        
@@ -53,13 +54,18 @@ var vueTemp1 = new Vue({
             maxDate: $.nowDate({
                 DD: 0
             }), //最大日期
+            // trigger: "mousedown",  //可绑定一个或多个事件
             okfun: function (obj) {
                 end.minDate = obj.val; //开始日选好后，重置结束日的最小日期
                 // console.log(obj.elem); //得到当前输入框的ID
-                // console.log(obj.val); //得到日期生成的值，如：2017-06-16
+                console.log(obj.val); //得到日期生成的值，如：2017-06-16
                 json_search.startTime = obj.val;
                 endDates();
             },
+            clearfun: function (elem, val) {
+                json_search.startTime = val;
+            },
+           
         };
         var end = {
             format: 'YYYY-MM-DD- hh:mm:ss',
@@ -67,12 +73,16 @@ var vueTemp1 = new Vue({
                 DD: 0
             }), //设定最小日期为当前日期
             maxDate: '2099-06-16 23:59:59', //最大日期
+            // trigger: "mousedown", //可绑定一个或多个事件
             okfun: function (obj) {
                 start.maxDate = obj.val; //将结束日的初始值设定为开始日的最大日期
                 // console.log(obj.elem); //得到当前输入框的ID
                 // console.log(obj.val); //得到日期生成的值，如：2017-06-16
                json_search.endTime = obj.val;
                
+            },
+            clearfun: function (elem, val) {
+                json_search.startTime = val;
             }
         };
         //这里是日期联动的关键
@@ -225,8 +235,24 @@ var vueTemp1 = new Vue({
                 width: "100%",
                 // single: true,
                 placeholder: "请选择案件类型",
+                animate: 'slide',
+                onCheckAll: function () {
+                    _self.caseTypesChecked = []
+                    _self.caseTypesAll.forEach(function (item) {
+                        _self.caseTypesChecked.push({
+                            "value": item.id
+                        })
+                    })
+                    _self.changeCaseClassesAll()
+                    console.log(_self.caseTypesChecked)
+                },
+                onUncheckAll: function () {
+                    _self.caseTypesChecked = []
+                    _self.changeCaseClassesAll()
+                    console.log(_self.caseTypesChecked)
+                },
                 onClick: function (view) {
-                    if(view.checked){//勾选
+                    if (view.checked) { //勾选
                         if (_self.caseTypesChecked.length == 0) {
                             _self.caseTypesChecked.push(view);
                         } else {
@@ -236,19 +262,29 @@ var vueTemp1 = new Vue({
                                 }
                             })
                         }
-                    }else {//取消
+                    } else { //取消
                         _self.caseTypesChecked.forEach(function (item, index) {
                             if (item.value == view.value) {
                                 _self.caseTypesChecked.splice(index, 1);
                             }
                         })
                     }
-                    if (_self.caseTypesChecked.length==0){//一项没选
+                    if (_self.caseTypesChecked.length == 0) { //一项没选
                         _self.caseClassesAll = [];
                         _self.caseSmallClassesAll = [];
                     }
-                    _self.changeCaseClassesAll()
-                    json_search.bjlbdm = _self.caseTypesChecked[0].value;
+                    _self.changeCaseClassesAll();
+                    console.log(_self.caseTypesChecked)
+
+                    //单选逻辑
+                    // json_search.bjlbdm = view.value;
+                    // json_search.bjlxdm = ''
+                    // json_search.bjxldm = ''
+                    // _self.caseClassesAll = [];
+                    // _self.caseSmallClassesAll = [];
+                
+                    // _self.changeCaseClassesAll([view])
+                    //    -----end
                 }
             });
         },
@@ -258,8 +294,25 @@ var vueTemp1 = new Vue({
                 width: "100%",
                 // single: true,
                 placeholder: "请选择案件类别",
+                animate: 'slide',
+                // selectAll:false,
+                onCheckAll: function () {
+                    _self.caseClassesChecked = []
+                    _self.caseClassesAll.forEach(function (item) {
+                        _self.caseClassesChecked.push({
+                            "value": item.id
+                        })
+                    })
+                    _self.changeCaseSmallClassesAll()
+                    console.log(_self.caseClassesChecked)
+                },
+                onUncheckAll: function () {
+                    _self.caseClassesChecked = []
+                    _self.changeCaseSmallClassesAll()
+                    console.log(_self.caseClassesChecked)
+                },
                 onClick: function (view) {
-                    if(view.checked){
+                    if (view.checked) {
                         if (_self.caseClassesChecked.length == 0) {
                             _self.caseClassesChecked.push(view);
                         } else {
@@ -269,19 +322,18 @@ var vueTemp1 = new Vue({
                                 }
                             })
                         }
-                    }else{
+                    } else {
                         _self.caseClassesChecked.forEach(function (item, index) {
                             if (item.value == view.value) {
                                 _self.caseClassesChecked.splice(index, 1);
                             }
                         })
                     }
-                    if (_self.caseClassesChecked.length == 0){
+                    if (_self.caseClassesChecked.length == 0) {
                         _self.caseSmallClassesAll = [];
                     }
-                    
                     _self.changeCaseSmallClassesAll()
-                    json_search.bjlxdm = _self.caseClassesChecked[0].value;
+                    console.log(_self.caseClassesChecked)
                 }
             });
         },
@@ -291,8 +343,23 @@ var vueTemp1 = new Vue({
                 width: "100%",
                 // single: true,
                 placeholder: "请选择案件类别",
+                animate: 'slide',
+                // selectAll: false,
+                onCheckAll: function () {
+                    _self.caseSmallClassesChecked = []
+                    _self.caseSmallClassesAll.forEach(function (item) {
+                        _self.caseSmallClassesChecked.push({
+                            "value": item.id
+                        })
+                    })
+                    console.log(_self.caseSmallClassesChecked)
+                },
+                onUncheckAll: function () {
+                    _self.caseSmallClassesChecked = []
+                    console.log(_self.caseSmallClassesChecked)
+                },
                 onClick: function (view) {
-                    if(view.checked){
+                    if (view.checked) {
                         if (_self.caseSmallClassesChecked.length == 0) {
                             _self.caseSmallClassesChecked.push(view);
                         } else {
@@ -302,15 +369,13 @@ var vueTemp1 = new Vue({
                                 }
                             })
                         }
-                    }else{
+                    } else {
                         _self.caseSmallClassesChecked.forEach(function (item, index) {
                             if (item.value == view.value) {
                                 _self.caseSmallClassesChecked.splice(index, 1);
                             }
                         })
                     }
-
-                    json_search.bjxldm = _self.caseSmallClassesChecked[0].value;
                 }
             });
         },
@@ -318,6 +383,8 @@ var vueTemp1 = new Vue({
             $(".chosen-select-view").multipleSelect({
                 width: "180px",
                 single: true,
+                placeholder: "请选择单位",
+                animate: 'slide',
                 onClick: function (view) {
                    json_search.jjdwdm = view.value;
                 }
@@ -326,6 +393,8 @@ var vueTemp1 = new Vue({
             $(".chosen-select-jb").multipleSelect({
                 width: "180px",
                 single: true,
+                placeholder: "请选择按键级别",
+                animate: 'slide',
                 onClick: function (view) {
                     json_search.jqjb = view.value;
                 }
@@ -356,7 +425,7 @@ var vueTemp1 = new Vue({
        changeCaseClassesAll: function(){
             var _self = this;
             var _session = [];
-            _self.caseTypesChecked.forEach(function(item){
+            _self.caseTypesChecked.forEach(function (item) {
                 var id = item.value;
                 $.ajax({
                     url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/eventTypes/findByParentId/" + id,
@@ -372,7 +441,7 @@ var vueTemp1 = new Vue({
             //通过一级初始化二级的数据
             _self.caseClassesAll = _session;
        },
-        changeCaseSmallClassesAll: function(){
+        changeCaseSmallClassesAll: function (){
             var _self = this;
             var _session = [];
             _self.caseClassesChecked.forEach(function (item) {
@@ -395,6 +464,14 @@ var vueTemp1 = new Vue({
             var _self = this;
             var _yongzongshujuceshi = [];
             _self.allList = [];
+            json_search.bjlxdm = JSON.stringify(_self.caseTypesChecked)
+            json_search.bjlbdm = JSON.stringify(_self.caseClassesChecked)
+            json_search.bjxldm = JSON.stringify(_self.caseSmallClassesChecked)
+            if(json_search.jjdwdm == ''){
+                alert('请先选择单位');
+                return
+            }
+            console.log(JSON.stringify(json_search))
             $.ajax({
                         url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/jjdb/all",
                         type: "post",
@@ -405,7 +482,7 @@ var vueTemp1 = new Vue({
                         success: function success(data) {
                             _self.totalsJQNum = data.length;
                             _yongzongshujuceshi = data;
-                            console.log(data)
+                            // console.log(data)
                         }
                     })
             $.ajax({
@@ -417,13 +494,22 @@ var vueTemp1 = new Vue({
                 contentType: 'application/json;charset=UTF-8',
                 success: function success(data) {
                     _self.allList = data;
-                    console.log(data)
+                    // console.log(data)
                 }
             })
-                _self.allList = _yongzongshujuceshi;
+            _self.zhanshi = true
+                // _self.allList = _yongzongshujuceshi;
+                //更改分局为name
+                _self.allList.forEach(function(item1){
+                    _self.unitsAll.forEach(function(item2){
+                        if (item2.unitId === item1.jjdwdm){
+                            item1['name'] = item2.unitName
+                        }
+                    })
+                })
                 //初始化列表
                 _self.showList = _self.allList.slice(0,6)
-            
+
                 console.log(_self.showList)
                 //初始化分页条
                 _number = parseInt(_self.allList.length/_self.xishuIndex)
@@ -431,18 +517,37 @@ var vueTemp1 = new Vue({
                     _number++;
                 }
                 _self.endIndex = _number
-                for(var i = 0; i < _number;i++){
-                    _self.numberList.push({
-                        num:i
-                    })
-                }
+                _self.numberList = []
+                if (_number <  _self.xishuIndex ){
+                    for (var i = 0; i < _number; i++) {
+                        _self.numberList.push({
+                            num: i
+                        })
+                    }
+                }else{
+                    for (var i = 0; i < _self.xishuIndex; i++) {
+                        _self.numberList.push({
+                            num: i
+                        })
+                    }
+                }//---end---
+
+            // console.log(json_search)
               
             // 填入数据
+            if(!_self.totalsJQNum){
+                _self.totalsJQNum = 0
+            }
+            if(!_self.allList.length){
+                var _le = 0
+            }else {
+                _le = _self.allList.length
+            }
             _self.myChart.setOption({
                 series: [{
                     // 根据名字对应到相应的系列
-                    name: '销量',
-                    data: [_self.totalsJQNum, _self.allList.length]
+
+                    data: [_self.totalsJQNum, _le]
                 }]
             });
         },

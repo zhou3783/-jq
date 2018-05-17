@@ -32,31 +32,27 @@
         </div>
 
         <div id="vue-temp-1">
-            <div class="addWrap" v-if="type=='add'" :add-id="addId">
+            <div class="addWrap" v-show="type=='add'" :add-id="addId">
                 <div class="ibox-title">
                     <h5 style="font-size: 16px">新增</h5>
                     <button class="btn btn-primary btn-sm btn-add" v-on:click="add_save">保存</button>
                 </div>
                 <div class="ibox-content databaseSelectedWrap">
                     <div role="form" class="clearfix">
-
                         <div class="form-group inline" type="units" itemIdName="unitId">
                             <label>单位：</label>
-                            <select v-on:click="chosenSelectChange" class="chosen-select block" style="display: none;"> 
+                            <select class="chosen-select block" style="display: none;"> 
                               <option value="">--未选择--</option>
                               <option v-for="i in unitsAll" :value="i.unitId">{{i.unitName}}</option>
                             </select>
                         </div>
                         <div class="form-group inline" type="viewName" itemIdName="viewNameId">
                             <label>视图名称：</label>
-                            <!-- <input class="form-control" placeholder="请输入视图名称" :value="addItems.viewName" v-on:input="valueChange"> -->
-                            <select  class="multiple-select block" 
-                                 v-on:click="multipleSelectChange"    style="display: none;" multiple >
-                                <option selected = "selected" disabled = "disabled" value="JJDB">接警</option>
-                                <option value="CJDB">处警</option>
-                                <option value="FKDB">反馈</option>
+                            <select class="multiple-select block" ref="viewName" style="display: none;" multiple>
+                                <option selected="selected" disabled="disabled" value="JJdb">接警</option>
+                                <option value="CJdb">处警</option>
+                                <option value="FKdb">反馈</option>
                             </select>
-
                         </div>
                         <div class="form-group inline" type="viewUserName">
                             <label>用户名：</label>
@@ -72,115 +68,98 @@
                         </div>
                         <div class="form-group inline" type="caseTypes" itemIdName="caseTypeId">
                             <label>案件类型：</label>
-                            <select v-on:click="multipleSelectChange" class="multiple-select block" multiple data-placeholder="" style="display: none;">
-                                <option v-for="i in caseTypesAll" :value="i.id" :selected="i.selected" >{{i.typeName}}</option>
+                            <select class="multiple-select caseTypesSelectHock block" ref="caseTypesAll" multiple data-placeholder="">
+                                <option v-for="(i, index) in caseTypesAll" :value="i.id" :key="index">{{i.typeName}}</option>
                             </select>
                         </div>
                         <div class="form-group inline" type="caseClasses" itemIdName="caseClassId">
                             <label>案件类别：</label>
-                            <select v-on:click="multipleSelectChange" class="multiple-select block" multiple style="display: none;">
-                                <option v-for="i in caseClassesAll" :value="i.id" :value="i.id">{{i.typeName}}</option>
+                            <select class="multiple-select caseClassesSelectHock block" ref="caseClassesAll" multiple data-placeholder="">
+                                <option v-for="(i, index) in caseClassesAll" :value="i.id" :key="index">{{i.typeName}}</option>
                             </select>
                         </div>
                         <div class="form-group inline" type="caseSmallClasses" itemIdName="caseSmallClassId">
                             <label>案件细类：</label>
-                            <select v-on:click="multipleSelectChange" class="multiple-select block" multiple style="display: none;">
-                                <option v-for="i in caseSmallClassesAll" :value="i.id">{{i.typeName}}</option>
+                            <select class="multiple-select caseSmallClassesSelectHock block" multiple ref="caseSmallClassesAll" data-placeholder="">
+                                <option v-for="(i, index) in caseSmallClassesAll" :value="i.id" :key="index">{{i.typeName}}</option>
                             </select>
                         </div>
-
                         <div class="form-group inline" type="alarmCalls" itemName="alarmCall">
                             <label>报警电话：</label>
                             <div class="event-add-wrap">
-                                <input class="form-control" />
+                                <input class="form-control alarmCalls" />
                                 <a class="btn btn-primary" v-on:click="add_addOne">添加</a>
                             </div>
                             <div class="databaseSelected-wrap">
                                 <label class="selected-condition">已有条件：</label>
                                 <ul>
-                                    <li v-for="(i, index) in addItems.alarmCalls" :key="index">{{ i.alarmCall }}
-<i class="fa fa-times-circle" v-on:click="delete_selectAdd(addItems.alarmCalls,index)"></i>
-</li>
+                                    <li v-for="(i, index) in addItems.alarmCalls">{{ i.alarmCall }}
+                                        <i class="fa fa-times-circle" v-on:click="delete_selectAdd(addItems.alarmCalls, index,'alarmCalls')"></i>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
                         <div class="form-group inline" type="caseAddrs" itemName="caseAddrKeywords">
                             <label>案发地址：</label>
                             <div class="event-add-wrap">
-                                <input class="form-control" />
+                                <input class="form-control caseAddrs" />
                                 <a class="btn btn-primary" v-on:click="add_addOne">添加</a>
                             </div>
                             <div class="databaseSelected-wrap">
                                 <label class="selected-condition">已有条件：</label>
                                 <ul>
-                                    <li v-for="(i,index) in addItems.caseAddrs">{{ i.caseAddrKeywords }}
-<i class="fa fa-times-circle" v-on:click="delete_selectAdd(addItems.caseAddrs,index)"></i>
-</li>
+                                    <li v-for="(i, index) in addItems.caseAddrs">{{ i.caseAddrKeywords }}
+                                        <i class="fa fa-times-circle" v-on:click="delete_selectAdd(addItems.caseAddrs,index,'caseAddrs')"></i>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
                         <div class="form-group inline" type="caseContents" itemName="caseContentKeywords">
                             <label>警情内容：</label>
                             <div class="event-add-wrap">
-                                <input class="form-control" />
+                                <input class="form-control caseContents" />
                                 <a class="btn btn-primary" v-on:click="add_addOne">添加</a>
                             </div>
                             <div class="databaseSelected-wrap">
                                 <label class="selected-condition">已有条件：</label>
                                 <ul>
                                     <li v-for="(i, index) in addItems.caseContents">{{ i.caseContentKeywords }}
-<i class="fa fa-times-circle" v-on:click="delete_selectAdd(addItems.caseContents, index)"></i>
-</li>
+                                        <i class="fa fa-times-circle" v-on:click="delete_selectAdd(addItems.caseContents, index,'caseContents')"></i>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="editWrap" v-if="type=='edit'" :edit-view-id="editViewId">
+            <div class="editWrap" v-show="type=='edit'" :edit-view-id="editViewId">
                 <div class="ibox-title">
-                    <h5 style="font-size: 16px" >编辑</h5>
+                    <h5 style="font-size: 16px">编辑</h5>
                     <button class="btn btn-primary btn-sm btn-save" v-if="editing" v-on:click="tempSave">保存</button>
                     <button class="btn btn-primary btn-sm btn-edit" v-if="!editing" v-on:click="tempEdit">编辑</button>
                 </div>
                 <div class="ibox-content databaseSelectedWrap">
                     <div role="form" class="clearfix">
-                        <!-- <div class="form-group inline" type="units" itemIdName="unitId"> -->
-                            <!-- <label>单位：</label> -->
-                             <!-- <select v-on:click="chosenSelectChange" class="chosen-select block" style="display: none;">  -->
-<!-- <option v-for="i in unitsAll" :value="i.unitId" :selected="editItems.units[0].unitId==i.unitId">{{i.unitName}}</option> -->
-                              <!-- <option :value="editItems.units[0].unitId">{{editItems._unitName}}</option> -->
-                            <!-- </select> -->
-                            <!-- <select v-on:click="multipleSelectChange" class="multiple-select block" multiple :disabled="!editing" style="display: none;">
-                              <option v-for="i in unitsAll" :value="i.id" :selected="editItems.units[0].unitId==i.id">{{i.unitName}}</option>
-                            </select> -->
-                            <!--<div class="databaseSelected-wrap">
-                                <label class="selected-condition">已有条件：</label>
-                                <ul>
-                                    <li v-if="editItems.units.length>0" v-for="i in editItems.units" :pid="i.unitId">{{ i.name }}<i class="fa fa-times-circle" v-on:click="delete_select"></i></li>
-                                </ul>
-                            </div>-->
-                        <!-- </div> -->
-                        <div class="form-group inline">
+                        <div class="form-group inline" type="units" itemIdName="unitId">
                             <label>单位：</label>
                             <div>{{editItems._unitName}}</div>
                         </div>
-                        <div class="form-group inline" type="viewName">
+                        <div class="form-group inline" type="viewName" >
                             <label>视图名称：</label>
-                            <select class="multiple-select block" v-on:click="multipleSelectChange" style="display: none;" multiple>
+                            <select class="multiple-select block" disabled="!editing"  ref="editViewName" style="display: none;" multiple>
                                 <option selected="selected" disabled="disabled" value="JJdb">接警</option>
-                                <option value="CJdb" :selected="editItems.viewName.indexOf('CJdb') > 0">处警</option>
-                                <option value="FKdb" :selected="editItems.viewName.indexOf('FKdb') > 0">反馈</option>
+                                <option value="CJdb" :selected="editItems.viewName.indexOf('CJdb') != -1">处警</option>
+                                <option value="FKdb" :selected="editItems.viewName.indexOf('FKdb') != -1">反馈</option>
                             </select>
-                            
+            
                         </div>
                         <div class="form-group inline" type="viewUserName">
                             <label>用户名：</label>
-                            <input class="form-control" :value="editItems.viewUserName" v-on:input="valueChange" :disabled="!editing">
+                            <input class="form-control" :value="editItems.viewUserName" v-on:input="valueChange" disabled="!editing">
                         </div>
                         <div class="form-group inline" type="viewPassword">
                             <label>密码：</label>
-                            <input class="form-control" :value="editItems.viewPassword" v-on:input="valueChange" :disabled="!editing">
+                            <input class="form-control" :value="editItems.viewPassword" v-on:input="valueChange" disabled="!editing">
                         </div>
                         <div class="form-group w100p" type="comments">
                             <label>基本信息：</label>
@@ -188,13 +167,13 @@
                         </div>
                         <div class="form-group inline" type="caseTypes" itemIdName="caseTypeId">
                             <label>案件类型：</label>
-                            <select v-on:click="multipleSelectChange" class="multiple-select block" multiple :disabled="!editing" style="display: none;">
+                            <select ref="editCaseTypesAll" class="multiple-select block" multiple  style="display: none;">
                                 <option v-for="i in caseTypesAll" :value="i.id" :selected="i.selected">{{i.typeName}}</option>
                             </select>
                             <div class="databaseSelected-wrap">
                                 <label class="selected-condition">已有条件：</label>
                                 <ul>
-                                    <li v-if="editItems.caseTypes.length>0" v-for="i in editItems.caseTypes" >{{ i.typeName }}
+                                    <li v-if="editItems.caseTypes.length>0" v-for="i in editItems.caseTypes">{{ i.typeName }}
                                         <i class="fa fa-times-circle" v-on:click="delete_select($event,i.caseTypeId,i.id)"></i>
                                     </li>
                                 </ul>
@@ -202,7 +181,7 @@
                         </div>
                         <div class="form-group inline" type="caseClasses" itemIdName="caseClassId">
                             <label>案件类别：</label>
-                            <select v-on:click="multipleSelectChange" class="multiple-select block" multiple :disabled="!editing" style="display: none;">
+                            <select ref="editCaseClassesAll" class="multiple-select block" multiple  style="display: none;">
                                 <option v-for="i in caseClassesAll" :value="i.id" :selected="i.selected">{{i.typeName}}</option>
                             </select>
                             <div class="databaseSelected-wrap">
@@ -216,7 +195,7 @@
                         </div>
                         <div class="form-group inline" type="caseSmallClasses" itemIdName="caseSmallClassId">
                             <label>案件细类：</label>
-                            <select v-on:click="multipleSelectChange" class="multiple-select block" multiple :disabled="!editing" style="display: none;">
+                            <select ref="editCaseSmallClassesAll" class="multiple-select block" multiple  style="display: none;">
                                 <option v-for="i in caseSmallClassesAll" :value="i.id" :selected="i.selected">{{i.typeName}}</option>
                             </select>
                             <div class="databaseSelected-wrap">
@@ -231,45 +210,54 @@
                         <div class="form-group inline" type="alarmCalls" itemName="alarmCall">
                             <label>报警电话：</label>
                             <div class="event-add-wrap">
-                                <input class="form-control" :disabled="!editing" />
-                                <a class="btn btn-primary" v-on:click="edit_addOne" :disabled="!editing">添加</a>
+                                <input class="form-control alarmCalls"  />
+                                <a class="btn btn-primary" v-on:click="edit_addOne" >添加</a>
                             </div>
                             <div class="databaseSelected-wrap">
                                 <label class="selected-condition">已有条件：</label>
                                 <ul>
-                                    <li v-for="i in editItems.alarmCalls">{{ i.alarmCall }}<i class="fa fa-times-circle" v-on:click="delete_select1($event,i,editItems.alarmCalls,'alarmCalls')" ></i></li>
+                                    <li v-for="i in editItems.alarmCalls">{{ i.alarmCall }}
+                                        <i class="fa fa-times-circle" v-on:click="delete_select1(i,editItems.alarmCalls,'alarmCalls')"></i>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
                         <div class="form-group inline" type="caseAddrs" itemName="caseAddrKeywords">
                             <label>案发地址：</label>
                             <div class="event-add-wrap">
-                                <input class="form-control" :disabled="!editing" />
-                                <a class="btn btn-primary" v-on:click="edit_addOne" :disabled="!editing">添加</a>
+                                <input class="form-control caseAddrs"  />
+                                <a class="btn btn-primary" v-on:click="edit_addOne" >添加</a>
                             </div>
                             <div class="databaseSelected-wrap">
                                 <label class="selected-condition">已有条件：</label>
                                 <ul>
-                                    <li v-for="i in editItems.caseAddrs">{{ i.caseAddrKeywords }}<i class="fa fa-times-circle" v-on:click="delete_select1($event,i,editItems.caseAddrs,'caseAddrs')" ></i></li>
+                                    <li v-for="i in editItems.caseAddrs">{{ i.caseAddrKeywords }}
+                                        <i class="fa fa-times-circle" v-on:click="delete_select1(i,editItems.caseAddrs,'caseAddrs')"></i>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
                         <div class="form-group inline" type="caseContents" itemName="caseContentKeywords">
                             <label>警情内容：</label>
                             <div class="event-add-wrap">
-                                <input class="form-control" :disabled="!editing" />
-                                <a class="btn btn-primary" v-on:click="edit_addOne" :disabled="!editing">添加</a>
+                                <input class="form-control caseContents"  />
+                                <a class="btn btn-primary" v-on:click="edit_addOne" >添加</a>
                             </div>
                             <div class="databaseSelected-wrap">
                                 <label class="selected-condition">已有条件：</label>
                                 <ul>
-                                    <li v-for="i in editItems.caseContents">{{ i.caseContentKeywords }}<i class="fa fa-times-circle" v-on:click="delete_select1($event,i,editItems.caseContents,'caseContents')" ></i></li>
+                                    <li v-for="i in editItems.caseContents">{{ i.caseContentKeywords }}
+                                        <i class="fa fa-times-circle" v-on:click="delete_select1(i,editItems.caseContents,'caseContents')"></i>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+    </div>
+</div>
+            
         </div>
     </div>
     <!-- 全局js -->
