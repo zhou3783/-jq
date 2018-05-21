@@ -58,6 +58,8 @@
                                             <option value="3">3级</option>
                                         </select>
                                     </div>
+                                    <h3>选择搜索条件：</h3>
+                                    <hr/>
 <!-- 三级联动选择 -->
                                     <div class="form-group inline" type="caseTypes" itemIdName="caseTypeId">
                                         <label>案件类型：</label><!--multiple js也要改一些-->
@@ -123,8 +125,7 @@
                                 
                                 </tfoot>
                             </table>
-                          
-                                <ul class="pagination" style="font-size: 20px;" v-show="numberList.length != 0">
+                               <ul class="pagination" style="font-size: 20px;" v-show="numberList.length != 0">
                                     <li>
                                         <a @click="fenYe('Previous')"aria-label="Previous">
                                             <span aria-hidden="true">&laquo;</span>

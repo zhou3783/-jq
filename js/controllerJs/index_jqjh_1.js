@@ -29,7 +29,8 @@ var vueTemp1 = new Vue({
             numberList: [],
             myChart: null,
             totalsJQNum : undefined,
-            zhanshi: false
+            zhanshi: false,
+            xianShiTiaoShu: 6
             
         }
        
@@ -142,14 +143,15 @@ var vueTemp1 = new Vue({
                 console.log('last')
                 console.log(_self.nowIndex)
                 console.log(_self.endIndex)
-                if (_self.nowIndex + 2 >  _self.endIndex) {
-                    _self.nowIndex = 0;
+                if (_self.nowIndex + 1 >=  _self.endIndex) {
+                    _self.nowIndex = _self.endIndex-1;
+                    return
                     // // _self.numberList = [];
                     // _self.initFenTiao();
                     
                 }else{
                     var _end = _self.numberList[_self.numberList.length - 1].num;
-                    if (_self.nowIndex + 1 > _self.xishuIndex) {
+                    if (_self.nowIndex + 1 >= _self.xishuIndex ) {
                         _self.numberList = [];
                         var _numberList = [];
                         for (var i = 0; i < _self.xishuIndex; i++){
@@ -159,6 +161,8 @@ var vueTemp1 = new Vue({
                         }
                         _self.numberList = _numberList;
                         
+                    }else if(_self.nowIndex + 1 >= _self.endIndex  ){
+                        return
                     }
                    _self.nowIndex = _self.nowIndex + 1;
                 }
@@ -172,7 +176,7 @@ var vueTemp1 = new Vue({
                 _self.showList = _self.allList.slice(_star)
                 return;
             }
-            _self.showList = _self.allList.slice(_star, 6 + _star)
+            _self.showList = _self.allList.slice(_star, _self.xianShiTiaoShu + _star)
             // console.log(_self.showList)
             console.log(_self.nowIndex)
         },

@@ -37,7 +37,10 @@
                     <h5 style="font-size: 16px">新增</h5>
                     <button class="btn btn-primary btn-sm btn-add" v-on:click="add_save">保存</button>
                 </div>
+               
                 <div class="ibox-content databaseSelectedWrap">
+                    <h3>基本信息创建：</h3>
+                    <hr/>
                     <div role="form" class="clearfix">
                         <div class="form-group inline" type="units" itemIdName="unitId">
                             <label>单位：</label>
@@ -66,6 +69,8 @@
                             <label>基本信息：</label>
                             <input class="form-control" placeholder="请输入基本信息" :value="addItems.comments" v-on:input="valueChange">
                         </div>
+                        <h3>选择屏蔽条件：</h3>
+                        <hr/>
                         <div class="form-group inline" type="caseTypes" itemIdName="caseTypeId">
                             <label>案件类型：</label>
                             <select class="multiple-select caseTypesSelectHock block" ref="caseTypesAll" multiple data-placeholder="">
