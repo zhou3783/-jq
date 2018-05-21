@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>用户管理</title>
@@ -179,7 +179,7 @@
                                 <label class="selected-condition">已有条件：</label>
                                 <ul>
                                     <li v-if="editItems.caseTypes.length>0" v-for="i in editItems.caseTypes">{{ i.typeName }}
-                                        <i class="fa fa-times-circle" v-on:click="delete_select($event,i.caseTypeId,i.id)"></i>
+                                        <i class="fa fa-times-circle" v-on:click="deleteType($event,i.caseTypeId,i.id,'caseType')"></i>
                                     </li>
                                 </ul>
                             </div>
@@ -193,7 +193,7 @@
                                 <label class="selected-condition">已有条件：</label>
                                 <ul>
                                     <li v-if="editItems.caseClasses.length>0" v-for="i in editItems.caseClasses" :pid="i.caseClassId">{{ i.typeName }}
-                                        <i class="fa fa-times-circle" v-on:click="delete_select($event,i.caseClassId,i.id)"></i>
+                                        <i class="fa fa-times-circle" v-on:click="deleteType($event,i.caseClassId,i.id,'caseClasse')"></i>
                                     </li>
                                 </ul>
                             </div>
@@ -207,7 +207,7 @@
                                 <label class="selected-condition">已有条件：</label>
                                 <ul>
                                     <li v-if="editItems.caseSmallClasses.length>0" v-for="i in editItems.caseSmallClasses" :pid="i.caseSmallClassId">{{ i.typeName }}
-                                        <i class="fa fa-times-circle" v-on:click="delete_select($event,i.caseSmallClassId, i.id)"></i>
+                                        <i class="fa fa-times-circle" v-on:click="deleteType($event,i.caseSmallClassId, i.id,'caseSmallClasse')"></i>
                                     </li>
                                 </ul>
                             </div>

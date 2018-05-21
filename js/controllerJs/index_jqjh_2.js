@@ -161,7 +161,7 @@ $(document).ready(function () {
             async: false,
             contentType: 'application/json;charset=UTF-8',
             success: function success(data) {
-                    console.log(data)
+                    // console.log(data)
                     jsonArr_edit = data;
                     var caseSmallClassesString = '';
                     var caseClassesString = '';
@@ -243,7 +243,7 @@ $(document).ready(function () {
                             async: false,
                             contentType: 'application/json;charset=UTF-8',
                             success: function (data) {
-                                console.log(data)
+                                // console.log(data)
                                 jsonArr_edit.caseTypes = data;
                             }
                         })
@@ -259,6 +259,7 @@ $(document).ready(function () {
                 })
                 vueTemp1.editItems['_unitName'] = _unitName;
                 // console.log(vueTemp1.editItems.units[0].unitId)
+                //改变勾选的视图
                 jsonArr_edit.caseTypes.forEach(function (item) {
                     self.caseTypesAll.forEach(function (item1) {
                         if (item.id == item1.id) {
@@ -475,11 +476,7 @@ $(document).ready(function () {
                             if (_self.caseTypesChecked.length == 0) {
                                 _self.caseTypesChecked.push(view);
                             } else {
-                                _self.caseTypesChecked.forEach(function (item) {
-                                    if (item.value != view.value) {
-                                        _self.caseTypesChecked.push(view);
-                                    }
-                                })
+                                 _self.caseTypesChecked.push(view);
                             }
                         } else {//取消
                             _self.caseTypesChecked.forEach(function (item, index) {
@@ -507,12 +504,17 @@ $(document).ready(function () {
                         _self.editItems.caseTypes = [];
                         _self.caseTypesAll.forEach(function (item) {
                             _self.caseTypesChecked.push({
-                                "value": item.id
+                                "value": item.id,
+                                "label": item.typeName,
+                                "checked": true
                             })
                              //更改视图
-                           item1['selected'] = true
+                            item['selected'] = true
                             //shuju
-                            _self.editItems.caseTypes.push(item)
+                            _self.editItems.caseTypes.push({
+                                'caseTypeId': item.id,
+                                'typeName': item.typeName
+                            })
                         })
                        
                         _self.changeCaseClassesAll()
@@ -527,18 +529,15 @@ $(document).ready(function () {
                         //shuju
                         _self.editItems.caseTypes = [];
                         _self.changeCaseClassesAll()
-                        console.log(_self.caseTypesChecked)
+                        // console.log(_self.caseTypesChecked)
                     },
                     onClick: function (view) {
                         if (view.checked) { //勾选
                             if (_self.caseTypesChecked.length == 0) {
                                 _self.caseTypesChecked.push(view);
                             } else {
-                                _self.caseTypesChecked.forEach(function (item) {
-                                    if (item.value != view.value) {
-                                        _self.caseTypesChecked.push(view);
-                                    }
-                                })
+                                //勾选逻辑
+                                _self.caseTypesChecked.push(view);
                             }
                         } else { //取消
                             _self.caseTypesAll.forEach(function (item1) {
@@ -579,7 +578,7 @@ $(document).ready(function () {
                         //qingkongxianshishuju
                         _self.editItems.caseClasses = []
                         _self.editItems.caseSmallClasses = []
-                        console.log(_self.caseTypesAll)
+                        // console.log(_self.caseTypesAll)
                     }
                 });
             },
@@ -608,11 +607,8 @@ $(document).ready(function () {
                             if (_self.caseClassesChecked.length == 0) {
                                 _self.caseClassesChecked.push(view);
                             } else {
-                                _self.caseClassesChecked.forEach(function (item) {
-                                    if (item.value != view.value) {
-                                        _self.caseClassesChecked.push(view);
-                                    }
-                                })
+                                _self.caseClassesChecked.push(view);
+
                             }
                         } else {
                             _self.caseClassesChecked.forEach(function (item, index) {
@@ -640,14 +636,22 @@ $(document).ready(function () {
                         _self.editItems.caseClasses = [];
                         _self.caseClassesAll.forEach(function (item) {
                             _self.caseClassesChecked.push({
-                                "value": item.id
+                                "value": item.id,
+                                "label": item.typeName,
+                                "checked": true
                             })
                             //更改视图
                             item['selected'] = true
                             //shuju
                             _self.editItems.caseClasses.push(item)
                         })
-                        
+                        //更改视图
+                        item['selected'] = true
+                        //shuju
+                        _self.editItems.caseClasses.push({
+                            'caseClassId': item.id,
+                            'typeName': item.typeName
+                        })
                        
                         //
                         _self.changeCaseSmallClassesAll()
@@ -669,11 +673,7 @@ $(document).ready(function () {
                             if (_self.caseClassesChecked.length == 0) {
                                 _self.caseClassesChecked.push(view);
                             } else {
-                                _self.caseClassesChecked.forEach(function (item) {
-                                    if (item.value != view.value) {
-                                        _self.caseClassesChecked.push(view);
-                                    }
-                                })
+                                _self.caseClassesChecked.push(view);
                             }
                         } else {
                             _self.caseClassesAll.forEach(function (item1) {
@@ -738,11 +738,7 @@ $(document).ready(function () {
                             if (_self.caseSmallClassesChecked.length == 0) {
                                 _self.caseSmallClassesChecked.push(view);
                             } else {
-                                _self.caseSmallClassesChecked.forEach(function (item) {
-                                    if (item.value != view.value) {
-                                        _self.caseSmallClassesChecked.push(view);
-                                    }
-                                })
+                                _self.caseSmallClassesChecked.push(view);
                             }
                         } else {
                             _self.caseSmallClassesChecked.forEach(function (item, index) {
@@ -765,14 +761,16 @@ $(document).ready(function () {
                         _self.editItems.caseSmallClasses = [];
                         _self.caseSmallClassesAll.forEach(function (item) {
                             _self.caseSmallClassesChecked.push({
-                                "value": item.id
+                                "value": item.id,
+                                "label": item.typeName,
+                                "checked": true
                             })
                             //更改视图
                             item['selected'] = true
                             //shuju
                             _self.editItems.caseSmallClasses.push(item)                            
                         })
-                        console.log(_self.caseSmallClassesChecked)
+                        // console.log(_self.caseSmallClassesChecked)
                     },
                     onUncheckAll: function () {
                         _self.caseSmallClassesChecked = []
@@ -782,26 +780,28 @@ $(document).ready(function () {
                         })
                         //shuju
                         _self.editItems.caseSmallClasses = [];
-                        console.log(_self.caseSmallClassesChecked)
+                        // console.log(_self.caseSmallClassesChecked)
                     },
                     onClick: function (view) {
                         if (view.checked) {
                             if (_self.caseSmallClassesChecked.length == 0) {
                                 _self.caseSmallClassesChecked.push(view);
                             } else {
-                                _self.caseSmallClassesChecked.forEach(function (item) {
-                                    if (item.value != view.value) {
-                                        _self.caseSmallClassesChecked.push(view);
-                                    }
-                                })
+                                _self.caseSmallClassesChecked.push(view);
                             }
                         } else {
-                            _self.caseSmallClassesChecked.forEach(function (item, index) {
-                                if (item.value == view.value) {
-                                    _self.caseSmallClassesChecked.splice(index, 1);
-                                }
-                            })
+                           _self.caseSmallClassesAll.forEach(function (item1) {
+                               if(item1.id == view.value){
+                                   item1['selected'] = view.checked;
+                               }
+                           })
+                           _self.caseSmallClassesChecked.forEach(function (item, index) {
+                               if (item.value == view.value) {
+                                   _self.caseSmallClassesChecked.splice(index, 1);
+                               }
+                           })
                         }
+
                         //视图改变
                         _self.caseSmallClassesAll.forEach(function (item1) {
                             _self.caseSmallClassesChecked.forEach(function (item2) {
@@ -957,49 +957,26 @@ $(document).ready(function () {
                 })
 
             },
-            delete_select: function delete_select(e, TypeId, id) {
-                console.log(id)
-                console.log(TypeId)
-                var $self = $(e.target);
-                var $parent = $self.parents('.form-group');
-                var type = $parent.attr('type');
-                var idName = $parent.attr('itemIdName');
-                var self = this;
-                var items = self[self.type + 'Items'];
-                // if (self.type == "edit" && !self.editing) return;
-                var _typeId = self.zuhetype(type);
-                var _typeAll = type + 'All';
-                // console.log(self.editItems[type])
-                console.log(items[type])
-
-                for (var i = 0; i < self.editItems[type].length; i++) {
-                    if (self.editItems[type][i].id == id || self.editItems[type][i].id == TypeId || self.editItems[type][i][_typeId] == id || self.editItems[type][i][_typeId] == TypeId) { //默认选中
-                        self[_typeAll].forEach(function (item1) {
-                            if (TypeId == item1.id || id == item1.id) {
-                                console.log(id)
-                                console.log(TypeId)
-                                console.log(item1)
-                                item1.selected = false;
-                                self.editItems[type].splice(i, 1)
-
-                            }
-                        });
-                    }
-                }
-                var _id = undefined
-                if(id != undefined){
-                    _id = id
-                }else if( TypeId != undefined){
-                    _id = TypeId
-                }
-                self[type + 'All'].forEach(function(item){
+            deleteType: function (e,TypeId,id,Type){
+                var _self = this;
+                var _id = TypeId ? TypeId: id;
+                var _class = Type.substring(0, Type.length -1)
+                //改变勾选状态
+                this[Type+'sAll'].forEach(function(item){
                     if(item.id == _id){
                         item['selected'] = false
                     }
                 })
-                self[type+ 'Checked'].forEach(function (item, index) {
+                //改变已有条件展示
+                this.editItems[Type+'s'].forEach(function(item, index){
+                    if(item['id']== _id || item[Type+'Id'] === _id || item[_class+'Id'] === _id){
+                        _self.editItems[Type+'s'].splice(index,1)
+                    }
+                })
+                //更改选取的列表
+                _self[Type+'sChecked'].forEach(function (item, index) {
                     if (item.value == _id) {
-                        self[type + 'Checked'].splice(index, 1);
+                        _self[Type+'sChecked'].splice(index, 1);
                     }
                 })
             },
