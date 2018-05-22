@@ -18,6 +18,20 @@
     <link href="css/style.css?v=4.0.0" rel="stylesheet">
     <link href="css/index_jqjh.css" rel="stylesheet">
     <link rel="stylesheet" href="css/zTreeStyle/metro.css"/>
+    <style>
+        h3 {
+            line-height: 48px;
+            padding-left:16px;
+            background-color: #F0F0F0;
+            margin:0 -11px;
+        }
+        .clearBoth {
+            clear: both;
+        }
+        .margin {
+            margin-right: 78px;
+        }
+    </style>
 </head>
 <body class="gray-bg">
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -40,7 +54,6 @@
                
                 <div class="ibox-content databaseSelectedWrap">
                     <h3>基本信息创建：</h3>
-                    <hr/>
                     <div role="form" class="clearfix">
                         <div class="form-group inline" type="units" itemIdName="unitId">
                             <label>单位：</label>
@@ -69,27 +82,28 @@
                             <label>基本信息：</label>
                             <input class="form-control" placeholder="请输入基本信息" :value="addItems.comments" v-on:input="valueChange">
                         </div>
-                        <h3>选择屏蔽条件：</h3>
-                        <hr/>
-                        <div class="form-group inline" type="caseTypes" itemIdName="caseTypeId">
+
+                        <h3 class="clearBoth">创建视图条件：</h3>
+
+                        <div class="form-group inline margin" type="caseTypes" itemIdName="caseTypeId">
                             <label>案件类型：</label>
                             <select class="multiple-select caseTypesSelectHock block" ref="caseTypesAll" multiple data-placeholder="">
                                 <option v-for="(i, index) in caseTypesAll" :value="i.id" :key="index">{{i.typeName}}</option>
                             </select>
                         </div>
-                        <div class="form-group inline" type="caseClasses" itemIdName="caseClassId">
+                        <div class="form-group inline margin" type="caseClasses" itemIdName="caseClassId">
                             <label>案件类别：</label>
                             <select class="multiple-select caseClassesSelectHock block" ref="caseClassesAll" multiple data-placeholder="">
                                 <option v-for="(i, index) in caseClassesAll" :value="i.id" :key="index">{{i.typeName}}</option>
                             </select>
                         </div>
-                        <div class="form-group inline" type="caseSmallClasses" itemIdName="caseSmallClassId">
+                        <div class="form-group inline margin" type="caseSmallClasses" itemIdName="caseSmallClassId">
                             <label>案件细类：</label>
                             <select class="multiple-select caseSmallClassesSelectHock block" multiple ref="caseSmallClassesAll" data-placeholder="">
                                 <option v-for="(i, index) in caseSmallClassesAll" :value="i.id" :key="index">{{i.typeName}}</option>
                             </select>
                         </div>
-                        <div class="form-group inline" type="alarmCalls" itemName="alarmCall">
+                        <div class="form-group inline clearBoth margin" type="alarmCalls" itemName="alarmCall">
                             <label>报警电话：</label>
                             <div class="event-add-wrap">
                                 <input class="form-control alarmCalls" />
@@ -104,7 +118,7 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="form-group inline" type="caseAddrs" itemName="caseAddrKeywords">
+                        <div class="form-group inline margin" type="caseAddrs" itemName="caseAddrKeywords">
                             <label>案发地址：</label>
                             <div class="event-add-wrap">
                                 <input class="form-control caseAddrs" />
@@ -119,7 +133,7 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="form-group inline" type="caseContents" itemName="caseContentKeywords">
+                        <div class="form-group inline margin" type="caseContents" itemName="caseContentKeywords">
                             <label>警情内容：</label>
                             <div class="event-add-wrap">
                                 <input class="form-control caseContents" />
@@ -144,6 +158,7 @@
                     <button class="btn btn-primary btn-sm btn-edit" v-if="!editing" v-on:click="tempEdit">编辑</button>
                 </div>
                 <div class="ibox-content databaseSelectedWrap">
+                    <h3>基本信息创建：</h3>
                     <div role="form" class="clearfix">
                         <div class="form-group inline" type="units" itemIdName="unitId">
                             <label>单位：</label>
@@ -170,7 +185,8 @@
                             <label>基本信息：</label>
                             <input class="form-control" :value="editItems.comments" v-on:input="valueChange" :disabled="!editing">
                         </div>
-                        <div class="form-group inline" type="caseTypes" itemIdName="caseTypeId">
+                        <h3 class="clearBoth">创建视图条件：</h3>
+                        <div class="form-group inline margin" type="caseTypes" itemIdName="caseTypeId">
                             <label>案件类型：</label>
                             <select ref="editCaseTypesAll" class="multiple-select block" multiple  style="display: none;">
                                 <option v-for="i in caseTypesAll" :value="i.id" :selected="i.selected">{{i.typeName}}</option>
@@ -184,7 +200,7 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="form-group inline" type="caseClasses" itemIdName="caseClassId">
+                        <div class="form-group inline margin" type="caseClasses" itemIdName="caseClassId">
                             <label>案件类别：</label>
                             <select ref="editCaseClassesAll" class="multiple-select block" multiple  style="display: none;">
                                 <option v-for="i in caseClassesAll" :value="i.id" :selected="i.selected">{{i.typeName}}</option>
@@ -198,7 +214,7 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="form-group inline" type="caseSmallClasses" itemIdName="caseSmallClassId">
+                        <div class="form-group inline margin" type="caseSmallClasses" itemIdName="caseSmallClassId">
                             <label>案件细类：</label>
                             <select ref="editCaseSmallClassesAll" class="multiple-select block" multiple  style="display: none;">
                                 <option v-for="i in caseSmallClassesAll" :value="i.id" :selected="i.selected">{{i.typeName}}</option>
@@ -212,7 +228,7 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="form-group inline" type="alarmCalls" itemName="alarmCall">
+                        <div class="form-group inline clearBoth margin" type="alarmCalls" itemName="alarmCall">
                             <label>报警电话：</label>
                             <div class="event-add-wrap">
                                 <input class="form-control alarmCalls"  />
@@ -227,7 +243,7 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="form-group inline" type="caseAddrs" itemName="caseAddrKeywords">
+                        <div class="form-group inline margin" type="caseAddrs" itemName="caseAddrKeywords">
                             <label>案发地址：</label>
                             <div class="event-add-wrap">
                                 <input class="form-control caseAddrs"  />
@@ -242,7 +258,7 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="form-group inline" type="caseContents" itemName="caseContentKeywords">
+                        <div class="form-group inline margin" type="caseContents" itemName="caseContentKeywords">
                             <label>警情内容：</label>
                             <div class="event-add-wrap">
                                 <input class="form-control caseContents"  />

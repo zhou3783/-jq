@@ -8,6 +8,87 @@ var json_search = {
     "bjlxdm": '',
     "bjlbdm": ''
 }
+
+    var start = {
+        format: 'YYYY-MM-DD hh:mm:ss',
+        minDate: '2014-06-16 23:59:59', //设定最小日期为当前日期
+        // isinitVal: true,
+        maxDate: $.nowDate({
+            DD: 0
+        }), //最大日期
+        // trigger: "mousedown",  //可绑定一个或多个事件
+        okfun: function (obj) {
+            end.minDate = obj.val; //开始日选好后，重置结束日的最小日期
+            // console.log(obj.elem); //得到当前输入框的ID
+            // console.log(obj.val); //得到日期生成的值，如：2017-06-16
+            json_search.startTime = obj.val;
+            endDates();
+        },
+        clearfun: function (elem, val) {
+            json_search.startTime = val;
+        },
+
+    };
+    var end = {
+        format: 'YYYY-MM-DD- hh:mm:ss',
+        minDate: $.nowDate({
+            DD: 0
+        }), //设定最小日期为当前日期
+        maxDate: '2099-06-16 23:59:59', //最大日期
+        // trigger: "mousedown", //可绑定一个或多个事件
+        okfun: function (obj) {
+            start.maxDate = obj.val; //将结束日的初始值设定为开始日的最大日期
+            // console.log(obj.elem); //得到当前输入框的ID
+            // console.log(obj.val); //得到日期生成的值，如：2017-06-16
+            json_search.endTime = obj.val;
+
+        },
+        clearfun: function (elem, val) {
+            json_search.startTime = val;
+        }
+    };
+
+    var inpStartHour = {
+
+        format:"hh:mm:ss",
+        // minDate:"2014-06-16 00:00:00",              //最小日期 或者 "1900-01-01" 或者 "10:30:25"
+        // maxDate:"2099-06-16 23:59:59",
+        // range:" ~ ",
+
+        okfun: function(obj){
+            // console.log(obj.elem);
+            console.log(obj.val) // eg:13:39:43 ~ 16:43:46
+        }
+    }
+    var inpEndHour = {
+
+        format:"hh:mm:ss",
+        // minDate:"2014-06-16 00:00:00",              //最小日期 或者 "1900-01-01" 或者 "10:30:25"
+        // maxDate:"2099-06-16 23:59:59",
+        // range:" ~ ",
+
+        okfun: function(obj){
+            // console.log(obj.elem);
+            console.log(obj.val) // eg:13:39:43 ~ 16:43:46
+        }
+    }
+
+    //这里是日期联动的关键
+    function endDates() {
+        //将结束日期的事件改成 false 即可
+        end.trigger = false;
+        $("#inpend").jeDate(end);
+    }
+
+   $( function (){
+       $('#inpstart').jeDate(start);
+       $('#inpend').jeDate(end);
+       $('#inpStartHour').jeDate(inpStartHour);
+       $('#inpEndHour').jeDate(inpEndHour)
+   });
+
+
+
 var allNum = undefined;
 var vueTemp1 = new Vue({
     el: '#vue-temp-1',
@@ -30,8 +111,14 @@ var vueTemp1 = new Vue({
             myChart: null,
             totalsJQNum : undefined,
             zhanshi: false,
-            xianShiTiaoShu: 6
-            
+            xianShiTiaoShu: 6,
+            hjlsh: '',
+            bjDH: '',
+            bjrxm: '',
+            bjnr: '',
+            detailsTarget:false,
+            detailsContent:{},
+
         }
        
     },
@@ -48,53 +135,7 @@ var vueTemp1 = new Vue({
         //初始化单位视图
         this.initchosenSelect();
         this.drawLine()
-        var start = {
-            format: 'YYYY-MM-DD hh:mm:ss',
-            minDate: '2014-06-16 23:59:59', //设定最小日期为当前日期
-            // isinitVal: true,
-            maxDate: $.nowDate({
-                DD: 0
-            }), //最大日期
-            // trigger: "mousedown",  //可绑定一个或多个事件
-            okfun: function (obj) {
-                end.minDate = obj.val; //开始日选好后，重置结束日的最小日期
-                // console.log(obj.elem); //得到当前输入框的ID
-                console.log(obj.val); //得到日期生成的值，如：2017-06-16
-                json_search.startTime = obj.val;
-                endDates();
-            },
-            clearfun: function (elem, val) {
-                json_search.startTime = val;
-            },
-           
-        };
-        var end = {
-            format: 'YYYY-MM-DD- hh:mm:ss',
-            minDate: $.nowDate({
-                DD: 0
-            }), //设定最小日期为当前日期
-            maxDate: '2099-06-16 23:59:59', //最大日期
-            // trigger: "mousedown", //可绑定一个或多个事件
-            okfun: function (obj) {
-                start.maxDate = obj.val; //将结束日的初始值设定为开始日的最大日期
-                // console.log(obj.elem); //得到当前输入框的ID
-                // console.log(obj.val); //得到日期生成的值，如：2017-06-16
-               json_search.endTime = obj.val;
-               
-            },
-            clearfun: function (elem, val) {
-                json_search.startTime = val;
-            }
-        };
-        //这里是日期联动的关键
-        function endDates() {
-        //将结束日期的事件改成 false 即可
-            end.trigger = false;
-            $("#inpend").jeDate(end);
-        }
 
-        $('#inpstart').jeDate(start);
-        $('#inpend').jeDate(end);
 
         this.initFenTiao();
     },
@@ -102,6 +143,16 @@ var vueTemp1 = new Vue({
        
     },
     methods: {
+        popDetails:function(index){
+            this.detailsTarget = true
+            this.detailsContent = this.showList[index]
+            console.log(this.showList[index])
+
+        },
+        hideDetails:function(){
+            this.detailsTarget = false
+            console.log('hide')
+        },
         initFenTiao: function(){
             var _self = this;
             if (_self.endIndex > _self.xishuIndex) {
@@ -140,9 +191,6 @@ var vueTemp1 = new Vue({
               }
             }
             if (index === 'Next'){
-                console.log('last')
-                console.log(_self.nowIndex)
-                console.log(_self.endIndex)
                 if (_self.nowIndex + 1 >=  _self.endIndex) {
                     _self.nowIndex = _self.endIndex-1;
                     return
@@ -177,8 +225,8 @@ var vueTemp1 = new Vue({
                 return;
             }
             _self.showList = _self.allList.slice(_star, _self.xianShiTiaoShu + _star)
-            // console.log(_self.showList)
-            console.log(_self.nowIndex)
+            console.log(_self.showList)
+
         },
         shuzuquchong: function(arr){
             var _res = [];
@@ -464,6 +512,16 @@ var vueTemp1 = new Vue({
             //通过二级初始化三级的数据
             _self.caseSmallClassesAll = _session;
         },
+        caseTypeName: function(){
+            var _self = this
+            _self.showList.forEach(function(item1) {
+                _self.caseTypesAll.forEach(function(item2){
+                    if(item1.bjlbdm == item2.id){
+                        item1['caseTypeName'] = item2.typeName;
+                    }
+                })
+            })
+        },
         search: function () {
             var _self = this;
             var _yongzongshujuceshi = [];
@@ -513,8 +571,8 @@ var vueTemp1 = new Vue({
                 })
                 //初始化列表
                 _self.showList = _self.allList.slice(0,6)
-
-                console.log(_self.showList)
+                _self.caseTypeName()
+                // console.log(_self.showList)
                 //初始化分页条
                 _number = parseInt(_self.allList.length/_self.xishuIndex)
                 if (_self.allList.length % _self.xishuIndex > 0){
@@ -567,7 +625,7 @@ var vueTemp1 = new Vue({
                 },
                 tooltip: {},
                 xAxis: {
-                    data: ['总警情', '屏蔽后警情']
+                    data: ['总警情', '视图数据']
                 },
                 yAxis: {
                      type: 'value'
