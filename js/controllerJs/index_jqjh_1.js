@@ -10,8 +10,8 @@ var json_search = {
 }
 
     var start = {
-        format: 'YYYY-MM-DD hh:mm:ss',
-        minDate: '2014-06-16 23:59:59', //设定最小日期为当前日期
+        format: 'YYYY-MM-DD',
+        minDate: '2014-06-16 ', //设定最小日期为当前日期
         // isinitVal: true,
         maxDate: $.nowDate({
             DD: 0
@@ -30,11 +30,14 @@ var json_search = {
 
     };
     var end = {
-        format: 'YYYY-MM-DD- hh:mm:ss',
+        isinitVal: true,
+        // format: 'YYYY-MM-DD- hh:mm:ss',
+        format: 'YYYY-MM-DD',
         minDate: $.nowDate({
             DD: 0
         }), //设定最小日期为当前日期
         maxDate: '2099-06-16 23:59:59', //最大日期
+        // maxDate: '2099-06-16 00:00:00', //最大日期
         // trigger: "mousedown", //可绑定一个或多个事件
         okfun: function (obj) {
             start.maxDate = obj.val; //将结束日的初始值设定为开始日的最大日期
@@ -116,6 +119,7 @@ var vueTemp1 = new Vue({
             bjDH: '',
             bjrxm: '',
             bjnr: '',
+            bjdz: '',
             detailsTarget:false,
             detailsContent:{},
 

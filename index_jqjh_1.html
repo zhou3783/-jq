@@ -26,6 +26,7 @@
                         <div class="ibox-title" style="margin-bottom: 20px;">
                             <div class="search-div">
                                 <div role="form" class="clearfix">
+                                    <h3>选择搜索条件：</h3>
                                     <div class="form-group inline">
                                         <label for="view">分局名称：</label>
                                         <select data-placeholder="视图名" class="chosen-select chosen-select-view block" id="view" style="display:none;">
@@ -36,11 +37,11 @@
                                     <div class="form-group inline">
                                         <label for="inpstart">时段：</label>
                                         <div class="jeDate-wrap">
-                                            <input type="text" class="form-control workinput wicon" id="inpstart" readonly>
+                                            <input type="text" class="form-control workinput wicon" id="inpstart" placeholder="选择起始日期" readonly>
                                             <span>至</span>
-                                            <input type="text" class="form-control workinput wicon" id="inpend" readonly>
-                                            <input type="text" class="form-control workinput wicon" id="inpStartHour" placeholder="00:00" readonly>
-                                            <input type="text" class="form-control workinput wicon" id="inpEndHour" placeholder="24:00" readonly>
+                                            <input type="text" class="form-control workinput wicon" id="inpend" placeholder="选择终止日期" readonly>
+                                            <input type="text" class="form-control workinput wicon" id="inpStartHour" placeholder="选择起始小时" readonly>
+                                            <input type="text" class="form-control workinput wicon" id="inpEndHour" placeholder="选择终止小时" readonly>
                                         </div>
                                     </div>
                                     <div class="form-group inline">
@@ -52,7 +53,6 @@
                                             <option value="3">3级</option>
                                         </select>
                                     </div>
-                                    <h3>选择搜索条件：</h3>
                                     <div class="form-group inline">
                                         <label>流水号：</label>
                                         <input v-model="hjlsh" placeholder="流水号" class="form-control "  />
@@ -68,6 +68,10 @@
                                     <div class="form-group inline">
                                         <label>摘要：</label>
                                         <input v-model="bjnr" placeholder="摘要" class="form-control "  />
+                                    </div>
+                                    <div class="form-group inline">
+                                        <label>地址：</label>
+                                        <input v-model="bjdz" placeholder="地址" class="form-control "  />
                                     </div>
                                     <!--<div class="form-group inline">-->
                                         <!--<label>&nbsp;</label>-->
