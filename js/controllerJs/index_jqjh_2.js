@@ -39,6 +39,32 @@ $(document).ready(function () {
         "zjkId": "4"
     };
 
+     function shuzuquchong (arr){
+        var _res = [];
+        var _json = {};
+        for(var i = 0; i < arr.length; i++){
+            if(!_json[arr[i]]){
+                _res.push(arr[i]);
+                _json[arr[i]] = 1
+            }
+        }
+        return _res;
+    }
+    function resolveTransform(arr){
+         arr.forEach(function (t) {
+             t['selected'] = false
+         })
+    }
+    function trueChecked (arr1, arr2){
+        arr1.forEach(function(item1){
+            arr2.forEach(function (item2) {
+                if (item1.id == item2.value){
+                    item1['selected'] = true
+                }
+            })
+        })
+    }
+
     $.ajax({
         url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/zjks/all",
         type: "get",
@@ -67,7 +93,6 @@ $(document).ready(function () {
             });
         }
     });
-
     var oc = $('#orgChart-wrap-1').orgchart({
         'data': zjksAll,
         'nodeContent': 'title'
@@ -154,6 +179,21 @@ $(document).ready(function () {
         vueTemp1.editing = false;
         var id = $(this).parents('.node').attr('id');
         vueTemp1.editViewId = id;
+        var eventLever2 = self.eventLever2
+        var eventLever3 = self.eventLever3
+        //初始化为空
+        self.caseSmallClassesChecked = []
+        self.caseClassesChecked = []
+        self.caseTypesChecked = []
+        self.editItems['caseSmallClasses'] = []
+        self.editItems['caseClasses'] = []
+        self.editItems['caseTypes'] = []
+        self.caseClassesAll = []
+        self.caseSmallClassesAll = []
+        //解决切换不同单位编辑转换的勾选问题
+        resolveTransform(self.caseTypesAll)
+        // resolveTransform(self.caseClassesAll)
+        // resolveTransform(self.caseSmallClassesAll)
         $.ajax({
             url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/views/byUnitId/" + id,
             type: "get",
@@ -162,93 +202,171 @@ $(document).ready(function () {
             contentType: 'application/json;charset=UTF-8',
             success: function success(data) {
                     // console.log(data)
-                    jsonArr_edit = data;
-                    var caseSmallClassesString = '';
-                    var caseClassesString = '';
-                    var caseTypesString = '';
-                    jsonArr_edit.caseSmallClasses.forEach(function (item, index) {
-                        if (index === 0) {
-                            caseSmallClassesString = item.caseSmallClassId;
-                        } else {
-                            caseSmallClassesString = caseSmallClassesString + "," + item.caseSmallClassId;
-                        }
-                    })
-                    jsonArr_edit.caseClasses.forEach(function (item, index) {
-                        if (index === 0) {
-                            caseClassesString = item.caseClassId;
-                        } else {
-                            caseClassesString = caseClassesString + "," + item.caseClassId;
-                        }
-                    })
-                    jsonArr_edit.caseTypes.forEach(function (item, index) {
-                        if (index === 0) {
-                            caseTypesString = item.caseTypeId;
-                        } else {
-                            caseTypesString = caseTypesString + "," + item.caseTypeId;
-                        }
-                    })
+                    // jsonArr_edit = data;
+                    //通过循环对比来初始化下拉菜单
+                if(data.caseSmallClasses.length != 0){
+                    //需要做两步操作，第一步：去重之后前四位为二级菜单，前两位为一级菜单；
+                    //第二步：对比显示本菜单
+                    //第一步 shuzuquchong
+                    var yijicaidan = []
+                    var erjicaidan = []
+                    var erhucaidanxianshishuju = []
 
-                    if (caseSmallClassesString) {
-                        $.ajax({
-                            url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/eventTypes/findByIds/" + caseSmallClassesString,
-                            type: "get",
-                            async: false,
-                            contentType: 'application/json;charset=UTF-8',
-                            success: function (data) {
-                                var parentId = data[0].parentId;
-                                jsonArr_edit.caseSmallClasses = data;
-                                $.ajax({
-                                    url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/eventTypes/findByParentId/" + parentId,
-                                    type: "get",
-                                    dataType: "json",
-                                    async: false,
-                                    contentType: 'application/json;charset=UTF-8',
-                                    success: function success(data) {
-                                        self.caseSmallClassesAll = data;
-                                        return
-                                        //   console.log(data)
-                                    }
+                    data.caseSmallClasses.forEach(function(item1){
+                        erjicaidan.push(item1.caseSmallClassId.substring(0, 4))
+                    })
+                    erjicaidan = shuzuquchong(erjicaidan)
+                    erjicaidan.forEach(function (item1) {
+                        yijicaidan.push(item1.substring(0,2))
+                    })
+                    yijicaidan = shuzuquchong(yijicaidan)
+                    //初始化一级菜单勾选项
+                    self.caseTypesAll.forEach(function(item1){
+                        yijicaidan.forEach(function (item2) {
+                            if(item1.id == item2){
+                                item1['selected'] = true
+                                self.editItems.caseTypes.push(item1)
+                                self.caseTypesChecked.push({
+                                    "value": item1.id,
+                                    "label": item1.typeName,
+                                    "checked": true
                                 })
+                                return
                             }
                         })
-                    } else if (caseClassesString) {
-                        $.ajax({
-                            url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/eventTypes/findByIds/" + caseClassesString,
-                            type: "get",
-                            async: false,
-                            contentType: 'application/json;charset=UTF-8',
-                            success: function (data) {
-                                console.log(data)
+                    })
+                    //初始化二级菜单显示项
+                    var _classes = []
+                    yijicaidan.forEach(function (item1) {
+                        eventLever2.forEach(function (item2) {
+                            if(item1 == item2.parentId){
+                                _classes.push(item2)
+                            }
+                        })
+                    })
+                    self.caseClassesAll = _classes
+                    //初始化二级菜单勾选项
+                    self.caseClassesAll.forEach(function (item1) {
+                        item1['selected'] = false
+                        erjicaidan.forEach(function (item2) {
+                            if(item1.id == item2+'00'){
+                                // item1['selected'] = true
+                                self.editItems.caseClasses.push(item1)
+                                self.caseClassesChecked.push({
+                                    "value": item1.id,
+                                    "label": item1.typeName,
+                                    "checked": true
+                                })
+                                return
+                            }
+                        })
+                    })
+                    trueChecked(self.caseClassesAll,self.caseClassesChecked)
+                    //初始化三级菜单显示项
+                    var _SmallClasses = []
+                    erjicaidan.forEach(function (item1) {
+                        eventLever3.forEach(function (item2) {
+                            if (item2.parentId == item1+'00'){
+                                _SmallClasses.push(item2)
+                            }
+                        })
+                    })
+                    self.caseSmallClassesAll = _SmallClasses
+                    //初始化三级菜单勾选项
+                    self.caseSmallClassesAll.forEach(function (item1) {
+                        item1['selected'] = false
+                        data.caseSmallClasses.forEach(function (item2) {
+                            if(item1.id == item2.caseSmallClassId){
 
-                                $.ajax({
-                                    url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/eventTypes/findByLever/1",
-                                    type: "get",
-                                    dataType: "json",
-                                    async: false,
-                                    contentType: 'application/json;charset=UTF-8',
-                                    success: function success(data) {
-                                        caseTypesAll = data;
-                                        return
-                                    }
-                                }); //init caseTypesAll
-                                jsonArr_edit.caseClasses = data;
-                                self.caseClassesAll = data;
+                                self.editItems.caseSmallClasses.push(item1)
+                                self.caseSmallClassesChecked.push({
+                                    "value": item1.id,
+                                    "label": item1.typeName,
+                                    "checked": true
+                                })
+                                return
                             }
                         })
-                    } else if (caseTypesString) {
-                        jsonArr_edit.caseTypes = [];
-                        $.ajax({
-                            url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/eventTypes/findByIds/" + caseTypesString,
-                            type: "get",
-                            async: false,
-                            contentType: 'application/json;charset=UTF-8',
-                            success: function (data) {
-                                // console.log(data)
-                                jsonArr_edit.caseTypes = data;
+                    })
+                   trueChecked(self.caseSmallClassesAll, self.caseSmallClassesChecked)
+                } else if(data.caseClasses.length != 0){
+                    //需要做两步操作，第一步：显示本级菜单，caseClasses.caseClassId 前两位为一级菜单；
+                    //第二步：对比勾选本菜单和一级菜单
+                    //第一步 shuzuquchong
+                    var yijicaidan = []
+                    data.caseClasses.forEach(function(item1){
+                        yijicaidan.push(item1.caseClassId.substring(0, 2))
+                    })
+                    yijicaidan = shuzuquchong(yijicaidan)
+                    //初始化一级菜单勾选项
+                    self.caseTypesAll.forEach(function(item1){
+                        yijicaidan.forEach(function (item2) {
+                            if(item1.id == item2){
+                                item1['selected'] = true
+                                self.editItems.caseTypes.push(item1)
+                                self.caseTypesChecked.push({
+                                    "value": item1.id,
+                                    "label": item1.typeName,
+                                    "checked": true
+                                })
+                                return
                             }
                         })
-                    }
-                vueTemp1.editItems = jsonArr_edit;
+                    })
+                    //初始化二级菜单,通过一级菜单来显示所有二级菜单的兄弟
+                    //初始化二级菜单显示项
+                    var _classes = []
+                    yijicaidan.forEach(function (item1) {
+                        eventLever2.forEach(function (item2) {
+                            if(item1 == item2.parentId){
+                                _classes.push(item2)
+                            }
+                        })
+                    })
+                    self.caseClassesAll = _classes
+                    //二级菜单勾选
+                    self.caseClassesAll.forEach(function (item1) {
+                        item1['selected'] = false
+                        data.caseClasses.forEach(function (item2) {
+                            if (item1.id == item2.caseClassId){
+                                item1['selected'] = true
+                                self.editItems.caseClasses.push(item1)
+                                self.caseClassesChecked.push({
+                                    "value": item1.id,
+                                    "label": item1.typeName,
+                                    "checked": true
+                                })
+                                return
+                            }
+                        })
+                    })
+                } else if(data.caseTypes.length != 0){
+                   self.caseTypesAll.forEach(function (item1) {
+                       data.caseTypes.forEach(function (item2) {
+                           if (item1.id == item2.caseTypeId){
+                               item1['selected'] = true
+                               self.editItems.caseTypes.push(item1)
+                               self.caseTypesChecked.push({
+                                   "value": item1.id,
+                                   "label": item1.typeName,
+                                   "checked": true
+                               })
+                               return
+                           }
+                       })
+                   })
+                }
+                vueTemp1.editItems["alarmCalls"] = data.alarmCalls
+                vueTemp1.editItems["caseAddrs"] = data.caseAddrs
+                vueTemp1.editItems["caseContents"] = data.caseContents
+                vueTemp1.editItems["units"] = data.units
+                vueTemp1.editItems["comments"] = data.comments
+                vueTemp1.editItems["kgkz"] = data.kgkz
+                vueTemp1.editItems["viewName"] = data.viewName
+                vueTemp1.editItems["viewPassword"] = data.viewPassword
+                vueTemp1.editItems["viewUserName"] = data.viewUserName
+                vueTemp1.editItems["zjkId"] = data.zjkId
+
                 var _unitId = vueTemp1.editItems.units[0].unitId;
                 var _unitName = '';
 
@@ -258,31 +376,6 @@ $(document).ready(function () {
                     }
                 })
                 vueTemp1.editItems['_unitName'] = _unitName;
-                // console.log(vueTemp1.editItems.units[0].unitId)
-                //改变勾选的视图
-                jsonArr_edit.caseTypes.forEach(function (item) {
-                    self.caseTypesAll.forEach(function (item1) {
-                        if (item.id == item1.id) {
-                            item1.selected = true;
-                        }
-                    });
-                });
-                jsonArr_edit.caseClasses.forEach(function (item) {
-                    self.caseClassesAll.forEach(function (item1) {
-                        if (item.id == item1.id) {
-                            item1.selected = true;
-                        }
-                    });
-                });
-                jsonArr_edit.caseSmallClasses.forEach(function (item) {
-                    self.caseSmallClassesAll.forEach(function (item1) {
-                        if (item.id == item1.id) {
-                            item1.selected = true;
-                        }
-                    });
-                });
-
-
                 vueTemp1.type = 'edit';
             }
     })
@@ -333,7 +426,9 @@ $(document).ready(function () {
                 type: '',
                 addId: '',
                 editViewId: '',
-                editing: false
+                editing: false,
+                eventLever2: [],
+                eventLever3: []
             }
         },
         created: function () {
@@ -341,6 +436,7 @@ $(document).ready(function () {
             this.editItems = jsonArr_edit;
             this.initcaseTypeAll();
             this.initUnitsAll();
+            this.initLever()
             
         },
         mounted: function () {
@@ -356,8 +452,35 @@ $(document).ready(function () {
                 this.initcaseSmallClassesSelect();
                  this.initEditCaseSmallClassesSelect();
 
+
         },
         methods: {
+            initLever: function(){
+                var _self = this;
+                $.ajax({
+                    url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/eventTypes/findByLever/2",
+                    type: "get",
+                    dataType: "json",
+                    // async: false,
+                    contentType: 'application/json;charset=UTF-8',
+                    success: function success(data) {
+                        _self.eventLever2 = data;
+                        console.log(_self.eventLever2)
+
+                    }
+                }); //init eventLever2
+                $.ajax({
+                    url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/eventTypes/findByLever/3",
+                    type: "get",
+                    dataType: "json",
+                    // async: false,
+                    contentType: 'application/json;charset=UTF-8',
+                    success: function success(data) {
+                        _self.eventLever3 = data;
+                        console.log(_self.eventLever3)
+                    }
+                }); //init eventLever3
+            },
             initUnitsAll: function () {
                 var _self = this;
                 $.ajax({
@@ -463,7 +586,7 @@ $(document).ready(function () {
                        
                         _self.changeCaseClassesAll()
         
-                        console.log(_self.caseTypesChecked)
+                        // console.log(_self.caseTypesChecked)
                     },
                     onUncheckAll: function () {
                         _self.caseTypesChecked = []
@@ -490,9 +613,14 @@ $(document).ready(function () {
                             _self.caseSmallClassesAll = [];
                         }
                         _self.changeCaseClassesAll();
-                        console.log(_self.caseTypesChecked)
+                        // console.log(_self.caseTypesChecked)
                     }
                 });            
+            },
+            allFalseCheked: function(arrAll){
+                arrAll.forEach(function (item) {
+                    item['selected'] = false
+                })
             },
             initEditCaseTypeSelect: function () {
                 var _self = this;
@@ -518,17 +646,23 @@ $(document).ready(function () {
                         })
                        
                         _self.changeCaseClassesAll()
-                        console.log(_self.caseTypesChecked)
+                        // console.log(_self.caseTypesChecked)
                     },
                     onUncheckAll: function () {
                         _self.caseTypesChecked = []
+                        _self.caseClassesChecked = []
+                        _self.caseSmallClassesChecked = []
                         //更改视图
-                        _self.caseTypesAll.forEach(function (item1) {
-                            item1['selected'] = false
-                        })
+                        _self.allFalseCheked(_self.caseTypesAll)
+                        _self.allFalseCheked(_self.caseClassesAll)
+                        _self.allFalseCheked(_self.caseSmallClassesAll)
+
                         //shuju
                         _self.editItems.caseTypes = [];
+                        _self.editItems.caseClasses = [];
+                        _self.editItems.caseSmallClasses = [];
                         _self.changeCaseClassesAll()
+                        _self.changeCaseSmallClassesAll()
                         // console.log(_self.caseTypesChecked)
                     },
                     onClick: function (view) {
@@ -543,6 +677,21 @@ $(document).ready(function () {
                             _self.caseTypesAll.forEach(function (item1) {
                                 if (item1.id == view.value) {
                                     item1['selected'] = view.checked
+                                    //设置为false后，通过改变数据的函数下级菜单显示会改变，但是选中的项在下次其父类被选中的时候
+                                    // 还是会保留选中的状态，更改下级菜单的勾选状态为false
+                                    _self.falseChecked(item1.id, _self.caseClassesAll, _self.caseClassesChecked)
+                                    _self.caseSmallClassesAll.forEach(function (item2) {
+                                        if (item2.id.substring(0,2) == item1.id){
+                                            item2['selected'] = false
+                                        }
+                                        _self.caseSmallClassesChecked.forEach(function (item3, index) {
+                                            if (item3.value.substring(0,2) == item1.id){
+                                                _self.caseSmallClassesChecked.splice(index, 1)
+                                            }
+                                        })
+                                    })
+                                    // _self.caseClassesChecked = []
+                                    // _self.caseSmallClassesChecked = []
                                 }
                             })
                             //更改选取的列表
@@ -556,8 +705,10 @@ $(document).ready(function () {
                             _self.caseClassesAll = [];
                             _self.caseSmallClassesAll = [];
                         }
+                        //改变后面选项的显示数据
                         _self.changeCaseClassesAll();
-                        console.log(_self.caseTypesChecked)
+                        _self.changeCaseSmallClassesAll();
+                        // console.log(_self.caseTypesChecked)
 
                         //更改选取的状态
                         _self.caseTypesAll.forEach(function(item1){
@@ -569,18 +720,27 @@ $(document).ready(function () {
                         })
                         //shuju
                         _self.editItems.caseTypes = [];
-                        _self.caseTypesChecked.forEach(function (item) {
-                            _self.editItems.caseTypes.push({
-                                'caseTypeId': item.value,
-                                'typeName': item.label
-                            })
-                        })
-                        //qingkongxianshishuju
                         _self.editItems.caseClasses = []
                         _self.editItems.caseSmallClasses = []
+                        _self.editCaseShow(_self.caseTypesChecked, _self.editItems.caseTypes, "caseTypeId")
+                        _self.editCaseShow(_self.caseClassesChecked, _self.editItems.caseClasses, "caseClassId")
+                        _self.editCaseShow(_self.caseSmallClassesChecked, _self.editItems.caseSmallClasses, "caseSmallClassId")
+
+
+                        //qingkongxianshishuju
+                        // _self.editItems.caseClasses = []
+                        // _self.editItems.caseSmallClasses = []
                         // console.log(_self.caseTypesAll)
                     }
                 });
+            },
+            editCaseShow:function(checkedArr, editCase, idName){
+                checkedArr.forEach(function (item) {
+                    editCase.push({
+                        idName: item.value,
+                        'typeName': item.label
+                    })
+                })
             },
             initcaseClassesSelect: function() {
                 var _self = this;
@@ -595,15 +755,15 @@ $(document).ready(function () {
                             })
                         })
                         _self.changeCaseSmallClassesAll()
-                        console.log(_self.caseClassesChecked)
+                        // console.log(_self.caseClassesChecked)
                     },
                     onUncheckAll: function () {
                         _self.caseClassesChecked = []
                         _self.changeCaseSmallClassesAll()
-                        console.log(_self.caseClassesChecked)
+                        // console.log(_self.caseClassesChecked)
                     },
                     onClick: function (view) {
-                        if (view.checked) {
+                        if (view.checked) {//checked
                             if (_self.caseClassesChecked.length == 0) {
                                 _self.caseClassesChecked.push(view);
                             } else {
@@ -621,7 +781,7 @@ $(document).ready(function () {
                             _self.caseSmallClassesAll = [];
                         }
                         _self.changeCaseSmallClassesAll()
-                        console.log(_self.caseClassesChecked)
+                        // console.log(_self.caseClassesChecked)
                     }
                 });
             },
@@ -643,30 +803,28 @@ $(document).ready(function () {
                             //更改视图
                             item['selected'] = true
                             //shuju
-                            _self.editItems.caseClasses.push(item)
+                            _self.editItems.caseClasses.push({
+                                'caseClassId': item.id,
+                                'typeName': item.typeName
+                            })
+
                         })
-                        //更改视图
-                        item['selected'] = true
-                        //shuju
-                        _self.editItems.caseClasses.push({
-                            'caseClassId': item.id,
-                            'typeName': item.typeName
-                        })
-                       
-                        //
                         _self.changeCaseSmallClassesAll()
-                        console.log(_self.caseClassesChecked)
+                        // console.log(_self.caseClassesChecked)
                     },
                     onUncheckAll: function () {
+                        //取消选中状态的数组
                         _self.caseClassesChecked = []
+                        _self.caseSmallClassesChecked = []
                         //更改视图
-                        _self.caseClassesAll.forEach(function (item1) {
-                            item1['selected'] = false
-                        })
+                        _self.allFalseCheked(_self.caseClassesAll)
+                        _self.allFalseCheked(_self.caseSmallClassesAll)
+
                         //shuju
                         _self.editItems.caseClasses = [];
+                        _self.editItems.caseSmallClasses = [];
                         _self.changeCaseSmallClassesAll()
-                        console.log(_self.caseClassesChecked)
+                        // console.log(_self.caseClassesChecked)
                     },
                     onClick: function (view) {
                         if (view.checked) {
@@ -678,7 +836,19 @@ $(document).ready(function () {
                         } else {
                             _self.caseClassesAll.forEach(function (item1) {
                                 if (item1.id == view.value) {
-                                    item1['selected'] = view.checked
+                                    item1['selected'] = false
+                                    //设置为false后，通过改变数据的函数下级菜单显示会改变，但是选中的项在下次其父类被选中的时候
+                                    // 还是会保留选中的状态，更改下级菜单的勾选状态为false
+                                    _self.caseSmallClassesAll.forEach(function (item2) {
+                                        if (item2.parentId == item1.id){
+                                            item2['selected'] = false
+                                        }
+                                        _self.caseSmallClassesChecked.forEach(function (item3, index) {
+                                            if ((item3.value.substring(0,4) + "00") == item1.id){
+                                                _self.caseSmallClassesChecked.splice(index, 1)
+                                            }
+                                        })
+                                    })
                                 }
                             })
 
@@ -687,10 +857,12 @@ $(document).ready(function () {
                                     _self.caseClassesChecked.splice(index, 1);
                                 }
                             })
+                            // console.log(_self.caseSmallClassesChecked)
                         }
                         if (_self.caseClassesChecked.length == 0) {
                             _self.caseSmallClassesAll = [];
                         }
+                        //改变下级菜单数据
                         _self.changeCaseSmallClassesAll()
                         //更改选取的状态
                         _self.caseClassesAll.forEach(function (item1) {
@@ -702,18 +874,23 @@ $(document).ready(function () {
                         })
                         //
                         _self.editItems.caseClasses = [];
-                        _self.caseClassesChecked.forEach(function (item) {
-                            _self.editItems.caseClasses.push({
-                                'caseClassId': item.value,
-                                'typeName': item.label
-                            })
-                        })
-                        //qingkongxianshishuju
-                        // _self.editItems.caseClasses = []
-                        _self.editItems.caseSmallClasses = []
-                        console.log(_self.caseClassesChecked)
+                        _self.editItems.caseSmallClasses = [];
+                        _self.editCaseShow(_self.caseClassesChecked, _self.editItems.caseClasses, "caseClassId")
+                        _self.editCaseShow(_self.caseSmallClassesChecked, _self.editItems.caseSmallClasses, "caseSmallClassId")
                     }
                 });
+            },
+            falseChecked: function(parentId, arr, checkedArr){
+                arr.forEach(function (item) {
+                    if(item.parentId == parentId){
+                        item['selected'] = false
+                    }
+                    checkedArr.forEach(function (item2, index) {
+                        if (item2.value.substring(0,2) == parentId){
+                            checkedArr.splice(index, 1)
+                        }
+                    })
+                })
             },
             initcaseSmallClassesSelect: function () {
                 var _self = this;
@@ -792,7 +969,7 @@ $(document).ready(function () {
                         } else {
                            _self.caseSmallClassesAll.forEach(function (item1) {
                                if(item1.id == view.value){
-                                   item1['selected'] = view.checked;
+                                   item1['selected'] = false;
                                }
                            })
                            _self.caseSmallClassesChecked.forEach(function (item, index) {
@@ -847,17 +1024,22 @@ $(document).ready(function () {
                 var _self = this;
                 var _session = [];
                 _self.caseTypesChecked.forEach(function (item) {
-                    var id = item.value;
-                    $.ajax({
-                        url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/eventTypes/findByParentId/" + id,
-                        type: "get",
-                        dataType: "json",
-                        async: false,
-                        contentType: 'application/json;charset=UTF-8',
-                        success: function success(data) {
-                            _session = _session.concat(data);
+                    var id = item.value;//20
+                    _self.eventLever2.forEach(function (item2) {
+                        if (item2.parentId == id){
+                            _session.push(item2)
                         }
                     })
+                    // $.ajax({
+                    //     url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/eventTypes/findByParentId/" + id,
+                    //     type: "get",
+                    //     dataType: "json",
+                    //     async: false,
+                    //     contentType: 'application/json;charset=UTF-8',
+                    //     success: function success(data) {
+                    //         _session = _session.concat(data);
+                    //     }
+                    // })
                 })
                 //通过一级初始化二级的数据
                 _self.caseClassesAll = _session;
@@ -867,16 +1049,21 @@ $(document).ready(function () {
                 var _session = [];
                 _self.caseClassesChecked.forEach(function (item) {
                     var id = item.value;
-                    $.ajax({
-                        url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/eventTypes/findByParentId/" + id,
-                        type: "get",
-                        dataType: "json",
-                        async: false,
-                        contentType: 'application/json;charset=UTF-8',
-                        success: function success(data) {
-                            _session = _session.concat(data);
+                    _self.eventLever3.forEach(function (item2) {
+                        if (item2.parentId == id){
+                            _session.push(item2)
                         }
                     })
+                    // $.ajax({
+                    //     url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/eventTypes/findByParentId/" + id,
+                    //     type: "get",
+                    //     dataType: "json",
+                    //     async: false,
+                    //     contentType: 'application/json;charset=UTF-8',
+                    //     success: function success(data) {
+                    //         _session = _session.concat(data);
+                    //     }
+                    // })
                 })
                 //通过二级初始化三级的数据
                 _self.caseSmallClassesAll = _session;
