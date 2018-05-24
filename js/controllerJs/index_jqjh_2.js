@@ -639,10 +639,7 @@ $(document).ready(function () {
                              //更改视图
                             item['selected'] = true
                             //shuju
-                            _self.editItems.caseTypes.push({
-                                'caseTypeId': item.id,
-                                'typeName': item.typeName
-                            })
+                            _self.editItems.caseTypes.push(item)
                         })
                        
                         _self.changeCaseClassesAll()
@@ -676,7 +673,7 @@ $(document).ready(function () {
                         } else { //取消
                             _self.caseTypesAll.forEach(function (item1) {
                                 if (item1.id == view.value) {
-                                    item1['selected'] = view.checked
+                                    item1['selected'] = false
                                     //设置为false后，通过改变数据的函数下级菜单显示会改变，但是选中的项在下次其父类被选中的时候
                                     // 还是会保留选中的状态，更改下级菜单的勾选状态为false
                                     _self.falseChecked(item1.id, _self.caseClassesAll, _self.caseClassesChecked)
@@ -722,22 +719,17 @@ $(document).ready(function () {
                         _self.editItems.caseTypes = [];
                         _self.editItems.caseClasses = []
                         _self.editItems.caseSmallClasses = []
-                        _self.editCaseShow(_self.caseTypesChecked, _self.editItems.caseTypes, "caseTypeId")
-                        _self.editCaseShow(_self.caseClassesChecked, _self.editItems.caseClasses, "caseClassId")
-                        _self.editCaseShow(_self.caseSmallClassesChecked, _self.editItems.caseSmallClasses, "caseSmallClassId")
+                        _self.editCaseShow(_self.caseTypesChecked, _self.editItems.caseTypes)
+                        _self.editCaseShow(_self.caseClassesChecked, _self.editItems.caseClasses)
+                        _self.editCaseShow(_self.caseSmallClassesChecked, _self.editItems.caseSmallClasses)
 
-
-                        //qingkongxianshishuju
-                        // _self.editItems.caseClasses = []
-                        // _self.editItems.caseSmallClasses = []
-                        // console.log(_self.caseTypesAll)
                     }
                 });
             },
-            editCaseShow:function(checkedArr, editCase, idName){
+            editCaseShow:function(checkedArr, editCase){
                 checkedArr.forEach(function (item) {
                     editCase.push({
-                        idName: item.value,
+                        'id': item.value,
                         'typeName': item.label
                     })
                 })
@@ -803,10 +795,7 @@ $(document).ready(function () {
                             //更改视图
                             item['selected'] = true
                             //shuju
-                            _self.editItems.caseClasses.push({
-                                'caseClassId': item.id,
-                                'typeName': item.typeName
-                            })
+                            _self.editItems.caseClasses.push(item)
 
                         })
                         _self.changeCaseSmallClassesAll()
@@ -875,8 +864,8 @@ $(document).ready(function () {
                         //
                         _self.editItems.caseClasses = [];
                         _self.editItems.caseSmallClasses = [];
-                        _self.editCaseShow(_self.caseClassesChecked, _self.editItems.caseClasses, "caseClassId")
-                        _self.editCaseShow(_self.caseSmallClassesChecked, _self.editItems.caseSmallClasses, "caseSmallClassId")
+                        _self.editCaseShow(_self.caseClassesChecked, _self.editItems.caseClasses)
+                        _self.editCaseShow(_self.caseSmallClassesChecked, _self.editItems.caseSmallClasses)
                     }
                 });
             },
@@ -991,7 +980,7 @@ $(document).ready(function () {
                         _self.editItems.caseSmallClasses = [];
                         _self.caseSmallClassesChecked.forEach(function(item){
                             _self.editItems.caseSmallClasses.push({
-                                'caseSmallClassId': item.value,
+                                'id': item.value,
                                 'typeName': item.label
                             })
                         })
@@ -1030,16 +1019,6 @@ $(document).ready(function () {
                             _session.push(item2)
                         }
                     })
-                    // $.ajax({
-                    //     url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/eventTypes/findByParentId/" + id,
-                    //     type: "get",
-                    //     dataType: "json",
-                    //     async: false,
-                    //     contentType: 'application/json;charset=UTF-8',
-                    //     success: function success(data) {
-                    //         _session = _session.concat(data);
-                    //     }
-                    // })
                 })
                 //通过一级初始化二级的数据
                 _self.caseClassesAll = _session;
@@ -1054,16 +1033,6 @@ $(document).ready(function () {
                             _session.push(item2)
                         }
                     })
-                    // $.ajax({
-                    //     url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/eventTypes/findByParentId/" + id,
-                    //     type: "get",
-                    //     dataType: "json",
-                    //     async: false,
-                    //     contentType: 'application/json;charset=UTF-8',
-                    //     success: function success(data) {
-                    //         _session = _session.concat(data);
-                    //     }
-                    // })
                 })
                 //通过二级初始化三级的数据
                 _self.caseSmallClassesAll = _session;
@@ -1120,16 +1089,6 @@ $(document).ready(function () {
                 item.push({});
                 item[item.length - 1][itemName] = value;
             },
-            zuhetype: function zuhetype(_type) {
-                var _typeId = '';
-                if (_type == 'caseTypes') {
-                    return _typeId = 'caseTypeId';
-                } else if (_type == 'caseClasses') {
-                    return _typeId = 'caseClassId';
-                } else if (_type == 'caseSmallClasses') {
-                    return _typeId = 'caseSmallClassId';
-                }
-            },
             delete_selectAdd: function(item, index, name) {
                 item.splice(index,1)
                 $('.'+name).val('')
@@ -1144,28 +1103,100 @@ $(document).ready(function () {
                 })
 
             },
-            deleteType: function (e,TypeId,id,Type){
+            deleteType: function (id,Type){
                 var _self = this;
-                var _id = TypeId ? TypeId: id;
-                var _class = Type.substring(0, Type.length -1)
-                //改变勾选状态
-                this[Type+'sAll'].forEach(function(item){
-                    if(item.id == _id){
-                        item['selected'] = false
-                    }
-                })
-                //改变已有条件展示
-                this.editItems[Type+'s'].forEach(function(item, index){
-                    if(item['id']== _id || item[Type+'Id'] === _id || item[_class+'Id'] === _id){
-                        _self.editItems[Type+'s'].splice(index,1)
-                    }
-                })
-                //更改选取的列表
-                _self[Type+'sChecked'].forEach(function (item, index) {
-                    if (item.value == _id) {
-                        _self[Type+'sChecked'].splice(index, 1);
-                    }
-                })
+                switch(Type){
+                    case "caseType":
+                        _self.caseTypesAll.forEach(function (item1) {
+                            if (item1.id == id) {
+                                item1['selected'] = false
+                                //设置为false后，通过改变数据的函数下级菜单显示会改变，但是选中的项在下次其父类被选中的时候
+                                // 还是会保留选中的状态，更改下级菜单的勾选状态为false
+                                _self.falseChecked(item1.id, _self.caseClassesAll, _self.caseClassesChecked)
+                                _self.caseSmallClassesAll.forEach(function (item2) {
+                                    if (item2.id.substring(0,2) == item1.id){
+                                        item2['selected'] = false
+                                    }
+                                    _self.caseSmallClassesChecked.forEach(function (item3, index) {
+                                        if (item3.value.substring(0,2) == item1.id){
+                                            _self.caseSmallClassesChecked.splice(index, 1)
+                                        }
+                                    })
+                                })
+                            }
+                        })
+                        //更改选取的列表
+                        _self.caseTypesChecked.forEach(function (item, index) {
+                            if (item.value == id) {
+                                _self.caseTypesChecked.splice(index, 1);
+                            }
+                        })
+                        _self.changeCaseClassesAll();
+                        _self.changeCaseSmallClassesAll();
+                        //shuju
+                        _self.editItems.caseTypes = [];
+                        _self.editItems.caseClasses = []
+                        _self.editItems.caseSmallClasses = []
+                        _self.editCaseShow(_self.caseTypesChecked, _self.editItems.caseTypes)
+                        _self.editCaseShow(_self.caseClassesChecked, _self.editItems.caseClasses)
+                        _self.editCaseShow(_self.caseSmallClassesChecked, _self.editItems.caseSmallClasses)
+                        break
+                    case "caseClasse":
+                        _self.caseClassesAll.forEach(function (item1) {
+                            if (item1.id == id) {
+                                item1['selected'] = false
+                                //设置为false后，通过改变数据的函数下级菜单显示会改变，但是选中的项在下次其父类被选中的时候
+                                // 还是会保留选中的状态，更改下级菜单的勾选状态为false
+                                _self.caseSmallClassesAll.forEach(function (item2) {
+                                    if (item2.parentId == item1.id){
+                                        item2['selected'] = false
+                                    }
+                                    _self.caseSmallClassesChecked.forEach(function (item3, index) {
+                                        if ((item3.value.substring(0,4) + "00") == item1.id){
+                                            _self.caseSmallClassesChecked.splice(index, 1)
+                                        }
+                                    })
+                                })
+                            }
+                        })
+
+                        _self.caseClassesChecked.forEach(function (item, index) {
+                            if (item.value == id) {
+                                _self.caseClassesChecked.splice(index, 1);
+                            }
+                        })
+                        if (_self.caseClassesChecked.length == 0) {
+                            _self.caseSmallClassesAll = [];
+                        }
+                        //改变下级菜单数据
+                        _self.changeCaseSmallClassesAll()
+                        //
+                        _self.editItems.caseClasses = [];
+                        _self.editItems.caseSmallClasses = [];
+                        _self.editCaseShow(_self.caseClassesChecked, _self.editItems.caseClasses)
+                        _self.editCaseShow(_self.caseSmallClassesChecked, _self.editItems.caseSmallClasses)
+                        break
+                    case "caseSmallClasse":
+                        _self.caseSmallClassesAll.forEach(function (item1) {
+                            if(item1.id == id){
+                                item1['selected'] = false;
+                            }
+                        })
+                        _self.caseSmallClassesChecked.forEach(function (item, index) {
+                            if (item.value == id) {
+                                _self.caseSmallClassesChecked.splice(index, 1);
+                            }
+                        })
+                        //通过checked数组给editItems传值
+                        _self.editItems.caseSmallClasses = [];
+                        _self.caseSmallClassesChecked.forEach(function(item){
+                            _self.editItems.caseSmallClasses.push({
+                                'id': item.value,
+                                'typeName': item.label
+                            })
+                        })
+                        break
+                }
             },
             edit_addOne: function(e) {
                 var $self = $(e.target);

@@ -195,7 +195,7 @@
                                 <label class="selected-condition">已有条件：</label>
                                 <ul>
                                     <li v-if="editItems.caseTypes.length>0" v-for="i in editItems.caseTypes">{{ i.typeName }}
-                                        <i class="fa fa-times-circle" v-on:click="deleteType($event,i.caseTypeId,i.id,'caseType')"></i>
+                                        <i class="fa fa-times-circle" v-on:click="deleteType(i.id,'caseType')"></i>
                                     </li>
                                 </ul>
                             </div>
@@ -209,7 +209,7 @@
                                 <label class="selected-condition">已有条件：</label>
                                 <ul>
                                     <li v-if="editItems.caseClasses.length>0" v-for="i in editItems.caseClasses" :pid="i.caseClassId">{{ i.typeName }}
-                                        <i class="fa fa-times-circle" v-on:click="deleteType($event,i.caseClassId,i.id,'caseClasse')"></i>
+                                        <i class="fa fa-times-circle" v-on:click="deleteType(i.id,'caseClasse')"></i>
                                     </li>
                                 </ul>
                             </div>
@@ -223,7 +223,7 @@
                                 <label class="selected-condition">已有条件：</label>
                                 <ul>
                                     <li v-if="editItems.caseSmallClasses.length>0" v-for="i in editItems.caseSmallClasses" :pid="i.caseSmallClassId">{{ i.typeName }}
-                                        <i class="fa fa-times-circle" v-on:click="deleteType($event,i.caseSmallClassId, i.id,'caseSmallClasse')"></i>
+                                        <i class="fa fa-times-circle" v-on:click="deleteType(i.id,'caseSmallClasse')"></i>
                                     </li>
                                 </ul>
                             </div>
