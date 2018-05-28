@@ -154,8 +154,7 @@
             <div class="editWrap" v-show="type=='edit'" :edit-view-id="editViewId">
                 <div class="ibox-title">
                     <h5 style="font-size: 16px">编辑</h5>
-                    <button class="btn btn-primary btn-sm btn-save" v-if="editing" v-on:click="tempSave">保存</button>
-                    <button class="btn btn-primary btn-sm btn-edit" v-if="!editing" v-on:click="tempEdit">编辑</button>
+                    <button class="btn btn-primary btn-sm btn-save" v-on:click="tempSave">保存</button>
                 </div>
                 <div class="ibox-content databaseSelectedWrap">
                     <h3>基本信息创建：</h3>
@@ -183,7 +182,7 @@
                         </div>
                         <div class="form-group w100p" type="comments">
                             <label>基本信息：</label>
-                            <input class="form-control" :value="editItems.comments" v-on:input="valueChange" :disabled="!editing">
+                            <input class="form-control" :value="editItems.comments" v-on:input="valueChange" >
                         </div>
                         <h3 class="clearBoth">创建视图条件：</h3>
                         <div class="form-group inline margin" type="caseTypes" itemIdName="caseTypeId">
