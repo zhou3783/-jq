@@ -115,13 +115,9 @@ var vueTemp1 = new Vue({
             totalsJQNum : undefined,
             zhanshi: false,
             xianShiTiaoShu: 6,
-            hjlsh: '',
-            bjDH: '',
-            bjrxm: '',
-            bjnr: '',
-            bjdz: '',
             detailsTarget:false,
             detailsContent:{},
+            inputValue: ''
 
         }
        
@@ -478,7 +474,7 @@ var vueTemp1 = new Vue({
                 }
             }); //init caseTypesAll
         },
-       changeCaseClassesAll: function(){
+        changeCaseClassesAll: function(){
             var _self = this;
             var _session = [];
             _self.caseTypesChecked.forEach(function (item) {
@@ -533,6 +529,7 @@ var vueTemp1 = new Vue({
             json_search.bjlxdm = JSON.stringify(_self.caseTypesChecked)
             json_search.bjlbdm = JSON.stringify(_self.caseClassesChecked)
             json_search.bjxldm = JSON.stringify(_self.caseSmallClassesChecked)
+            json_search['searchBox'] = _self.inputValue;
             if(json_search.jjdwdm == ''){
                 alert('请先选择单位');
                 return

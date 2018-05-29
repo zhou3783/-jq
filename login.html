@@ -1,101 +1,112 @@
 <!DOCTYPE html>
 <html>
 
-<head>
+	<head>
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>H+ 后台主题UI框架 - 登录</title>
-    <meta name="keywords" content="H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
-    <meta name="description" content="H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
+		<title>H+ 后台主题UI框架 - 登录</title>
+		<meta name="keywords" content="H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
+		<meta name="description" content="H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
 
-    <link rel="shortcut icon" href="favicon.ico"> <link href="css/bootstrap.min.css?v=3.3.5" rel="stylesheet">
-    <link href="css/font-awesome.css?v=4.4.0" rel="stylesheet">
+		<link rel="shortcut icon" href="favicon.ico">
+		<link href="css/bootstrap.min.css?v=3.3.5" rel="stylesheet">
+		<link href="css/font-awesome.css?v=4.4.0" rel="stylesheet">
 
-    <link href="css/animate.css" rel="stylesheet">
-    <link href="css/style.css?v=4.0.0" rel="stylesheet"><base target="_blank">
-    
-    <style>
-    	.login-container .title {
-		    font-size: 26px;
-		    font-weight: 400;
-		    color: #eee;
-		    margin: 0px auto 40px auto;
-		    text-align: center;
-		    font-weight: bold;
-		}
-		.login-container {
-		    position: relative;
-		    width: 100%;
-		    height: 100%;
-		    height: 100vh;
-		    background-color: #2d3a4b;
-		}
-		.form-control{
-			background: #283443;
-		    border: 1px solid #3E4957;
-		    border-radius: 4px;
-		    height: 50px;
-		}
-		.full-width{
-		    color: #fff;
-		    background-color: #20a0ff;
-		    border-color: #20a0ff;
-		    height: 36px;
-		}
-		.full-width:hover{
-			background-color: #4DB3FF;
-		}
-		.middle-box {
-		    padding-top: 15%;
-		}
-		.loginscreen.middle-box {
-		    width: 350px;
-		}
-    </style>
-    <!--[if lt IE 8]>
+		<link href="css/animate.css" rel="stylesheet">
+		<link href="css/style.css?v=4.0.0" rel="stylesheet">
+		<base target="_blank">
+
+		<style>
+			.login-container .title {
+				font-size: 26px;
+				font-weight: 400;
+				color: #eee;
+				margin: 0px auto 40px auto;
+				text-align: center;
+				font-weight: bold;
+			}
+			
+			.login-container {
+				position: relative;
+				width: 100%;
+				height: 100%;
+				height: 100vh;
+				background-color: #2d3a4b;
+			}
+			
+			.form-control {
+				background: #283443;
+				border: 1px solid #3E4957;
+				border-radius: 4px;
+				height: 50px;
+			}
+			
+			.full-width {
+				color: #fff;
+				background-color: #20a0ff;
+				border-color: #20a0ff;
+				height: 36px;
+			}
+			
+			.full-width:hover {
+				background-color: #4DB3FF;
+			}
+			
+			.middle-box {
+				padding-top: 15%;
+			}
+			
+			.loginscreen.middle-box {
+				width: 350px;
+			}
+		</style>
+		<!--[if lt IE 8]>
     <meta http-equiv="refresh" content="0;ie.html" />
     <![endif]-->
-    <script>if(window.top !== window.self){ window.top.location = window.location;}</script>
-</head>
+		<script>
+			if(window.top !== window.self) {
+				window.top.location = window.location;
+			}
+		</script>
+	</head>
 
-<body class="gray-bg login-container">
+	<body class="gray-bg login-container">
 
-    <div class="middle-box text-center loginscreen  animated fadeInDown">
-        <div>
-            <h3 class="title">系统登录</h3>
+		<div class="middle-box text-center loginscreen  animated fadeInDown">
+			<div>
+				<h3 class="title">系统登录</h3>
 
-            <form class="m-t" id="commentForm" action="javascript:loginAction();">
-                <div class="form-group">
-                    <input type="text" name="loginname" class="form-control" placeholder="用户名" required="">
-                </div>
-                <div class="form-group">
-                    <input type="password" name="pwd" class="form-control" placeholder="密码" required="">
-                </div>
-                <button type="submit" class="btn btn-primary block full-width m-b">登 录</button>
+				<form class="m-t" id="commentForm" action="javascript:loginAction();">
+					<div class="form-group">
+						<input type="text" name="userName" class="form-control" placeholder="用户名" required="">
+					</div>
+					<div class="form-group">
+						<input type="password" name="password" class="form-control" placeholder="密码" required="">
+					</div>
+					<button type="submit" class="btn btn-primary block full-width m-b">登 录</button>
 
-                <!--<p class="text-muted text-center"> <a href="login.html#"><small>忘记密码了？</small></a> | <a href="register.html">注册一个新账号</a></p>-->
-            </form>
-        </div>
-    </div>
+					<!--<p class="text-muted text-center"> <a href="login.html#"><small>忘记密码了？</small></a> | <a href="register.html">注册一个新账号</a></p>-->
+				</form>
+			</div>
+		</div>
 
-    <!-- 全局js -->
-    <script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/plugins/layer/layer.min.js"></script>
-    <script src="js/common/config.js" type="text/javascript" charset="utf-8"></script>
-    <script src="js/jquery.serializejson.js" type="text/javascript" charset="utf-8"></script>
-    <script src="js/router/login.js" type="text/javascript"></script>
-  <!--  <script>
-    	$(function(){
-    		$(".full-width").click(function(){
-    			location.href="index.html";
-    		})
-    	})
-    </script>-->
+		<!-- 全局js -->
+		<script src="js/jquery.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/plugins/layer/layer.min.js"></script>
+		<script src="js/common/config.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/jquery.serializejson.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/router/login.js" type="text/javascript"></script>
+		<script>
+			$(function(){
+				$(".full-width").click(function(){
+					location.href="index.html";
+				})
+			})
+         </script>
 
-</body>
+	</body>
 
 </html>

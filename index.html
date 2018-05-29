@@ -42,7 +42,6 @@
                     </a>
                     <ul class="nav nav-second-level">
                         <li><a class="J_menuItem" href="index_jqjh_1.html">警情数据查询</a></li>
-                        <li><a class="J_menuItem" href="index_jqjh_2.html">警情数据筛选</a></li>
                     </ul>
                 </li>
                 <li>
@@ -220,15 +219,17 @@
 <script src="js/plugins/pace/pace.min.js"></script>
 <script>
     $(function(){
-        var userid=window.sessionStorage.userId;
+        var userRole=window.sessionStorage.userRole;
 
-//        if(userid==""||userid==undefined){
-//            window.location.href="login.html";
-//        }
+        if(userRole==""||userRole==undefined){
+            window.location.href="login.html";
+        } else if (userRole === '1') {
+            $('.nav-second-level').append('<li><a class="J_menuItem" href="index_jqjh_2.html">警情数据筛选</a></li>\n')
+        }
 
         $(".J_tabExit").click(function(){
-            window.sessionStorage.removeItem("userId");
-            window.sessionStorage.removeItem("loginname");
+            window.sessionStorage.removeItem("userRole");
+            window.sessionStorage.removeItem("userName");
         })
     })
 </script>

@@ -45,6 +45,7 @@ h3 {
 .pop-details > p {
     position: relative;
     margin-bottom: 12px;
-
 }
-
+.min-height {
+    min-height: 500px;
+}
