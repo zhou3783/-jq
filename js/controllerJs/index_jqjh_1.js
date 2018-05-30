@@ -6,7 +6,9 @@ var json_search = {
     "jqjb": '',
     "bjxldm": '',
     "bjlxdm": '',
-    "bjlbdm": ''
+    "bjlbdm": '',
+    "periodStartTime": '',
+    "periodEndTime": ''
 }
 
     var start = {
@@ -59,8 +61,9 @@ var json_search = {
         // range:" ~ ",
 
         okfun: function(obj){
+            json_search.periodStartTime = obj.val;
             // console.log(obj.elem);
-            console.log(obj.val) // eg:13:39:43 ~ 16:43:46
+            //console.log(obj.val) // eg:13:39:43 ~ 16:43:46
         }
     }
     var inpEndHour = {
@@ -71,8 +74,9 @@ var json_search = {
         // range:" ~ ",
 
         okfun: function(obj){
+            json_search.periodEndTime = obj.val;
             // console.log(obj.elem);
-            console.log(obj.val) // eg:13:39:43 ~ 16:43:46
+            //console.log(obj.val) // eg:13:39:43 ~ 16:43:46
         }
     }
 
