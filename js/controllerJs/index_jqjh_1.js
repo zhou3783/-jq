@@ -64,6 +64,9 @@ var json_search = {
             json_search.periodStartTime = obj.val;
             // console.log(obj.elem);
             //console.log(obj.val) // eg:13:39:43 ~ 16:43:46
+        },
+        clearfun: function (elem, val) {
+            json_search.periodStartTime = val;
         }
     }
     var inpEndHour = {
@@ -77,6 +80,9 @@ var json_search = {
             json_search.periodEndTime = obj.val;
             // console.log(obj.elem);
             //console.log(obj.val) // eg:13:39:43 ~ 16:43:46
+        },
+        clearfun: function (elem, val) {
+            json_search.periodEndTime = val;
         }
     }
 
@@ -538,16 +544,31 @@ var vueTemp1 = new Vue({
                 alert('请先选择单位');
                 return
             }
+            if (json_search.startTime == '' || json_search.endTime == '') {
+            	alert('请选择天数');
+            	return
+            }
+            if (json_search.periodStartTime == '') {
+            	json_search.periodStartTime = '00:00:00'
+            }
+            if (json_search.periodEndTime == '') {
+            	json_search.periodEndTime = '23:59:59'
+            }
+            if ($.timeStampDate(json_search.periodStartTime) > $.timeStampDate(json_search.periodEndTime)) {
+            	var _date = json_search.periodStartTime
+            	json_search.periodStartTime = json_search.periodEndTime
+            	json_search.periodEndTime = _date
+            }
             console.log(JSON.stringify(json_search))
             $.ajax({
                         url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/jjdb/all",
                         type: "post",
-                        dataType: "json",
+                        dataType: "text",
                         async: false,
                         data: JSON.stringify(json_search),
                         contentType: 'application/json;charset=UTF-8',
                         success: function success(data) {
-                            _self.totalsJQNum = data.length;
+                            _self.totalsJQNum = data;
                             _yongzongshujuceshi = data;
                             // console.log(data)
                         }

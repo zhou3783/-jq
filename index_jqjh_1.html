@@ -139,7 +139,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="pop-detailsWrapper" @click="hideDetails" v-show="detailsTarget">
+                <div class="pop-detailsWrapper" @click="hideDetails" v-if="detailsTarget">
                     <div class="pop-details">
                         <p><span>案发地点:</span>{{detailsContent.afdd}}</p>
                         <p><span>报警电话:</span>{{detailsContent.bJDH}}</p>
