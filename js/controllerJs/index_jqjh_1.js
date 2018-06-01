@@ -15,6 +15,8 @@ var json_search = {
         format: 'YYYY-MM-DD',
         minDate: '2014-06-16 ', //设定最小日期为当前日期
         // isinitVal: true,
+        isinitVal:true,
+        initDate:[true],
         maxDate: $.nowDate({
             DD: 0
         }), //最大日期
@@ -27,7 +29,7 @@ var json_search = {
             endDates();
         },
         clearfun: function (elem, val) {
-            json_search.startTime = val;
+            json_search.startTime = '';
         },
 
     };
@@ -49,7 +51,7 @@ var json_search = {
 
         },
         clearfun: function (elem, val) {
-            json_search.startTime = val;
+            json_search.startTime = '';
         }
     };
 
@@ -66,7 +68,7 @@ var json_search = {
             //console.log(obj.val) // eg:13:39:43 ~ 16:43:46
         },
         clearfun: function (elem, val) {
-            json_search.periodStartTime = val;
+            json_search.periodStartTime = '';
         }
     }
     var inpEndHour = {
@@ -82,7 +84,7 @@ var json_search = {
             //console.log(obj.val) // eg:13:39:43 ~ 16:43:46
         },
         clearfun: function (elem, val) {
-            json_search.periodEndTime = val;
+            json_search.periodEndTime = '';
         }
     }
 
@@ -545,8 +547,10 @@ var vueTemp1 = new Vue({
                 return
             }
             if (json_search.startTime == '' || json_search.endTime == '') {
-            	alert('请选择天数');
-            	return
+            	json_search.startTime = $.nowDate().split(' ')[0]
+            	json_search.endTime = $.nowDate().split(' ')[0]
+//          	alert('请选择天数');
+//          	return
             }
             if (json_search.periodStartTime == '') {
             	json_search.periodStartTime = '00:00:00'
@@ -664,9 +668,9 @@ var vueTemp1 = new Vue({
             })
             // 处理点击事件并且跳转到相应的百度搜索页面
             myChart.on('click', function (params) {
-                window.open(
-                    'https://www.baidu.com/s?wd=' + encodeURIComponent(params.name)
-                )
+//              window.open(
+//                  'https://www.baidu.com/s?wd=' + encodeURIComponent(params.name)
+//              )
             })
         }
     },
