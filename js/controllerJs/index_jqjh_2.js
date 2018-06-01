@@ -437,7 +437,10 @@ $(document).ready(function () {
         editViewId: '',
         editing: false,
         eventLever2: [],
-        eventLever3: []
+        eventLever3: [],
+        clickCaseType: false,
+        clickCaseClasses: false,
+        clickCaseSmallClasses: false
       }
     },
     created: function () {
@@ -622,6 +625,7 @@ $(document).ready(function () {
               _self.caseSmallClassesAll = [];
             }
             _self.changeCaseClassesAll();
+            _self.clickCaseType = true
             // console.log(_self.caseTypesChecked)
           }
         });
@@ -731,7 +735,7 @@ $(document).ready(function () {
             _self.editCaseShow(_self.caseTypesChecked, _self.editItems.caseTypes)
             _self.editCaseShow(_self.caseClassesChecked, _self.editItems.caseClasses)
             _self.editCaseShow(_self.caseSmallClassesChecked, _self.editItems.caseSmallClasses)
-
+						_self.clickCaseType = true
           }
         });
       },
@@ -782,6 +786,7 @@ $(document).ready(function () {
               _self.caseSmallClassesAll = [];
             }
             _self.changeCaseSmallClassesAll()
+            _self.clickCaseClasses = true
             // console.log(_self.caseClassesChecked)
           }
         });
@@ -855,6 +860,7 @@ $(document).ready(function () {
                   _self.caseClassesChecked.splice(index, 1);
                 }
               })
+
               // console.log(_self.caseSmallClassesChecked)
             }
             if (_self.caseClassesChecked.length == 0) {
@@ -875,6 +881,7 @@ $(document).ready(function () {
             _self.editItems.caseSmallClasses = [];
             _self.editCaseShow(_self.caseClassesChecked, _self.editItems.caseClasses)
             _self.editCaseShow(_self.caseSmallClassesChecked, _self.editItems.caseSmallClasses)
+            _self.clickCaseClasses = true
           }
         });
       },
@@ -922,6 +929,7 @@ $(document).ready(function () {
                 }
               })
             }
+            _self.clickCaseSmallClasses = true
           }
         });
       },
@@ -950,7 +958,7 @@ $(document).ready(function () {
           onUncheckAll: function () {
             _self.caseSmallClassesChecked = []
             //更改视图
-            _self.caseClassesAll.forEach(function (item1) {
+            _self.caseSmallClassesAll.forEach(function (item1) {
               item1['selected'] = false
             })
             //shuju
@@ -993,17 +1001,9 @@ $(document).ready(function () {
                 'typeName': item.label
               })
             })
+            _self.clickCaseSmallClasses = true
           }
         });
-      },
-      refresh: function () {
-        $(this.$refs.caseTypesAll).multipleSelect('refresh');
-        $(this.$refs.editCaseTypesAll).multipleSelect('refresh');
-        $(this.$refs.caseClassesAll).multipleSelect('refresh');
-        $(this.$refs.editCaseClassesAll).multipleSelect('refresh');
-        $(this.$refs.caseSmallClassesAll).multipleSelect('refresh');
-        $(this.$refs.editCaseSmallClassesAll).multipleSelect('refresh');
-        $(this.$refs.editViewName).multipleSelect('refresh');
       },
       initcaseTypeAll: function initcaseTypeAll () {
         var _self = this;
@@ -1265,9 +1265,36 @@ $(document).ready(function () {
       tempEdit: function () {
         this.editing = true;
       },
+      refresh: function () {
+        $(this.$refs.caseTypesAll).multipleSelect('refresh');
+        $(this.$refs.editCaseTypesAll).multipleSelect('refresh');
+        $(this.$refs.caseClassesAll).multipleSelect('refresh');
+        $(this.$refs.editCaseClassesAll).multipleSelect('refresh');
+        $(this.$refs.caseSmallClassesAll).multipleSelect('refresh');
+        $(this.$refs.editCaseSmallClassesAll).multipleSelect('refresh');
+        $(this.$refs.editViewName).multipleSelect('refresh');
+      },
     },
     updated: function () {
-      this.refresh();
+    	if (!this.clickCaseClasses && !this.clickCaseType && !this.clickCaseSmallClasses) {
+    		this.refresh()
+    	}
+    	if (this.clickCaseClasses) {
+    		$(this.$refs.caseSmallClassesAll).multipleSelect('refresh');
+        $(this.$refs.editCaseSmallClassesAll).multipleSelect('refresh');
+        this.clickCaseType = false
+    	} 
+    	if (this.clickCaseType) {
+    		$(this.$refs.caseClassesAll).multipleSelect('refresh');
+        $(this.$refs.editCaseClassesAll).multipleSelect('refresh');
+        $(this.$refs.caseSmallClassesAll).multipleSelect('refresh');
+        $(this.$refs.editCaseSmallClassesAll).multipleSelect('refresh');
+    	}
+    	this.clickCaseType = false
+    	this.clickCaseClasses = false
+    	this.clickCaseSmallClasses = false
+    	$(this.$refs.editViewName).multipleSelect('refresh');
+//    this.refresh();
     }
    })
 })    
