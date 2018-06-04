@@ -64,7 +64,25 @@ $(document).ready(function () {
       })
     })
   }
-
+	/* * JSON数组去重 
+	* @param: [array] json Array 
+	* @param: [string] 唯一的key名，根据此键名进行去重 
+	*/ 
+	function uniqueArray(array, key){ 
+	  var result = [array[0]];
+	  for(var i = 1; i < array.length; i++){ 
+	  var item = array[i];
+	  var repeat = false; 
+	  for (var j = 0; j < result.length; j++) { 
+	    if (item[key] == result[j][key]) { 
+	      repeat = true; break; 
+	    } 
+	  } if (!repeat) { 
+	      result.push(item); 
+	    } 
+	 } 
+	 return result; 
+	}
   $.ajax({
     url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/zjks/all",
     type: "get",
@@ -118,6 +136,7 @@ $(document).ready(function () {
         async: false,
         contentType: 'application/json;charset=UTF-8',
         success: function success (data) {
+        	console.log(data)
           var childrenViews = [];
           var data = data;
           if (data && data.length > 0) {
@@ -246,7 +265,7 @@ $(document).ready(function () {
             })
           })
           self.caseClassesAll = _classes
-          //初始化二级菜单勾选项
+          //初始化二级菜单勾选项 不会出现重复的项
           self.caseClassesAll.forEach(function (item1) {
             item1['selected'] = false
             erjicaidan.forEach(function (item2) {
@@ -291,16 +310,23 @@ $(document).ready(function () {
             })
           })
           trueChecked(self.caseSmallClassesAll, self.caseSmallClassesChecked)
-        } else if (data.caseClasses.length != 0) {
-          //需要做两步操作，第一步：显示本级菜单，caseClasses.caseClassId 前两位为一级菜单；
-          //第二步：对比勾选本菜单和一级菜单
-          //第一步 shuzuquchong
+        }  
+        //上面已经通过三级菜单的值取得对应的二级菜单和一级菜单
+        //self.caseSmallClassesAll    self.editItems.caseSmallClasses  self.caseSmallClassesChecked
+        //self.caseClassesAll    self.editItems.caseClasses  self.caseClassesChecked
+        //self.caseTypesAll    self.editItems.caseTypes  self.caseTypesChecked
+        //但是页面显示的时候通过三级菜单选到的二级菜单没有被勾选 
+        
+        if (data.caseClasses.length != 0) {
+//        //需要做两步操作，第一步：显示本级菜单，caseClasses.caseClassId 前两位为一级菜单；
+//        //第二步：对比勾选本菜单和一级菜单
+//        //第一步 shuzuquchong
           var yijicaidan = []
           data.caseClasses.forEach(function (item1) {
             yijicaidan.push(item1.caseClassId.substring(0, 2))
           })
           yijicaidan = shuzuquchong(yijicaidan)
-          //初始化一级菜单勾选项
+//        //初始化一级菜单勾选项
           self.caseTypesAll.forEach(function (item1) {
             yijicaidan.forEach(function (item2) {
               if (item1.id == item2) {
@@ -316,8 +342,8 @@ $(document).ready(function () {
               }
             })
           })
-          //初始化二级菜单,通过一级菜单来显示所有二级菜单的兄弟
-          //初始化二级菜单显示项
+//        //初始化二级菜单,通过一级菜单来显示所有二级菜单的兄弟
+//        //初始化二级菜单显示项
           var _classes = []
           yijicaidan.forEach(function (item1) {
             eventLever2.forEach(function (item2) {
@@ -327,7 +353,7 @@ $(document).ready(function () {
             })
           })
           self.caseClassesAll = _classes
-          //二级菜单勾选
+//        //二级菜单勾选
           self.caseClassesAll.forEach(function (item1) {
             item1['selected'] = false
             data.caseClasses.forEach(function (item2) {
@@ -344,7 +370,12 @@ $(document).ready(function () {
               }
             })
           })
-        } else if (data.caseTypes.length != 0) {
+          trueChecked(self.caseClassesAll, self.caseClassesChecked)
+        } 
+        /*
+         *通过一级菜单的数据勾选出对应的二级数据
+         * */
+        if (data.caseTypes.length != 0) {
           self.caseTypesAll.forEach(function (item1) {
             data.caseTypes.forEach(function (item2) {
               if (item1.id == item2.caseTypeId) {
@@ -360,8 +391,25 @@ $(document).ready(function () {
               }
             })
           })
+          self.editItems.caseTypes = uniqueArray(self.editItems.caseTypes,'caseTypeId')
+          //通过一级数据去找二级数据
+          //二级菜单显示项
+          self.editItems.caseTypes.forEach(function (item1) {
+            eventLever2.forEach(function (item2) {
+              if (item1.id == item2.parentId) {
+                self.caseClassesAll.push(item2)
+              }
+            })
+          })
+          self.caseClassesAll = uniqueArray(self.caseClassesAll,'id')
         }
-        
+        //数组去重
+        self.editItems.caseTypes = uniqueArray(self.editItems.caseTypes,'id')
+        self.editItems.caseClasses = uniqueArray(self.editItems.caseClasses, 'id')
+        self.editItems.caseSmallClasses = uniqueArray(self.editItems.caseSmallClasses, 'id')
+        self.caseTypesChecked = uniqueArray(self.caseTypesChecked, 'value')
+        self.caseClassesChecked = uniqueArray(self.caseClassesChecked, 'value')
+        self.caseSmallClassesChecked = uniqueArray(self.caseSmallClassesChecked, 'value')
         vueTemp1.editItems["alarmCalls"] = data.alarmCalls
         vueTemp1.editItems["caseAddrs"] = data.caseAddrs
         vueTemp1.editItems["caseContents"] = data.caseContents
