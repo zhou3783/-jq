@@ -19,7 +19,7 @@
 
 <body class="gray-bg">
 <div class="wrapper wrapper-content animated fadeInRight">
-<div id="vue-temp-1">
+<div id="vue-temp-1" >
             <div class="row">
                 <div class="col-sm-9" style="width: 100%;margin-left: 0;">
                     <div class="ibox float-e-margins">
@@ -139,7 +139,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="pop-detailsWrapper" @click="hideDetails" v-if="detailsTarget">
+                <div class="pop-detailsWrapper" @click="hideDetails" v-if="detailsTarget" v-choak>
                     <div class="pop-details">
                         <p><span>案发地点:</span>{{detailsContent.afdd}}</p>
                         <p><span>报警电话:</span>{{detailsContent.bJDH}}</p>

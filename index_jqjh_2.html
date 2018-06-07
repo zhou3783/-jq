@@ -55,11 +55,11 @@
                 <div class="ibox-content databaseSelectedWrap">
                     <h3>基本信息创建：</h3>
                     <div role="form" class="clearfix">
-                        <div class="form-group inline" type="units" itemIdName="unitId">
+                        <div class="form-group inline" type="units"  itemIdName="unitId">
                             <label>单位：</label>
-                            <select class="chosen-select block" style="display: none;"> 
+                            <select class="chosen-select block" style="display: none;" ref="unitsAllSelecte">
                               <option value="">--未选择--</option>
-                              <option v-for="i in unitsAll" :value="i.unitId">{{i.unitName}}</option>
+                              <option v-for="i in unitsAll" :value="i.unitId" :selected="i.selected">{{i.unitName}}</option>
                             </select>
                         </div>
                         <div class="form-group inline" type="viewName" itemIdName="viewNameId">
@@ -166,7 +166,7 @@
                         <div class="form-group inline" type="viewName" >
                             <label>视图名称：</label>
                             <select class="multiple-select block" disabled="!editing"  ref="editViewName" style="display: none;" multiple>
-                                <option selected="selected" disabled="disabled" value="JJdb">接警</option>
+                                <option selected="selected"  value="JJdb">接警</option>
                                 <option value="CJdb" :selected="editItems.viewName.indexOf('CJdb') != -1">处警</option>
                                 <option value="FKdb" :selected="editItems.viewName.indexOf('FKdb') != -1">反馈</option>
                             </select>

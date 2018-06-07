@@ -95,17 +95,18 @@ $(document).ready(function () {
         if (item.id == 1) {
           zjksAll.name = item.zjkName;
           zjksAll.id = item.id;
-        } else if (item.id == 4) {
+        } else if (item.id == 4) {   //通过item.id==4判断出分局，渲染节点
           zjksAll.children.push({
             'name': item.zjkName,
             'title': '<a class="btn btn-primary btn-handle btn-handle-add">添加</a>',
-            'id': item.id,
+            'id': item.id,    //这个id就是点击的时候传过去去的id
             'class': 'green'
           });
         } else {
           zjksAll.children.push({
             'name': item.zjkName,
-            'id': item.id
+            'id': item.id,//增加添加按钮,需要看下item.id添加上去没有
+            'title': '<a class="btn btn-primary btn-handle btn-handle-add">添加</a>',
           });
         }
       });
@@ -123,20 +124,20 @@ $(document).ready(function () {
     var $self = $(this);
     $self.find('.btn-handle').hide();
     $self.find('.switch ').hide();
-  }).on('click', '.node.green', function () {
+  }).on('click', '.node.green', function () { //点击类有green的节点
     var $self = $(this);
-    var id = $self.attr('id');
+    var id = $self.attr('id');  //这个id是创建节点的时候从后台数据获取的
     var nodesLength = $self.parents('.nodes').length;
     if ($self.parent().parent().siblings('.nodes').length > 0) return;
-    if (nodesLength == 1) {
+    if (nodesLength == 1) {//如果是第一层节点,起始是零层
       $.ajax({
-        url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/zjks/findUnitByZjkId/" + id,
+        url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/zjks/findUnitByZjkId/" + id,  //同过不同的id渲染出对应创建的试图节点
         type: "get",
         dataType: "json",
         async: false,
         contentType: 'application/json;charset=UTF-8',
         success: function success (data) {
-        	console.log(data)
+        	console.log(data)//这个就是创建好的视图数据
           var childrenViews = [];
           var data = data;
           if (data && data.length > 0) {
@@ -144,12 +145,12 @@ $(document).ready(function () {
             data.forEach(function (item) {
               var title;
               //< a class = "btn btn-warning btn-handle btn-handle-delete" > 删除 < /a>
-              if (item.kgkz > 0) {
+              if (item.kgkz > 0) {  //不知道这是什么
                 title = '<a class="btn btn-primary btn-handle btn-handle-edit">编辑</a><div class="switch" data-on-label="开" data-off-label="关"> <input type="checkbox" checked/></div>'
               } else {
                 title = '<a class="btn btn-primary btn-handle btn-handle-edit">编辑</a><div class="switch" data-on-label="开" data-off-label="关"> <input type="checkbox"/></div>'
               }
-              childrenViews.push({
+              childrenViews.push({      //渲染视图节点，上面的id就是对应分局的id
                 'id': item.unitId,
                 'name': item.unitName,
                 'title': title
@@ -160,9 +161,9 @@ $(document).ready(function () {
           }
         }
       });
-    } else if (nodesLength == 2) {
+    } else if (nodesLength == 2) {//二级节点点击事件
       $.ajax({
-        url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/views/getViewsByUnitId/" + id,
+        url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/views/getViewsByUnitId/" + id,  //这就是视图对应分局的id，通过这个id找到创建的视图
         type: "get",
         dataType: "json",
         async: false,
@@ -187,13 +188,16 @@ $(document).ready(function () {
         }
       });
     }
-  }).on('click', '.btn-handle-add', function (e) {
+  }).on('click', '.btn-handle-add', function (e) {  //点击增加的时候要重新请求unitsAll，不同父节点的选项是不同的
     var $self = $(this);
     e.stopPropagation();
     vueTemp1.type = 'add';
     vueTemp1.addItems = jsonArr_add;
     vueTemp1.addId = $self.parent().parent().attr('id');
+      //通过点击刷新单位选框
+    vueTemp1.changeUnitsAll(vueTemp1.addId)
   }).on('click', '.btn-handle-edit', function (e) {
+  	//编辑的时候需要取得编辑时候的分局的名称
     var self = vueTemp1;
     vueTemp1.editing = false;
     var id = $(this).parents('.node').attr('id');
@@ -426,7 +430,7 @@ $(document).ready(function () {
   
         var _unitId = vueTemp1.editItems.units[0].unitId;
         var _unitName = '';
-
+  	//编辑的时候需要取得编辑时候的分局的名称
         vueTemp1.unitsAll.forEach(function (item) {
           if (item.unitId == _unitId) {
             _unitName = item.unitName;
@@ -464,8 +468,28 @@ $(document).ready(function () {
   $('#4').addClass('green');
   $('#4').click();
   $('#4').parent().parent().siblings('.nodes').find('.node').addClass('green');
+  //改进点击为点击节点添加class,去掉兄弟类的绿色
+    function _click(id) {
+        $('.node.green').removeClass('green')
+        $('.node').addClass('grey')
+        $(id).addClass('green').removeClass('grey')
+        $(id).parent().parent().siblings('.nodes').find('.node').addClass('green').removeClass('grey');
+    }
+$('#2').click(function () {
+    _click('#2')
+})
+$('#3').click(function () {
+    _click('#3')
+})
+$('#4').click(function () {
+    _click('#4')
+})
+$('#5').click(function () {
+    _click('#5')
+})
 
 
+  
   var vueTemp1 = new Vue({
     el: '#vue-temp-1',
     data: function () {
@@ -542,17 +566,23 @@ $(document).ready(function () {
         }); //init eventLever3
       },
       initUnitsAll: function () {
-        var _self = this;
-        $.ajax({
-          url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/policeStationInfos/",
-          type: "get",
-          dataType: "json",
-          async: false,
-          contentType: 'application/json;charset=UTF-8',
-          success: function success (data) {
-            _self.unitsAll = data;
-          }
-        })
+        this.changeUnitsAll(4)
+      },
+      changeUnitsAll: function (stationType) {
+          var _self = this;
+          var _stationType = stationType - 1
+          $.ajax({
+              url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/policeStationInfos/stationType/"+_stationType,
+              type: "get",
+              dataType: "json",
+              async: false,
+              contentType: 'application/json;charset=UTF-8',
+              success: function success (data) {
+                console.log(data)
+                _self.unitsAll = data;
+                _self.checkedFalse(_self.unitsAll)
+              }
+          })
       },
       initUnitsChosenSelect: function () {
         var _self = this;
@@ -560,7 +590,6 @@ $(document).ready(function () {
           _self.type = 'add'
         }
         var someItems = _self.type + 'Items' //add edit
-        console.log(someItems)
         $(".chosen-select").multipleSelect({
           width: "100%",
           single: true,
@@ -572,9 +601,21 @@ $(document).ready(function () {
                 "name": view.label
               })
             }
-            console.log(_self[someItems].units)
+            _self.unitsAll
           }
         });
+      },
+      checkedFalse: function(arr) {
+        arr.forEach(function(i) {
+          i['selected'] = false
+        })
+      },
+      somethingTrue: function(arr, id) {
+        arr.forEach(function(i) {
+          if(arr.unitId === id) {
+            i.selected = true
+          }
+        })
       },
       initViewName: function () {
         var _self = this;
@@ -1115,11 +1156,16 @@ $(document).ready(function () {
             "typeName": item.label
           })
         })
-        // this.addItems.zjkId = this.addId;
+        this.addItems.zjkId = this.addId;
+        this.addItems.stationType   = this.addId - 1;
+
         //暂时只有一个库所以直接设置的
-        this.addItems.zjkId = 4
+//      this.addItems.zjkId = 4
         if (this.addItems.viewName == '') {
           this.addItems.viewName = 'JJdb';
+        }
+        if (this.addItems.units.length === 0) {
+          alert('请确定单位')
         }
         var _addItems = JSON.stringify(this.addItems);
 
@@ -1341,6 +1387,7 @@ $(document).ready(function () {
     	this.clickCaseType = false
     	this.clickCaseClasses = false
     	this.clickCaseSmallClasses = false
+    	$(this.$refs.unitsAllSelecte).multipleSelect('refresh');
     	$(this.$refs.editViewName).multipleSelect('refresh');
 //    this.refresh();
     }
