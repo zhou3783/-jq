@@ -202,6 +202,7 @@ $(document).ready(function () {
     vueTemp1.editing = false;
     var id = $(this).parents('.node').attr('id');
     vueTemp1.editViewId = id;
+
     var eventLever2 = self.eventLever2
     var eventLever3 = self.eventLever3
     //初始化为空
@@ -211,12 +212,16 @@ $(document).ready(function () {
     self.editItems['caseSmallClasses'] = []
     self.editItems['caseClasses'] = []
     self.editItems['caseTypes'] = []
+      //解决切换不同单位编辑转换的勾选问题
+    resolveTransform(self.caseTypesAll)
+    resolveTransform(self.caseClassesAll)
+    resolveTransform(self.caseSmallClassesAll)
     self.caseClassesAll = []
     self.caseSmallClassesAll = []
-    //解决切换不同单位编辑转换的勾选问题
-    resolveTransform(self.caseTypesAll)
-    // resolveTransform(self.caseClassesAll)
-    // resolveTransform(self.caseSmallClassesAll)
+    self.caseTypesAll.forEach(function(i){
+      i['caseTypeId'] = i.id
+    })
+
     $.ajax({
       url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/views/byUnitId/" + id,
       type: "get",
@@ -225,7 +230,6 @@ $(document).ready(function () {
       contentType: 'application/json;charset=UTF-8',
       success: function success (data) {
         console.log(data)
-        // jsonArr_edit = data;
         //通过循环对比来初始化下拉菜单
         if (data.caseSmallClasses.length != 0) {
           //需要做两步操作，第一步：去重之后前四位为二级菜单，前两位为一级菜单；
@@ -411,9 +415,14 @@ $(document).ready(function () {
         self.editItems.caseTypes = uniqueArray(self.editItems.caseTypes,'id')
         self.editItems.caseClasses = uniqueArray(self.editItems.caseClasses, 'id')
         self.editItems.caseSmallClasses = uniqueArray(self.editItems.caseSmallClasses, 'id')
-        self.caseTypesChecked = uniqueArray(self.caseTypesChecked, 'value')
+        self.caseTypesChecked = uniqueArray(self.caseTypesChecked, 'value') //会让空的数组添加一项undefined，造成后面的错误，所以要删除掉
         self.caseClassesChecked = uniqueArray(self.caseClassesChecked, 'value')
         self.caseSmallClassesChecked = uniqueArray(self.caseSmallClassesChecked, 'value')
+				self.delUndefined(self.caseTypesChecked)
+				self.delUndefined(self.caseClassesChecked)
+				self.delUndefined(self.caseSmallClassesChecked)
+
+
         vueTemp1.editItems["alarmCalls"] = data.alarmCalls
         vueTemp1.editItems["caseAddrs"] = data.caseAddrs
         vueTemp1.editItems["caseContents"] = data.caseContents
@@ -431,6 +440,8 @@ $(document).ready(function () {
         var _unitId = vueTemp1.editItems.units[0].unitId;
         var _unitName = '';
   	//编辑的时候需要取得编辑时候的分局的名称
+    //通过点击刷新单位选框
+    vueTemp1.changeUnitsAll(data.zjkId)
         vueTemp1.unitsAll.forEach(function (item) {
           if (item.unitId == _unitId) {
             _unitName = item.unitName;
@@ -539,6 +550,13 @@ $('#5').click(function () {
 
     },
     methods: {
+			delUndefined: function (arr) {
+				arr.forEach(function(i, index) {
+					if(i === undefined){
+						arr.splice(index, 1)
+					}
+				})
+			},
       initLever: function () {
         var _self = this;
         $.ajax({
@@ -829,12 +847,14 @@ $('#5').click(function () {
         });
       },
       editCaseShow: function (checkedArr, editCase) {
-        checkedArr.forEach(function (item) {
-          editCase.push({
-            'id': item.value,
-            'typeName': item.label
+        if (checkedArr.length > 0 && checkedArr[0] != undefined) {
+          checkedArr.forEach(function (item) {
+            editCase.push({
+                'id': item.value,
+                'typeName': item.label
+            })
           })
-        })
+        }
       },
       initcaseClassesSelect: function () {
         var _self = this;
@@ -979,11 +999,13 @@ $('#5').click(function () {
           if (item.parentId == parentId) {
             item['selected'] = false
           }
-          checkedArr.forEach(function (item2, index) {
-            if (item2.value.substring(0, 2) == parentId) {
-              checkedArr.splice(index, 1)
-            }
-          })
+          if (checkedArr.length > 0 && checkedArr[0] != undefined) { //勾选记录数组去除对应项
+            checkedArr.forEach(function (item2, index) {
+                if (item2.value.substring(0, 2) == parentId) {
+                    checkedArr.splice(index, 1)
+                }
+            })
+          }
         })
       },
       initcaseSmallClassesSelect: function () {
@@ -1110,6 +1132,7 @@ $('#5').click(function () {
       changeCaseClassesAll: function () {
         var _self = this;
         var _session = [];
+
         _self.caseTypesChecked.forEach(function (item) {
           var id = item.value;//20
           _self.eventLever2.forEach(function (item2) {
@@ -1124,16 +1147,18 @@ $('#5').click(function () {
       changeCaseSmallClassesAll: function () {
         var _self = this;
         var _session = [];
-        _self.caseClassesChecked.forEach(function (item) {
-          var id = item.value;
-          _self.eventLever3.forEach(function (item2) {
-            if (item2.parentId == id) {
-              _session.push(item2)
-            }
+        if (_self.caseClassesChecked.length != 0 && _self.caseClassesChecked[0] != undefined) {
+          _self.caseClassesChecked.forEach(function (item) {
+              var id = item.value;
+              _self.eventLever3.forEach(function (item2) {
+                  if (item2.parentId == id) {
+                      _session.push(item2)
+                  }
+              })
           })
-        })
-        //通过二级初始化三级的数据
-        _self.caseSmallClassesAll = _session;
+          //通过二级初始化三级的数据
+          _self.caseSmallClassesAll = _session;
+        }
       },
       add_save: function (e) {
         var self = this;
@@ -1215,7 +1240,9 @@ $('#5').click(function () {
                 item1['selected'] = false
                 //设置为false后，通过改变数据的函数下级菜单显示会改变，但是选中的项在下次其父类被选中的时候
                 // 还是会保留选中的状态，更改下级菜单的勾选状态为false
-                _self.falseChecked(item1.id, _self.caseClassesAll, _self.caseClassesChecked)
+                if (_self.caseClassesAll.length > 0 && _self.caseClassesAll[0] != undefined)  {
+                    _self.falseChecked(item1.id, _self.caseClassesAll, _self.caseClassesChecked)
+                }
                 _self.caseSmallClassesAll.forEach(function (item2) {
                   if (item2.id.substring(0, 2) == item1.id) {
                     item2['selected'] = false

@@ -31,6 +31,9 @@
         .margin {
             margin-right: 78px;
         }
+        [v-cloak] {
+            display: none;
+        }
     </style>
 </head>
 <body class="gray-bg">
@@ -45,7 +48,7 @@
             </div>
         </div>
 
-        <div id="vue-temp-1">
+        <div id="vue-temp-1" v-cloak>
             <div class="addWrap" v-show="type=='add'" :add-id="addId">
                 <div class="ibox-title">
                     <h5 style="font-size: 16px">新增</h5>
@@ -165,7 +168,7 @@
                         </div>
                         <div class="form-group inline" type="viewName" >
                             <label>视图名称：</label>
-                            <select class="multiple-select block" disabled="!editing"  ref="editViewName" style="display: none;" multiple>
+                            <select class="multiple-select block" ref="editViewName" style="display: none;" multiple>
                                 <option selected="selected"  value="JJdb">接警</option>
                                 <option value="CJdb" :selected="editItems.viewName.indexOf('CJdb') != -1">处警</option>
                                 <option value="FKdb" :selected="editItems.viewName.indexOf('FKdb') != -1">反馈</option>
@@ -193,13 +196,13 @@
                             <div class="databaseSelected-wrap">
                                 <label class="selected-condition">已有条件：</label>
                                 <ul>
-                                    <li v-if="editItems.caseTypes.length>0" v-for="i in editItems.caseTypes">{{ i.typeName }}
+                                    <li v-if="editItems.caseTypes[0] != undefined" v-for="i in editItems.caseTypes">{{ i.typeName }}
                                         <i class="fa fa-times-circle" v-on:click="deleteType(i.id,'caseType')"></i>
                                     </li>
                                 </ul>
                             </div>
                         </div>
-                        <div class="form-group inline margin" type="caseClasses" itemIdName="caseClassId">
+                        <div class="form-group inline margin" type="caseClasses" >
                             <label>案件类别：</label>
                             <select ref="editCaseClassesAll" class="multiple-select block" multiple  style="display: none;">
                                 <option v-for="i in caseClassesAll" :value="i.id" :selected="i.selected">{{i.typeName}}</option>
@@ -207,13 +210,13 @@
                             <div class="databaseSelected-wrap">
                                 <label class="selected-condition">已有条件：</label>
                                 <ul>
-                                    <li v-if="editItems.caseClasses.length>0" v-for="i in editItems.caseClasses" :pid="i.caseClassId">{{ i.typeName }}
+                                    <li v-if="editItems.caseClasses[0] != undefined" v-for="i in editItems.caseClasses" >{{ i.typeName }}
                                         <i class="fa fa-times-circle" v-on:click="deleteType(i.id,'caseClasse')"></i>
                                     </li>
                                 </ul>
                             </div>
                         </div>
-                        <div class="form-group inline margin" type="caseSmallClasses" itemIdName="caseSmallClassId">
+                        <div class="form-group inline margin" type="caseSmallClasses" >
                             <label>案件细类：</label>
                             <select ref="editCaseSmallClassesAll" class="multiple-select block" multiple  style="display: none;">
                                 <option v-for="i in caseSmallClassesAll" :value="i.id" :selected="i.selected">{{i.typeName}}</option>
@@ -221,7 +224,7 @@
                             <div class="databaseSelected-wrap">
                                 <label class="selected-condition">已有条件：</label>
                                 <ul>
-                                    <li v-if="editItems.caseSmallClasses.length>0" v-for="i in editItems.caseSmallClasses" :pid="i.caseSmallClassId">{{ i.typeName }}
+                                    <li v-if="editItems.caseSmallClasses[0] != undefined" v-for="i in editItems.caseSmallClasses" >{{ i.typeName }}
                                         <i class="fa fa-times-circle" v-on:click="deleteType(i.id,'caseSmallClasse')"></i>
                                     </li>
                                 </ul>
