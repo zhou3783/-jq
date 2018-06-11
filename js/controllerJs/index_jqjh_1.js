@@ -127,11 +127,10 @@ var vueTemp1 = new Vue({
 				pageNum: 0,
 				detailsTarget:false,
 				detailsContent:{},
-				inputValue: '',
 				clickCaseType: false,
 				clickCaseClasses: false,
 				clickCaseSmallClasses: false,
-
+        inputValue: ''
 			}
        
     },
@@ -364,7 +363,7 @@ var vueTemp1 = new Vue({
 							} else {
 								self.changeErji(view.value)
 							}
-							self.stationType = view.value
+							self.stationType = view.value - 1
 						}
 					});
 					$(".chosen-select-view").multipleSelect({
@@ -374,7 +373,7 @@ var vueTemp1 = new Vue({
 						animate: 'slide',
 						onClick: function (view) {
 							 json_search.jjdwdm = view.value;
-							_self.unitsAll.forEach(function(i) {
+							 self.unitsAll.forEach(function(i) {
 								if (i.unitId == view.value) {
 									i['selected'] = true
 								}else {
@@ -394,10 +393,10 @@ var vueTemp1 = new Vue({
 						}
 					});
         },
-			  changeErji: function (stationType) {
+			  changeErji: function (zjkId) {
         	var _self = this
 					$.ajax({
-						url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/zjks/findUnitByZjkId/" + stationType,
+						url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/zjks/findUnitByZjkId/" + zjkId,
 						type: "get",
 						dataType: "json",
 						async: false,
@@ -484,6 +483,7 @@ var vueTemp1 = new Vue({
             json_search.bjlbdm = JSON.stringify(_self.caseClassesChecked)
             json_search.bjxldm = JSON.stringify(_self.caseSmallClassesChecked)
             json_search['searchBox'] = _self.inputValue;
+            json_search['zjkId'] = parseInt(_self.stationType) + 1;
             if(json_search.jjdwdm == ''){
                 alert('请先选择单位');
                 return

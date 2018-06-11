@@ -39,7 +39,7 @@
                                         <label >二级名称：</label>
                                         <select  class="chosen-select chosen-select-view block" ref="selectView" style="display:none;">
                                             <!--<option value="">&#45;&#45;</option>-->
-                                            <option v-for="(i, index) in unitsAll" :value="i.unitId" :key="index" >{{i.unitName}}</option>
+                                            <option v-for="(i, index) in unitsAll" :selected='i.selected' :value="i.unitId" :key="index" >{{i.unitName}}</option>
                                         </select>
                                     </div>
                                     <div class="form-group inline">

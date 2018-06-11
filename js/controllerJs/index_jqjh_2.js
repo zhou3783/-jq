@@ -360,7 +360,7 @@ $(document).ready(function () {
               }
             })
           })
-          self.caseClassesAll = _classes
+          self.caseClassesAll = self.caseClassesAll.concat( _classes )
 //        //二级菜单勾选
           self.caseClassesAll.forEach(function (item1) {
             item1['selected'] = false
@@ -379,6 +379,16 @@ $(document).ready(function () {
             })
           })
           trueChecked(self.caseClassesAll, self.caseClassesChecked)
+            //初始化三级菜单显示项
+          var _SmallClasses = []
+          self.caseClassesChecked.forEach(function (item1) {
+            eventLever3.forEach(function (item2) {
+              if (item2.parentId == item1.value) {
+                _SmallClasses.push(item2)
+              }
+            })
+          })
+          self.caseSmallClassesAll = _SmallClasses
         } 
         /*
          *通过一级菜单的数据勾选出对应的二级数据
@@ -1350,15 +1360,23 @@ $('#5').click(function () {
         }
       },
       tempSave: function (e) {
-      	this.editItems.caseTypes.forEach(function(item){
-      		item['caseTypeId'] = item.id
-      	})
-      	this.editItems.caseClasses.forEach(function(item){
-      		item['caseClassId'] = item.id
-      	})
-      	this.editItems.caseSmallClasses.forEach(function(item){
-      		item['caseSmallClassId'] = item.id
-      	})
+      	if (this.editItems.caseTypes.length > 0 && this.editItems.caseTypes[0] != undefined) {
+      		this.editItems.caseTypes.forEach(function(item){
+      			item['caseTypeId'] = item.id
+      		})
+      	}
+      	if (this.editItems.caseClasses.length > 0 && this.editItems.caseClasses[0] != undefined) {
+      		this.editItems.caseClasses.forEach(function(item){
+      			item['caseClassId'] = item.id
+      		})	
+      	}
+      	if (this.editItems.caseSmallClasses.length > 0 && this.editItems.caseSmallClasses[0] != undefined) {
+      		this.editItems.caseSmallClasses.forEach(function(item){
+      			item['caseSmallClassId'] = item.id
+      		})
+      	}
+      	
+      	this.editItems['stationType'] = this.editItems.zjkId - 1  //这个zjkId是从后台获取的
         var data = this.editItems;
         var _data = JSON.stringify(data)
         console.log(_data)
@@ -1377,9 +1395,10 @@ $('#5').click(function () {
             alert('修改成功');
           },
 					error: function(XMLHttpRequest, textStatus, errorThrown) {
-		         alert(XMLHttpRequest.status);
-		         alert(XMLHttpRequest.readyState);
-		         alert(textStatus);
+		         console.log(XMLHttpRequest.status);
+		         console.log(XMLHttpRequest.readyState);
+		         console.log(textStatus);
+		         alert('修改失败')
 		      },
         });
       },
