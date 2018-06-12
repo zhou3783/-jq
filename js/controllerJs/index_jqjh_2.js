@@ -595,7 +595,7 @@ $('#5').click(function () {
           contentType: 'application/json;charset=UTF-8',
           success: function success (data) {
             _self.eventLever2 = data;
-            console.log(_self.eventLever2)
+            _self.allFalseCheked(_self.eventLever2)
 
           }
         }); //init eventLever2
@@ -607,7 +607,7 @@ $('#5').click(function () {
           contentType: 'application/json;charset=UTF-8',
           success: function success (data) {
             _self.eventLever3 = data;
-            console.log(_self.eventLever3)
+            _self.allFalseCheked(_self.eventLever3)
           }
         }); //init eventLever3
       },
@@ -727,8 +727,11 @@ $('#5').click(function () {
             _self.caseTypesChecked = []
             _self.caseTypesAll.forEach(function (item) {
               _self.caseTypesChecked.push({
-                "value": item.id
+                "value": item.id,
+								"label": item.typeName,
+								"checked": true
               })
+			 				 item['selected'] = true
             })
 
             _self.changeCaseClassesAll()
@@ -737,9 +740,14 @@ $('#5').click(function () {
           },
           onUncheckAll: function () {
             _self.caseTypesChecked = []
-            _self.changeCaseClassesAll()
-            console.log(_self.caseTypesChecked)
-
+            _self.caseClassesChecked = []
+            _self.caseSmallClassesChecked = []
+            //更改视图
+					_self.allFalseCheked(_self.caseTypesAll)
+					_self.allFalseCheked(_self.caseClassesAll)
+					_self.allFalseCheked(_self.caseSmallClassesAll)
+					_self.changeCaseClassesAll()
+					_self.changeCaseSmallClassesAll()
           },
           onClick: function (view) {
             if (view.checked) {//勾选
@@ -749,20 +757,48 @@ $('#5').click(function () {
                 _self.caseTypesChecked.push(view);
               }
             } else {//取消
-              _self.caseTypesChecked.forEach(function (item, index) {
-                if (item.value == view.value) {
-                  _self.caseTypesChecked.splice(index, 1);
-                }
-              })
-            }
-            if (_self.caseTypesChecked.length == 0) {//一项没选
-              _self.caseClassesAll = [];
-              _self.caseSmallClassesAll = [];
-            }
-            _self.changeCaseClassesAll();
-            _self.clickCaseType = true
-            // console.log(_self.caseTypesChecked)
-          }
+              _self.caseTypesAll.forEach(function (item1) {
+								if (item1.id == view.value) {
+									item1['selected'] = false
+									//设置为false后，通过改变数据的函数下级菜单显示会改变，但是选中的项在下次其父类被选中的时候
+									// 还是会保留选中的状态，更改下级菜单的勾选状态为false
+									_self.falseChecked(item1.id, _self.caseClassesAll, _self.caseClassesChecked)
+									_self.caseSmallClassesAll.forEach(function (item2) {
+										if (item2.id.substring(0, 2) == item1.id) {
+											item2['selected'] = false
+										}
+										_self.caseSmallClassesChecked.forEach(function (item3, index) {
+											if (item3.value.substring(0, 2) == item1.id) {
+												_self.caseSmallClassesChecked.splice(index, 1)
+											}
+										})
+									})
+								}
+							 })
+								//更改选取的列表
+								_self.caseTypesChecked.forEach(function (item, index) {
+									if (item.value == view.value) {
+										_self.caseTypesChecked.splice(index, 1);
+									}
+								})
+           		 }
+						if (_self.caseTypesChecked.length == 0) { //一项没选
+							_self.caseClassesAll = [];
+							_self.caseSmallClassesAll = [];
+						}
+							//改变后面选项的显示数据
+						_self.changeCaseClassesAll();
+						_self.changeCaseSmallClassesAll();
+					//更改选取的状态
+					_self.caseTypesAll.forEach(function (item1) {
+						_self.caseTypesChecked.forEach(function (item2) {
+							if (item1.id == item2.value) {
+								item1['selected'] = item2.checked
+							}
+						})
+					})
+					_self.clickCaseType = true
+					}
         });
       },
       allFalseCheked: function (arrAll) {
@@ -835,8 +871,6 @@ $('#5').click(function () {
                       }
                     })
                   })
-                  // _self.caseClassesChecked = []
-                  // _self.caseSmallClassesChecked = []
                 }
               })
               //更改选取的列表
@@ -870,7 +904,7 @@ $('#5').click(function () {
             _self.editCaseShow(_self.caseTypesChecked, _self.editItems.caseTypes)
             _self.editCaseShow(_self.caseClassesChecked, _self.editItems.caseClasses)
             _self.editCaseShow(_self.caseSmallClassesChecked, _self.editItems.caseSmallClasses)
-						_self.clickCaseType = true
+			_self.clickCaseType = true
           }
         });
       },
@@ -893,14 +927,21 @@ $('#5').click(function () {
             _self.caseClassesChecked = []
             _self.caseClassesAll.forEach(function (item) {
               _self.caseClassesChecked.push({
-                "value": item.id
+								"value": item.id,
+								"label": item.typeName,
+								"checked": true
               })
+							//更改视图
+							item['selected'] = true
             })
             _self.changeCaseSmallClassesAll()
             // console.log(_self.caseClassesChecked)
           },
           onUncheckAll: function () {
             _self.caseClassesChecked = []
+						//更改视图
+						_self.allFalseCheked(_self.caseClassesAll)
+						_self.allFalseCheked(_self.caseSmallClassesAll)
             _self.changeCaseSmallClassesAll()
             // console.log(_self.caseClassesChecked)
           },
@@ -910,19 +951,43 @@ $('#5').click(function () {
                 _self.caseClassesChecked.push(view);
               } else {
                 _self.caseClassesChecked.push(view);
-
               }
             } else {
-              _self.caseClassesChecked.forEach(function (item, index) {
-                if (item.value == view.value) {
-                  _self.caseClassesChecked.splice(index, 1);
-                }
-              })
+							_self.caseClassesAll.forEach(function (item1) {
+								if (item1.id == view.value) {
+									item1['selected'] = false
+									//设置为false后，通过改变数据的函数下级菜单显示会改变，但是选中的项在下次其父类被选中的时候
+									// 还是会保留选中的状态，更改下级菜单的勾选状态为false
+									_self.caseSmallClassesAll.forEach(function (item2) {
+										if (item2.parentId == item1.id) {
+											item2['selected'] = false
+										}
+										_self.caseSmallClassesChecked.forEach(function (item3, index) {
+											if ((item3.value.substring(0, 4) + "00") == item1.id) {
+												_self.caseSmallClassesChecked.splice(index, 1)
+											}
+										})
+									})
+								}
+							})
+
+							_self.caseClassesChecked.forEach(function (item, index) {
+								if (item.value == view.value) {
+									_self.caseClassesChecked.splice(index, 1);
+								}
+							})
             }
             if (_self.caseClassesChecked.length == 0) {
               _self.caseSmallClassesAll = [];
             }
             _self.changeCaseSmallClassesAll()
+						_self.caseClassesAll.forEach(function (item1) {
+							_self.caseClassesChecked.forEach(function (item2) {
+								if (item1.id == item2.value) {
+									item1['selected'] = item2.checked
+								}
+							})
+						})
             _self.clickCaseClasses = true
             // console.log(_self.caseClassesChecked)
           }
@@ -950,7 +1015,6 @@ $('#5').click(function () {
 
             })
             _self.changeCaseSmallClassesAll()
-            // console.log(_self.caseClassesChecked)
           },
           onUncheckAll: function () {
             //取消选中状态的数组
@@ -963,8 +1027,8 @@ $('#5').click(function () {
             //shuju
             _self.editItems.caseClasses = [];
             _self.editItems.caseSmallClasses = [];
+			
             _self.changeCaseSmallClassesAll()
-            // console.log(_self.caseClassesChecked)
           },
           onClick: function (view) {
             if (view.checked) {
@@ -1045,14 +1109,20 @@ $('#5').click(function () {
             _self.caseSmallClassesChecked = []
             _self.caseSmallClassesAll.forEach(function (item) {
               _self.caseSmallClassesChecked.push({
-                "value": item.id
+								"value": item.id,
+								"label": item.typeName,
+								"checked": true
               })
+							//更改视图
+							item['selected'] = true
             })
-            console.log(_self.caseSmallClassesChecked)
           },
           onUncheckAll: function () {
             _self.caseSmallClassesChecked = []
-            console.log(_self.caseSmallClassesChecked)
+						//更改视图
+						_self.caseSmallClassesAll.forEach(function (item1) {
+							item1['selected'] = false
+						})
           },
           onClick: function (view) {
             if (view.checked) {
@@ -1062,12 +1132,25 @@ $('#5').click(function () {
                 _self.caseSmallClassesChecked.push(view);
               }
             } else {
-              _self.caseSmallClassesChecked.forEach(function (item, index) {
-                if (item.value == view.value) {
-                  _self.caseSmallClassesChecked.splice(index, 1);
-                }
-              })
+							_self.caseSmallClassesAll.forEach(function (item1) {
+								if (item1.id == view.value) {
+									item1['selected'] = false;
+								}
+							})
+							_self.caseSmallClassesChecked.forEach(function (item, index) {
+								if (item.value == view.value) {
+									_self.caseSmallClassesChecked.splice(index, 1);
+								}
+							})
             }
+						//视图改变
+						_self.caseSmallClassesAll.forEach(function (item1) {
+							_self.caseSmallClassesChecked.forEach(function (item2) {
+								if (item1.id == item2.value) {
+									item1['selected'] = item2.checked
+								}
+							})
+						})
             _self.clickCaseSmallClasses = true
           }
         });
@@ -1092,7 +1175,6 @@ $('#5').click(function () {
               //shuju
               _self.editItems.caseSmallClasses.push(item)
             })
-            // console.log(_self.caseSmallClassesChecked)
           },
           onUncheckAll: function () {
             _self.caseSmallClassesChecked = []
@@ -1154,6 +1236,7 @@ $('#5').click(function () {
           contentType: 'application/json;charset=UTF-8',
           success: function success (data) {
             _self.caseTypesAll = data;
+            _self.allFalseCheked(_self.caseTypesAll)
           }
         }); //init caseTypesAll
       },
@@ -1191,6 +1274,9 @@ $('#5').click(function () {
       add_save: function (e) {
         var self = this;
         var $self = $(e.target);
+				self.addItems.caseTypes=[]
+				self.addItems.caseClasses=[]
+				self.addItems.caseSmallClasses=[]
         this.caseTypesChecked.forEach(function (item) {
           self.addItems.caseTypes.push({
             "caseTypeId": item.value,

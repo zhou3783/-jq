@@ -130,14 +130,16 @@ var vueTemp1 = new Vue({
 				clickCaseType: false,
 				clickCaseClasses: false,
 				clickCaseSmallClasses: false,
-        inputValue: ''
+        inputValue: '',
+				eventLever2: [],
+				eventLever3: []
 			}
        
     },
     created: function () {
         this.initcaseTypeAll();
         this.initUnitsAll();
-        
+			  this.initLever()
     },
     mounted: function () {
         var _self = this;
@@ -153,6 +155,39 @@ var vueTemp1 = new Vue({
        
     },
     methods: {
+			allFalseCheked: function (arrAll) {
+				arrAll.forEach(function (item) {
+					item['selected'] = false
+				})
+			},
+			initLever: function () {
+				var _self = this;
+				$.ajax({
+					url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/eventTypes/findByLever/2",
+					type: "get",
+					dataType: "json",
+					// async: false,
+					contentType: 'application/json;charset=UTF-8',
+					success: function success (data) {
+						_self.eventLever2 = data;
+						_self.allFalseCheked(_self.eventLever2)
+						// console.log(_self.eventLever2)
+
+					}
+				}); //init eventLever2
+				$.ajax({
+					url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/eventTypes/findByLever/3",
+					type: "get",
+					dataType: "json",
+					// async: false,
+					contentType: 'application/json;charset=UTF-8',
+					success: function success (data) {
+						_self.eventLever3 = data;
+						_self.allFalseCheked(_self.eventLever3)
+						// console.log(_self.eventLever3)
+					}
+				}); //init eventLever3
+			},
         popDetails:function(index){
             this.detailsTarget = true
             this.detailsContent = this.list[index]
@@ -197,159 +232,233 @@ var vueTemp1 = new Vue({
 							}
 					})
         },
-        initcaseTypeSelect: function initcaseTypeSelect(){
-            var _self = this;
-            $(_self.$refs.caseTypesAll).multipleSelect({
-                width: "100%",
-                // single: true,
-                placeholder: "请选择案件类型",
-                animate: 'slide',
-                onCheckAll: function () {
-                    _self.caseTypesChecked = []
-                    _self.caseTypesAll.forEach(function (item) {
-                        _self.caseTypesChecked.push({
-                            "value": item.id
-                        })
-                    })
-                    _self.changeCaseClassesAll()
-                    console.log(_self.caseTypesChecked)
-                },
-                onUncheckAll: function () {
-                    _self.caseTypesChecked = []
-                    _self.changeCaseClassesAll()
-                    console.log(_self.caseTypesChecked)
-                },
-                onClick: function (view) {
-                    if (view.checked) { //勾选
-                        if (_self.caseTypesChecked.length == 0) {
-                            _self.caseTypesChecked.push(view);
-                        } else {
-                            _self.caseTypesChecked.forEach(function (item) {
-                                if (item.value != view.value) {
-                                    _self.caseTypesChecked.push(view);
-                                }
-                            })
-                        }
-                    } else { //取消
-                        _self.caseTypesChecked.forEach(function (item, index) {
-                            if (item.value == view.value) {
-                                _self.caseTypesChecked.splice(index, 1);
-                            }
-                        })
-                    }
-                    if (_self.caseTypesChecked.length == 0) { //一项没选
-                        _self.caseClassesAll = [];
-                        _self.caseSmallClassesAll = [];
-                    }
-                    _self.changeCaseClassesAll();
-									  _self.clickCaseType = true
-                    console.log(_self.caseTypesChecked)
+			falseChecked: function (parentId, arr, checkedArr) {
+				arr.forEach(function (item) {
+					if (item.parentId == parentId) {
+						item['selected'] = false
+					}
+					if (checkedArr.length > 0 && checkedArr[0] != undefined) { //勾选记录数组去除对应项
+						checkedArr.forEach(function (item2, index) {
+							if (item2.value.substring(0, 2) == parentId) {
+								checkedArr.splice(index, 1)
+							}
+						})
+					}
+				})
+			},
+			initcaseTypeSelect: function () {
+				var _self = this;
+				$(_self.$refs.caseTypesAll).multipleSelect({
+					width: "100%",
+					placeholder: "请选择案件类型",
+					onCheckAll: function () {
+						_self.caseTypesChecked = []
+						_self.caseTypesAll.forEach(function (item) {
+							_self.caseTypesChecked.push({
+								"value": item.id,
+								"label": item.typeName,
+								"checked": true
+							})
+							item['selected'] = true
+						})
 
-                    //单选逻辑
-                    // json_search.bjlbdm = view.value;
-                    // json_search.bjlxdm = ''
-                    // json_search.bjxldm = ''
-                    // _self.caseClassesAll = [];
-                    // _self.caseSmallClassesAll = [];
-                
-                    // _self.changeCaseClassesAll([view])
-                    //    -----end
-                }
-            });
-        },
-        initcaseClassesSelect: function initcaseClassesSelect() {
-            var _self = this;
-            $(_self.$refs.caseClassesAll).multipleSelect({
-                width: "100%",
-                // single: true,
-                placeholder: "请选择案件类别",
-                animate: 'slide',
-                // selectAll:false,
-                onCheckAll: function () {
-                    _self.caseClassesChecked = []
-                    _self.caseClassesAll.forEach(function (item) {
-                        _self.caseClassesChecked.push({
-                            "value": item.id
-                        })
-                    })
-                    _self.changeCaseSmallClassesAll()
-                    console.log(_self.caseClassesChecked)
-                },
-                onUncheckAll: function () {
-                    _self.caseClassesChecked = []
-                    _self.changeCaseSmallClassesAll()
-                    console.log(_self.caseClassesChecked)
-                },
-                onClick: function (view) {
-                    if (view.checked) {
-                        if (_self.caseClassesChecked.length == 0) {
-                            _self.caseClassesChecked.push(view);
-                        } else {
-                            _self.caseClassesChecked.forEach(function (item) {
-                                if (item.value != view.value) {
-                                    _self.caseClassesChecked.push(view);
-                                }
-                            })
-                        }
-                    } else {
-                        _self.caseClassesChecked.forEach(function (item, index) {
-                            if (item.value == view.value) {
-                                _self.caseClassesChecked.splice(index, 1);
-                            }
-                        })
-                    }
-                    if (_self.caseClassesChecked.length == 0) {
-                        _self.caseSmallClassesAll = [];
-                    }
-                    _self.changeCaseSmallClassesAll()
-										_self.clickCaseClasses = true
-                    console.log(_self.caseClassesChecked)
-                }
-            });
-        },
-        initcaseSmallClassesSelect: function () {
-            var _self = this;
-            $(_self.$refs.caseSmallClassesAll).multipleSelect({
-                width: "100%",
-                // single: true,
-                placeholder: "请选择案件类别",
-                animate: 'slide',
-                // selectAll: false,
-                onCheckAll: function () {
-                    _self.caseSmallClassesChecked = []
-                    _self.caseSmallClassesAll.forEach(function (item) {
-                        _self.caseSmallClassesChecked.push({
-                            "value": item.id
-                        })
-                    })
-                    console.log(_self.caseSmallClassesChecked)
-                },
-                onUncheckAll: function () {
-                    _self.caseSmallClassesChecked = []
-                    console.log(_self.caseSmallClassesChecked)
-                },
-                onClick: function (view) {
-                    if (view.checked) {
-                        if (_self.caseSmallClassesChecked.length == 0) {
-                            _self.caseSmallClassesChecked.push(view);
-                        } else {
-                            _self.caseSmallClassesChecked.forEach(function (item) {
-                                if (item.value != view.value) {
-                                    _self.caseSmallClassesChecked.push(view);
-                                }
-                            })
-                        }
-                    } else {
-                        _self.caseSmallClassesChecked.forEach(function (item, index) {
-                            if (item.value == view.value) {
-                                _self.caseSmallClassesChecked.splice(index, 1);
-                            }
-                        })
-                    }
-									_self.clickCaseSmallClasses = true
-                }
-            });
-        },
+						_self.changeCaseClassesAll()
+
+					},
+					onUncheckAll: function () {
+						_self.caseTypesChecked = []
+						_self.caseClassesChecked = []
+						_self.caseSmallClassesChecked = []
+						//更改视图
+						_self.allFalseCheked(_self.caseTypesAll)
+						_self.allFalseCheked(_self.caseClassesAll)
+						_self.allFalseCheked(_self.caseSmallClassesAll)
+						_self.changeCaseClassesAll()
+						_self.changeCaseSmallClassesAll()
+					},
+					onClick: function (view) {
+						if (view.checked) {//勾选
+							if (_self.caseTypesChecked.length == 0) {
+								_self.caseTypesChecked.push(view);
+							} else {
+								_self.caseTypesChecked.push(view);
+							}
+						} else {//取消
+							_self.caseTypesAll.forEach(function (item1) {
+								if (item1.id == view.value) {
+									item1['selected'] = false
+									//设置为false后，通过改变数据的函数下级菜单显示会改变，但是选中的项在下次其父类被选中的时候
+									// 还是会保留选中的状态，更改下级菜单的勾选状态为false
+									_self.falseChecked(item1.id, _self.caseClassesAll, _self.caseClassesChecked)
+									_self.caseSmallClassesAll.forEach(function (item2) {
+										if (item2.id.substring(0, 2) == item1.id) {
+											item2['selected'] = false
+										}
+										_self.caseSmallClassesChecked.forEach(function (item3, index) {
+											if (item3.value.substring(0, 2) == item1.id) {
+												_self.caseSmallClassesChecked.splice(index, 1)
+											}
+										})
+									})
+								}
+							 })
+							//更改选取的列表
+								_self.caseTypesChecked.forEach(function (item, index) {
+									if (item.value == view.value) {
+										_self.caseTypesChecked.splice(index, 1);
+									}
+								})
+						}
+						if (_self.caseTypesChecked.length == 0) { //一项没选
+							_self.caseClassesAll = [];
+							_self.caseSmallClassesAll = [];
+						}
+						//改变后面选项的显示数据
+						_self.changeCaseClassesAll();
+						_self.changeCaseSmallClassesAll();
+
+						//更改选取的状态
+						_self.caseTypesAll.forEach(function (item1) {
+							_self.caseTypesChecked.forEach(function (item2) {
+								if (item1.id == item2.value) {
+									item1['selected'] = item2.checked
+								}
+							})
+						})
+						_self.clickCaseType = true
+					}
+				});
+			},
+			initcaseClassesSelect: function () {
+				var _self = this;
+				$(_self.$refs.caseClassesAll).multipleSelect({
+					width: "100%",
+					placeholder: "请选择案件类别",
+					onCheckAll: function () {
+						_self.caseClassesChecked = []
+						_self.caseClassesAll.forEach(function (item) {
+							_self.caseClassesChecked.push({
+								"value": item.id,
+								"label": item.typeName,
+								"checked": true
+							})
+							//更改视图
+							item['selected'] = true
+						})
+						_self.changeCaseSmallClassesAll()
+					},
+					onUncheckAll: function () {
+						_self.caseClassesChecked = []
+						//更改视图
+						_self.allFalseCheked(_self.caseClassesAll)
+						_self.allFalseCheked(_self.caseSmallClassesAll)
+
+						_self.changeCaseSmallClassesAll()
+					},
+					onClick: function (view) {
+						if (view.checked) {//checked
+							if (_self.caseClassesChecked.length == 0) {
+								_self.caseClassesChecked.push(view);
+							} else {
+								_self.caseClassesChecked.push(view);
+							}
+						} else {
+							_self.caseClassesAll.forEach(function (item1) {
+								if (item1.id == view.value) {
+									item1['selected'] = false
+									//设置为false后，通过改变数据的函数下级菜单显示会改变，但是选中的项在下次其父类被选中的时候
+									// 还是会保留选中的状态，更改下级菜单的勾选状态为false
+									_self.caseSmallClassesAll.forEach(function (item2) {
+										if (item2.parentId == item1.id) {
+											item2['selected'] = false
+										}
+										_self.caseSmallClassesChecked.forEach(function (item3, index) {
+											if ((item3.value.substring(0, 4) + "00") == item1.id) {
+												_self.caseSmallClassesChecked.splice(index, 1)
+											}
+										})
+									})
+								}
+							})
+
+							_self.caseClassesChecked.forEach(function (item, index) {
+								if (item.value == view.value) {
+									_self.caseClassesChecked.splice(index, 1);
+								}
+							})
+						}
+						if (_self.caseClassesChecked.length == 0) {
+							_self.caseSmallClassesAll = [];
+						}
+						//改变下级菜单数据
+						_self.changeCaseSmallClassesAll()
+						//更改选取的状态
+						_self.caseClassesAll.forEach(function (item1) {
+							_self.caseClassesChecked.forEach(function (item2) {
+								if (item1.id == item2.value) {
+									item1['selected'] = item2.checked
+								}
+							})
+						})
+						_self.clickCaseClasses = true
+					}
+				});
+			},
+			initcaseSmallClassesSelect: function () {
+				var _self = this;
+				$(_self.$refs.caseSmallClassesAll).multipleSelect({
+					width: "100%",
+					placeholder: "请选择案件类别",
+					onCheckAll: function () {
+						_self.caseSmallClassesChecked = []
+						_self.caseSmallClassesAll.forEach(function (item) {
+							_self.caseSmallClassesChecked.push({
+								"value": item.id,
+								"label": item.typeName,
+								"checked": true
+							})
+							//更改视图
+							item['selected'] = true
+						})
+					},
+					onUncheckAll: function () {
+						_self.caseSmallClassesChecked = []
+						//更改视图
+						_self.caseSmallClassesAll.forEach(function (item1) {
+							item1['selected'] = false
+						})
+					},
+					onClick: function (view) {
+						if (view.checked) {
+							if (_self.caseSmallClassesChecked.length == 0) {
+								_self.caseSmallClassesChecked.push(view);
+							} else {
+								_self.caseSmallClassesChecked.push(view);
+							}
+						} else {
+							_self.caseSmallClassesAll.forEach(function (item1) {
+								if (item1.id == view.value) {
+									item1['selected'] = false;
+								}
+							})
+							_self.caseSmallClassesChecked.forEach(function (item, index) {
+								if (item.value == view.value) {
+									_self.caseSmallClassesChecked.splice(index, 1);
+								}
+							})
+						}
+						//视图改变
+						_self.caseSmallClassesAll.forEach(function (item1) {
+							_self.caseSmallClassesChecked.forEach(function (item2) {
+								if (item1.id == item2.value) {
+									item1['selected'] = item2.checked
+								}
+							})
+						})
+						_self.clickCaseSmallClasses = true
+					}
+				});
+			},
         initchosenSelect: function () {
         	var self = this
 					$(".chosen-select-yiji").multipleSelect({
@@ -424,46 +533,40 @@ var vueTemp1 = new Vue({
                 contentType: 'application/json;charset=UTF-8',
                 success: function success(data) {
                     _self.caseTypesAll = data;
+                    _self.allFalseCheked(_self.caseTypesAll)
                 }
             }); //init caseTypesAll
         },
         changeCaseClassesAll: function(){
-            var _self = this;
-            var _session = [];
-            _self.caseTypesChecked.forEach(function (item) {
-                var id = item.value;
-                $.ajax({
-                    url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/eventTypes/findByParentId/" + id,
-                    type: "get",
-                    dataType: "json",
-                    async: false,
-                    contentType: 'application/json;charset=UTF-8',
-                    success: function success(data) {
-                        _session = _session.concat(data);
-                    }
-                })
-            })
-            //通过一级初始化二级的数据
-            _self.caseClassesAll = _session;
+					var _self = this;
+					var _session = [];
+
+					_self.caseTypesChecked.forEach(function (item) {
+						var id = item.value;//20
+						_self.eventLever2.forEach(function (item2) {
+							if (item2.parentId == id) {
+								_session.push(item2)
+							}
+						})
+					})
+					//通过一级初始化二级的数据
+					_self.caseClassesAll = _session;
        },
         changeCaseSmallClassesAll: function (){
-            var _self = this;
-            var _session = [];
-            _self.caseClassesChecked.forEach(function (item) {
-                var id = item.value;
-                $.ajax({
-                    url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/eventTypes/findByParentId/" + id,
-                    type: "get",
-                    dataType: "json",
-                    async: false,
-                    contentType: 'application/json;charset=UTF-8',
-                    success: function success(data) {
-                        _session = _session.concat(data);
-                    }
-                })
-            })
-            //通过二级初始化三级的数据
-            _self.caseSmallClassesAll = _session;
+					var _self = this;
+					var _session = [];
+					if (_self.caseClassesChecked.length != 0 && _self.caseClassesChecked[0] != undefined) {
+						_self.caseClassesChecked.forEach(function (item) {
+							var id = item.value;
+							_self.eventLever3.forEach(function (item2) {
+								if (item2.parentId == id) {
+									_session.push(item2)
+								}
+							})
+						})
+						//通过二级初始化三级的数据
+						_self.caseSmallClassesAll = _session;
+					}
         },
         caseTypeName: function(){
             var _self = this
@@ -479,9 +582,21 @@ var vueTemp1 = new Vue({
             var _self = this;
             var _yongzongshujuceshi = [];
             _self.allList = [];
-            json_search.bjlxdm = JSON.stringify(_self.caseTypesChecked)
-            json_search.bjlbdm = JSON.stringify(_self.caseClassesChecked)
-            json_search.bjxldm = JSON.stringify(_self.caseSmallClassesChecked)
+            var bjlbdms = []
+            _self.caseTypesChecked.forEach(function(item){
+            	bjlbdms.push(item.value)
+            	})
+            	var bjlxdms = []
+            	_self.caseClassesChecked.forEach(function(item){
+            		   bjlxdms.push(item.value)
+            		})
+            		var bjxldms = []
+            		_self.caseSmallClassesChecked.forEach(function(item){
+											bjxldms.push(item.value)
+            			})
+            json_search['bjlbdms'] = bjlbdms
+            json_search['bjlxdms'] = bjlxdms
+            json_search['bjxldms'] = bjxldms
             json_search['searchBox'] = _self.inputValue;
             json_search['zjkId'] = parseInt(_self.stationType) + 1;
             if(json_search.jjdwdm == ''){
@@ -530,6 +645,8 @@ var vueTemp1 = new Vue({
 							contentType: 'application/json;charset=UTF-8',
 							success: function success(data) {
 									_self.list = data.list;
+								//中文显示caseTypeName
+								_self.caseTypeName()
 									var pages = data.pages
 									//分页
 								Page({
@@ -547,6 +664,8 @@ var vueTemp1 = new Vue({
 											contentType: 'application/json;charset=UTF-8',
 											success: function success(data) {
 												_self.list = data.list;
+												//中文显示caseTypeName
+												_self.caseTypeName()
 											}
 										})
 									}
@@ -560,8 +679,7 @@ var vueTemp1 = new Vue({
 										}
 									})
 								})
-								//中文显示caseTypeName
-								// _self.caseTypeName()
+
 								// echart填入数据
 								if(!_self.totalsJQNum){
 									_self.totalsJQNum = 0

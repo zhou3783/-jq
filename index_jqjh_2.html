@@ -91,19 +91,19 @@
                         <div class="form-group inline margin" type="caseTypes" itemIdName="caseTypeId">
                             <label>案件类型：</label>
                             <select class="multiple-select caseTypesSelectHock block" ref="caseTypesAll" multiple data-placeholder="">
-                                <option v-for="(i, index) in caseTypesAll" :value="i.id" :key="index">{{i.typeName}}</option>
+                                <option v-for="(i, index) in caseTypesAll" :selected="i.selected" :value="i.id" :key="index">{{i.typeName}}</option>
                             </select>
                         </div>
                         <div class="form-group inline margin" type="caseClasses" itemIdName="caseClassId">
                             <label>案件类别：</label>
                             <select class="multiple-select caseClassesSelectHock block" ref="caseClassesAll" multiple data-placeholder="">
-                                <option v-for="(i, index) in caseClassesAll" :value="i.id" :key="index">{{i.typeName}}</option>
+                                <option v-for="(i, index) in caseClassesAll" :selected="i.selected" :value="i.id" :key="index">{{i.typeName}}</option>
                             </select>
                         </div>
                         <div class="form-group inline margin" type="caseSmallClasses" itemIdName="caseSmallClassId">
                             <label>案件细类：</label>
                             <select class="multiple-select caseSmallClassesSelectHock block" multiple ref="caseSmallClassesAll" data-placeholder="">
-                                <option v-for="(i, index) in caseSmallClassesAll" :value="i.id" :key="index">{{i.typeName}}</option>
+                                <option v-for="(i, index) in caseSmallClassesAll" :selected="i.selected" :value="i.id" :key="index">{{i.typeName}}</option>
                             </select>
                         </div>
                         <div class="form-group inline clearBoth margin" type="alarmCalls" itemName="alarmCall">
