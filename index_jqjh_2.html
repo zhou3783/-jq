@@ -75,11 +75,11 @@
                         </div>
                         <div class="form-group inline" type="viewUserName">
                             <label>用户名：</label>
-                            <input class="form-control" placeholder="请输入用户名" :value="addItems.viewUserName" v-on:input="valueChange">
+                            <input class="form-control" placeholder="必填，用户名以字母开头" :value="addItems.viewUserName"  v-on:input="valueChange">
                         </div>
                         <div class="form-group inline" type="viewPassword">
                             <label>密码：</label>
-                            <input class="form-control" placeholder="请输入密码" :value="addItems.viewPassword" v-on:input="valueChange">
+                            <input class="form-control" placeholder="必填，密码最短为六位数" :value="addItems.viewPassword"   v-on:input="valueChange">
                         </div>
                         <div class="form-group w100p" type="comments">
                             <label>基本信息：</label>

@@ -157,8 +157,8 @@ $(document).ready(function () {
               });
             });
             oc.addChildren($self, childrenViews);
-            $('.switch')['bootstrapSwitch']();
-          }
+             $('.switch')['bootstrapSwitch']()
+					}
         }
       });
     } else if (nodesLength == 2) {//二级节点点击事件
@@ -428,6 +428,9 @@ $(document).ready(function () {
         self.caseTypesChecked = uniqueArray(self.caseTypesChecked, 'value') //会让空的数组添加一项undefined，造成后面的错误，所以要删除掉
         self.caseClassesChecked = uniqueArray(self.caseClassesChecked, 'value')
         self.caseSmallClassesChecked = uniqueArray(self.caseSmallClassesChecked, 'value')
+				self.delUndefined(self.editItems.caseTypes)
+				self.delUndefined(self.editItems.caseClasses)
+				self.delUndefined(self.editItems.caseSmallClasses)
 				self.delUndefined(self.caseTypesChecked)
 				self.delUndefined(self.caseClassesChecked)
 				self.delUndefined(self.caseSmallClassesChecked)
@@ -508,7 +511,22 @@ $('#4').click(function () {
 $('#5').click(function () {
     _click('#5')
 })
+	//点击开关，更改后台kgkz的状态（开关控制）
+	$('.switch').on('switch-change', function (event,state) {
+		var _unitId = $(this).parent().parent().attr('id')
+		$.ajax({
+			url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/views/updateKgkz/"+_unitId,
+			type: 'post',
+			dataType: 'text',
+			// async: false,
+			// data: _unitId,
+			contentType: 'application/json;charset=UTF-8',
+			success: function (data) {
+				// console.log(data)
+			}
+		})
 
+	});
 
   
   var vueTemp1 = new Vue({
@@ -1201,7 +1219,16 @@ $('#5').click(function () {
         }
         if (this.addItems.units.length === 0) {
           alert('请确定单位')
+					return
         }
+        if (!/^[A-Za-z]/.test(this.addItems.viewUserName)){
+        	alert('用户名第一位必须为字母')
+					return
+				}
+				if(this.addItems.viewPassword.length < 6) {
+        	alert('密码必须大于6位数')
+					return
+				}
         var _addItems = JSON.stringify(this.addItems);
 
         $.ajax({
@@ -1213,8 +1240,13 @@ $('#5').click(function () {
           contentType: 'application/json;charset=UTF-8',
           success: function (data) {
             location.href = location.href;
-          }
+          },
+					error:  function (error){
+          	console.log(error)
+            alert('保存错误，请检查')
+					}
         })
+
         console.log(JSON.stringify(this.addItems));
       },
       add_addOne: function (e) {
@@ -1433,9 +1465,17 @@ $('#5').click(function () {
     	this.clickCaseType = false
     	this.clickCaseClasses = false
     	this.clickCaseSmallClasses = false
-    	$(this.$refs.unitsAllSelecte).multipleSelect('refresh');
     	$(this.$refs.editViewName).multipleSelect('refresh');
 //    this.refresh();
-    }
+    },
+		watch: {
+			unitsAll: {
+				handler: function(val, oldVal){
+					this.$nextTick(function(){
+						$(this.$refs.unitsAllSelecte).multipleSelect('refresh');
+					})
+				}
+			}
+		}
    })
 })    
