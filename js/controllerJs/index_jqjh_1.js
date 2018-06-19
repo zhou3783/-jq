@@ -132,7 +132,8 @@ var vueTemp1 = new Vue({
 				clickCaseSmallClasses: false,
         inputValue: '',
 				eventLever2: [],
-				eventLever3: []
+				eventLever3: [],
+        unitsAllChecked: []
 			}
        
     },
@@ -246,7 +247,7 @@ var vueTemp1 = new Vue({
 					}
 				})
 			},
-			initcaseTypeSelect: function () {
+			initcaseTypeSelect: function () { //案件类型点击事件
 				var _self = this;
 				$(_self.$refs.caseTypesAll).multipleSelect({
 					width: "100%",
@@ -329,7 +330,7 @@ var vueTemp1 = new Vue({
 					}
 				});
 			},
-			initcaseClassesSelect: function () {
+			initcaseClassesSelect: function () { //案件类别
 				var _self = this;
 				$(_self.$refs.caseClassesAll).multipleSelect({
 					width: "100%",
@@ -404,7 +405,7 @@ var vueTemp1 = new Vue({
 					}
 				});
 			},
-			initcaseSmallClassesSelect: function () {
+			initcaseSmallClassesSelect: function () {//案件细类
 				var _self = this;
 				$(_self.$refs.caseSmallClassesAll).multipleSelect({
 					width: "100%",
@@ -459,282 +460,316 @@ var vueTemp1 = new Vue({
 					}
 				});
 			},
-        initchosenSelect: function () {
-        	var self = this
-					$(".chosen-select-yiji").multipleSelect({
-						width: "180px",
-						single: true,
-						placeholder: "请选择单位",
-						animate: 'slide',
-						onClick: function (view) {
-							if ( view.label === '__') {
-								_self.unitsAll = []
-							} else {
-								self.changeErji(view.value)
-							}
-							self.stationType = view.value - 1
-						}
-					});
-					$(".chosen-select-view").multipleSelect({
-						width: "180px",
-						single: true,
-						placeholder: "请选择单位",
-						animate: 'slide',
-						onClick: function (view) {
-							 json_search.jjdwdm = view.value;
-							 self.unitsAll.forEach(function(i) {
-								if (i.unitId == view.value) {
-									i['selected'] = true
-								}else {
-									i['selected'] = false
-								}
-							})
-						}
-					});
-
-					$(".chosen-select-jb").multipleSelect({
-						width: "180px",
-						single: true,
-						placeholder: "请选择按键级别",
-						animate: 'slide',
-						onClick: function (view) {
-								json_search.jqjb = view.value;
-						}
-					});
-        },
-			  changeErji: function (zjkId) {
-        	var _self = this
-					$.ajax({
-						url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/zjks/findUnitByZjkId/" + zjkId,
-						type: "get",
-						dataType: "json",
-						async: false,
-						contentType: 'application/json;charset=UTF-8',
-						success: function success(data) {
-							_self.unitsAll = data;
-							_self.unitsAll.forEach(function(i, index) {
-								if(index == 0){
-									i['selectd'] = true
-									json_search.jjdwdm = i.unitId
-								}else {
-									i['selected'] = false
-								}
-							})
-						}
-					});
-				},
-        initcaseTypeAll: function initcaseTypeAll(){
-            var _self = this;
-            $.ajax({
-                url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/eventTypes/findByLever/1",
-                type: "get",
-                dataType: "json",
-                async: false,
-                contentType: 'application/json;charset=UTF-8',
-                success: function success(data) {
-                    _self.caseTypesAll = data;
-                    _self.allFalseCheked(_self.caseTypesAll)
-                }
-            }); //init caseTypesAll
-        },
-        changeCaseClassesAll: function(){
-					var _self = this;
-					var _session = [];
-
-					_self.caseTypesChecked.forEach(function (item) {
-						var id = item.value;//20
-						_self.eventLever2.forEach(function (item2) {
-							if (item2.parentId == id) {
-								_session.push(item2)
-							}
-						})
-					})
-					//通过一级初始化二级的数据
-					_self.caseClassesAll = _session;
-       },
-        changeCaseSmallClassesAll: function (){
-					var _self = this;
-					var _session = [];
-					if (_self.caseClassesChecked.length != 0 && _self.caseClassesChecked[0] != undefined) {
-						_self.caseClassesChecked.forEach(function (item) {
-							var id = item.value;
-							_self.eventLever3.forEach(function (item2) {
-								if (item2.parentId == id) {
-									_session.push(item2)
-								}
-							})
-						})
-						//通过二级初始化三级的数据
-						_self.caseSmallClassesAll = _session;
-					}
-        },
-        caseTypeName: function(){
-            var _self = this
-            _self.list.forEach(function(item1) {
-                _self.caseTypesAll.forEach(function(item2){
-                    if(item1.bjlbdm == item2.id){
-                        item1['caseTypeName'] = item2.typeName;
-                    }
-                })
-            })
-        },
-        search: function () {
-            var _self = this;
-            var _yongzongshujuceshi = [];
-            _self.allList = [];
-            var bjlbdms = []
-            _self.caseTypesChecked.forEach(function(item){
-            	bjlbdms.push(item.value)
-            	})
-            	var bjlxdms = []
-            	_self.caseClassesChecked.forEach(function(item){
-            		   bjlxdms.push(item.value)
-            		})
-            		var bjxldms = []
-            		_self.caseSmallClassesChecked.forEach(function(item){
-											bjxldms.push(item.value)
-            			})
-            json_search['bjlbdms'] = bjlbdms
-            json_search['bjlxdms'] = bjlxdms
-            json_search['bjxldms'] = bjxldms
-            json_search['searchBox'] = _self.inputValue;
-            json_search['zjkId'] = parseInt(_self.stationType) + 1;
-            if(json_search.jjdwdm == ''){
-                alert('请先选择单位');
-                return
+      initchosenSelect: function () {
+        var self = this
+        $(".chosen-select-yiji").multipleSelect({
+          width: "180px",
+          single: true,
+          placeholder: "请选择单位",
+          onClick: function (view) {
+            if ( view.label === '__') {
+              _self.unitsAll = []
+            } else {
+              self.changeErji(view.value)
             }
-            if (json_search.startTime == '' || json_search.endTime == '') {
-            	json_search.startTime = $.nowDate().split(' ')[0]
-            	json_search.endTime = $.nowDate().split(' ')[0]
+            self.stationType = view.value - 1
+          }
+        });
+        $(".chosen-select-view").multipleSelect({//二级名称点击事件
+          width: "180px",
+          // single: true,
+          placeholder: "请选择单位",
+          onCheckAll: function () {
+            self.unitsAllChecked = []
+            self.unitsAll.forEach(function(item){
+              self.unitsAllChecked.push({
+                "value": item.id,
+                "label": item.typeName,
+                "checked": true
+              })
+              //更改视图
+              item['selected'] = true
+            })
+          },
+          onUncheckAll: function () {
+            self.unitsAllChecked = []
+            self.unitsAll.forEach(function(item1) {
+              item1['selected'] = false
+            })
+          },
+          onClick: function (view) {
+            //确定点击
+            if (view.checked) {
+              self.unitsAllChecked.push(view)
+            } else {
+              self.unitsAll.forEach(function (item1) {
+								if (item1.id == view.value) {
+									item1['selected'] = false;
+								}
+							})
+							self.unitsAllChecked.forEach(function (item, index) {
+								if (item.value == view.value) {
+									self.unitsAllChecked.splice(index, 1);
+								}
+							})
+            }
+            //视图改变
+						self.unitsAll.forEach(function (item1) {
+							self.unitsAllChecked.forEach(function (item2) {
+								if (item1.id == item2.value) {
+									item1['selected'] = item2.checked
+								}
+							})
+						})
+            //传给后台的结果
+            json_search.jjdwdm = self.unitsAllChecked;
+            console.log(self.unitsAllChecked) 
+          }
+        });
+
+        $(".chosen-select-jb").multipleSelect({
+          width: "180px",
+          single: true,
+          placeholder: "请选择按键级别",
+          animate: 'slide',
+          onClick: function (view) {
+              json_search.jqjb = view.value;
+          }
+        });
+      },
+      changeErji: function (zjkId) {
+        var _self = this
+        $.ajax({
+          url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/zjks/findUnitByZjkId/" + zjkId,
+          type: "get",
+          dataType: "json",
+          async: false,
+          contentType: 'application/json;charset=UTF-8',
+          success: function success(data) {
+            _self.unitsAll = data;
+            _self.unitsAll.forEach(function(i, index) {
+              if(index == 0){
+                i['selectd'] = true
+                json_search.jjdwdm = i.unitId
+              }else {
+                i['selected'] = false
+              }
+            })
+          }
+        });
+      },
+      initcaseTypeAll: function initcaseTypeAll(){
+        var _self = this;
+        $.ajax({
+          url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/eventTypes/findByLever/1",
+          type: "get",
+          dataType: "json",
+          async: false,
+          contentType: 'application/json;charset=UTF-8',
+          success: function success(data) {
+              _self.caseTypesAll = data;
+              _self.allFalseCheked(_self.caseTypesAll)
+          }
+        }); //init caseTypesAll
+      },
+      changeCaseClassesAll: function(){
+        var _self = this;
+        var _session = [];
+
+        _self.caseTypesChecked.forEach(function (item) {
+          var id = item.value;//20
+          _self.eventLever2.forEach(function (item2) {
+            if (item2.parentId == id) {
+              _session.push(item2)
+            }
+          })
+        })
+        //通过一级初始化二级的数据
+        _self.caseClassesAll = _session;
+      },
+      changeCaseSmallClassesAll: function (){
+        var _self = this;
+        var _session = [];
+        if (_self.caseClassesChecked.length != 0 && _self.caseClassesChecked[0] != undefined) {
+          _self.caseClassesChecked.forEach(function (item) {
+            var id = item.value;
+            _self.eventLever3.forEach(function (item2) {
+              if (item2.parentId == id) {
+                _session.push(item2)
+              }
+            })
+          })
+          //通过二级初始化三级的数据
+          _self.caseSmallClassesAll = _session;
+        }
+      },
+      caseTypeName: function(){
+        var _self = this
+        _self.list.forEach(function(item1) {
+            _self.caseTypesAll.forEach(function(item2){
+                if(item1.bjlbdm == item2.id){
+                    item1['caseTypeName'] = item2.typeName;
+                }
+            })
+        })
+      },
+      search: function () {
+          var _self = this;
+          var _yongzongshujuceshi = [];
+          _self.allList = [];
+          var bjlbdms = []
+          _self.caseTypesChecked.forEach(function(item){
+            bjlbdms.push(item.value)
+            })
+            var bjlxdms = []
+            _self.caseClassesChecked.forEach(function(item){
+                  bjlxdms.push(item.value)
+              })
+              var bjxldms = []
+              _self.caseSmallClassesChecked.forEach(function(item){
+                    bjxldms.push(item.value)
+                })
+          json_search['bjlbdms'] = bjlbdms
+          json_search['bjlxdms'] = bjlxdms
+          json_search['bjxldms'] = bjxldms
+          json_search['searchBox'] = _self.inputValue;
+          json_search['zjkId'] = parseInt(_self.stationType) + 1;
+          if(json_search.jjdwdm == ''){
+              alert('请先选择单位');
+              return
+          }
+          if (json_search.startTime == '' || json_search.endTime == '') {
+            json_search.startTime = $.nowDate().split(' ')[0]
+            json_search.endTime = $.nowDate().split(' ')[0]
 //          	alert('请选择天数');
 //          	return
+          }
+          if (json_search.periodStartTime == '') {
+            json_search.periodStartTime = '00:00:00'
+          }
+          if (json_search.periodEndTime == '') {
+            json_search.periodEndTime = '23:59:59'
+          }
+          if ($.timeStampDate(json_search.periodStartTime) > $.timeStampDate(json_search.periodEndTime)) {
+            var _date = json_search.periodStartTime
+            json_search.periodStartTime = json_search.periodEndTime
+            json_search.periodEndTime = _date
+          }
+          json_search['stationType'] = _self.stationType
+          console.log(JSON.stringify(json_search))
+          $.ajax({
+            url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/jjdb/all/count", //查询总数
+            type: "post",
+            dataType: "text",
+            async: false,
+            data: JSON.stringify(json_search),
+            contentType: 'application/json;charset=UTF-8',
+            success: function success(data) {
+                _self.totalsJQNum = data;
             }
-            if (json_search.periodStartTime == '') {
-            	json_search.periodStartTime = '00:00:00'
-            }
-            if (json_search.periodEndTime == '') {
-            	json_search.periodEndTime = '23:59:59'
-            }
-            if ($.timeStampDate(json_search.periodStartTime) > $.timeStampDate(json_search.periodEndTime)) {
-            	var _date = json_search.periodStartTime
-            	json_search.periodStartTime = json_search.periodEndTime
-            	json_search.periodEndTime = _date
-            }
-            json_search['stationType'] = _self.stationType
-            console.log(JSON.stringify(json_search))
-            $.ajax({
-							url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/jjdb/all/count", //查询总数
-							type: "post",
-							dataType: "text",
-							async: false,
-							data: JSON.stringify(json_search),
-							contentType: 'application/json;charset=UTF-8',
-							success: function success(data) {
-									_self.totalsJQNum = data;
-							}
-						})
-					  var pageSearch = json_search
-					  pageSearch['pageSize'] = _self.pageSize
-					  pageSearch['pageNum'] = _self.pageNum
-            $.ajax({
-							url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/jjdb/fromView/page",
-							type: "post",
-							dataType: "json",
-							async: false,
-							data: JSON.stringify(pageSearch),
-							contentType: 'application/json;charset=UTF-8',
-							success: function success(data) {
-									_self.list = data.list;
-								//中文显示caseTypeName
-								_self.caseTypeName()
-									var pages = data.pages
-									//分页
-								Page({
-									num:pages,					//页码数
-									startnum:1,				//指定页码
-									elem:$('#page1'),		//指定的元素
-									callback:function(n){	//回调函数
-										pageSearch['pageNum'] = n -1
-										$.ajax({
-											url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/jjdb/fromView/page",
-											type: "post",
-											dataType: "json",
-											async: false,
-											data: JSON.stringify(pageSearch),
-											contentType: 'application/json;charset=UTF-8',
-											success: function success(data) {
-												_self.list = data.list;
-												//中文显示caseTypeName
-												_self.caseTypeName()
-											}
-										})
-									}
-								});
+          })
+          var pageSearch = json_search
+          pageSearch['pageSize'] = _self.pageSize
+          pageSearch['pageNum'] = _self.pageNum
+          $.ajax({
+            url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/jjdb/fromView/page",
+            type: "post",
+            dataType: "json",
+            async: false,
+            data: JSON.stringify(pageSearch),
+            contentType: 'application/json;charset=UTF-8',
+            success: function success(data) {
+                _self.list = data.list;
+              //中文显示caseTypeName
+              _self.caseTypeName()
+                var pages = data.pages
+                //分页
+              Page({
+                num:pages,					//页码数
+                startnum:1,				//指定页码
+                elem:$('#page1'),		//指定的元素
+                callback:function(n){	//回调函数
+                  pageSearch['pageNum'] = n -1
+                  $.ajax({
+                    url: YZ.ajaxURLms + "api/jp-HCZZ-PAMonitor-app-ms/jjdb/fromView/page",
+                    type: "post",
+                    dataType: "json",
+                    async: false,
+                    data: JSON.stringify(pageSearch),
+                    contentType: 'application/json;charset=UTF-8',
+                    success: function success(data) {
+                      _self.list = data.list;
+                      //中文显示caseTypeName
+                      _self.caseTypeName()
+                    }
+                  })
+                }
+              });
 
-								//更改分局为name
-								_self.list.forEach(function(item1){
-									_self.unitsAll.forEach(function(item2){
-										if (item2.unitId === item1.jjdwdm){
-											item1['name'] = item2.unitName
-										}
-									})
-								})
+              //更改分局为name
+              _self.list.forEach(function(item1){
+                _self.unitsAll.forEach(function(item2){
+                  if (item2.unitId === item1.jjdwdm){
+                    item1['name'] = item2.unitName
+                  }
+                })
+              })
 
-								// echart填入数据
-								if(!_self.totalsJQNum){
-									_self.totalsJQNum = 0
-								}
-								if(!data.total){
-									var _le = 0
-								}else {
-									_le = data.total
-								}
-								_self.myChart.setOption({
-									series: [{
-										// 根据名字对应到相应的系列
-
-										data: [_self.totalsJQNum, _le]
-									}]
-								});
-							}
-            })
-            _self.zhanshi = true
-
-
-            // console.log(json_search)
-              
-
-        },
-        drawLine: function() {
-            var _self = this;
-            // 基于准备好的dom，初始化echarts实例
-            var myChart = echarts.init(document.getElementById('myChart'))
-            _self.myChart = myChart;
-            // 绘制图表
-            myChart.setOption({
-                title: {
-                    text: '警情展示图'
-                },
-                tooltip: {},
-                xAxis: {
-                    data: ['总警情', '视图数据']
-                },
-                yAxis: {
-                     type: 'value'
-                },
+              // echart填入数据
+              if(!_self.totalsJQNum){
+                _self.totalsJQNum = 0
+              }
+              if(!data.total){
+                var _le = 0
+              }else {
+                _le = data.total
+              }
+              _self.myChart.setOption({
                 series: [{
-                    name: '警情数量',
-                    type: 'bar',
-                    data: []
+                  // 根据名字对应到相应的系列
+
+                  data: [_self.totalsJQNum, _le]
                 }]
-            })
-            // 处理点击事件并且跳转到相应的百度搜索页面
-            myChart.on('click', function (params) {
+              });
+            }
+          })
+          _self.zhanshi = true
+
+
+          // console.log(json_search)
+            
+
+      },
+      drawLine: function() {
+          var _self = this;
+          // 基于准备好的dom，初始化echarts实例
+          var myChart = echarts.init(document.getElementById('myChart'))
+          _self.myChart = myChart;
+          // 绘制图表
+          myChart.setOption({
+              title: {
+                  text: '警情展示图'
+              },
+              tooltip: {},
+              xAxis: {
+                  data: ['总警情', '视图数据']
+              },
+              yAxis: {
+                    type: 'value'
+              },
+              series: [{
+                  name: '警情数量',
+                  type: 'bar',
+                  data: []
+              }]
+          })
+          // 处理点击事件并且跳转到相应的百度搜索页面
+          myChart.on('click', function (params) {
 //              window.open(
 //                  'https://www.baidu.com/s?wd=' + encodeURIComponent(params.name)
 //              )
-            })
-        }
+          })
+      }
     },
     updated: function(){
 			if (!this.clickCaseClasses && !this.clickCaseType && !this.clickCaseSmallClasses) {
@@ -750,11 +785,11 @@ var vueTemp1 = new Vue({
 				$(this.$refs.caseClassesAll).multipleSelect('refresh');
 				$(this.$refs.caseSmallClassesAll).multipleSelect('refresh');
 			}
-			this.clickCaseType = false
-			this.clickCaseClasses = false
-			this.clickCaseSmallClasses = false
-			$(this.$refs.selectView).multipleSelect('refresh')
+      this.clickCaseType = false
+      this.clickCaseClasses = false
+      this.clickCaseSmallClasses = false
+      $(this.$refs.selectView).multipleSelect('refresh')
     }
-});
+});//end vue
 
-});
+});//end ready
